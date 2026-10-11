@@ -1,0 +1,77 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+@layer utilities {
+  .gold-shimmer-btn {
+    background: linear-gradient(135deg, #e9c349 0%, #fed65b 45%, #d4af37 75%, #bfa034 100%);
+    box-shadow: 0 4px 20px -2px rgba(212, 175, 55, 0.4), 0 0 0 1px rgba(255, 224, 136, 0.6) inset;
+  }
+
+  .vellum-panel {
+    background: rgba(250, 249, 244, 0.88);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(233, 195, 73, 0.35);
+    box-shadow: 0 16px 40px -8px rgba(0, 53, 39, 0.12), 0 0 0 1px rgba(255, 255, 255, 0.8) inset;
+  }
+
+  .foliage-watermark {
+    background-image: radial-gradient(circle at 10% 20%, rgba(149, 211, 186, 0.12) 0%, transparent 60%),
+                      radial-gradient(circle at 90% 80%, rgba(233, 195, 73, 0.08) 0%, transparent 50%);
+  }
+
+  .gold-foil {
+    background: linear-gradient(135deg, #FFE088 0%, #D4AF37 50%, #B8860B 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .gold-button-gradient {
+    background: linear-gradient(135deg, #E9C349 0%, #C5A059 50%, #B8860B 100%);
+  }
+}
+
+@keyframes pulseGlow {
+  0%, 100% { transform: scale(1); opacity: 0.95; }
+  50% { transform: scale(1.02); opacity: 1; filter: drop-shadow(0 0 12px rgba(233, 195, 73, 0.5)); }
+}
+
+@keyframes botanicalSway {
+  0% { transform: rotate(0deg) scale(1); }
+  50% { transform: rotate(3deg) scale(1.03); }
+  100% { transform: rotate(-2deg) scale(0.98); }
+}
+
+@keyframes botanicalSwayBottom {
+  0% { transform: rotate(180deg) scale(1); }
+  50% { transform: rotate(183deg) scale(1.02); }
+  100% { transform: rotate(178deg) scale(0.99); }
+}
+
+@keyframes discRotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.animate-aura {
+  animation: pulseGlow 4s ease-in-out infinite;
+}
+
+.animate-botanical-sway {
+  animation: botanicalSway 8s ease-in-out infinite alternate;
+}
+
+.animate-botanical-sway-bottom {
+  animation: botanicalSwayBottom 9s ease-in-out infinite alternate;
+}
+
+.animate-disc-rotate {
+  animation: discRotate 4.5s linear infinite;
+}

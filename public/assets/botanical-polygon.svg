@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="100%" height="100%">
+  <defs>
+    <linearGradient id="gold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F9E8A2"/>
+      <stop offset="40%" stop-color="#D4AF37"/>
+      <stop offset="70%" stop-color="#AA771C"/>
+      <stop offset="100%" stop-color="#855806"/>
+    </linearGradient>
+    <linearGradient id="emerald" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#34d399"/>
+      <stop offset="50%" stop-color="#059669"/>
+      <stop offset="100%" stop-color="#064e3b"/>
+    </linearGradient>
+    <linearGradient id="leafSoft" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6ee7b7"/>
+      <stop offset="100%" stop-color="#047857"/>
+    </linearGradient>
+    <filter id="softGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#D4AF37" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+
+  <!-- Geometric Polygonal Frame (Double Line) -->
+  <polygon points="200,30 350,110 350,290 200,370 50,290 50,110" fill="none" stroke="url(#gold)" stroke-width="2.5" stroke-dasharray="none" filter="url(#softGlow)"/>
+  <polygon points="200,42 338,116 338,284 200,358 62,284 62,116" fill="none" stroke="url(#gold)" stroke-width="1.2" stroke-opacity="0.7"/>
+
+  <!-- Corner Botanical: Top Left & Left Side -->
+  <g id="top-left-foliage">
+    <!-- Branch stem -->
+    <path d="M 50,110 Q 30,150 45,210" fill="none" stroke="url(#emerald)" stroke-width="2.2" stroke-linecap="round"/>
+    
+    <!-- Eucalyptus Round Leaves -->
+    <ellipse cx="32" cy="118" rx="14" ry="10" transform="rotate(-30 32 118)" fill="url(#leafSoft)" fill-opacity="0.9" stroke="url(#gold)" stroke-width="0.8"/>
+    <path d="M 23,122 Q 32,118 41,114" stroke="#064e3b" stroke-width="0.7" fill="none"/>
+
+    <ellipse cx="22" cy="145" rx="16" ry="12" transform="rotate(-15 22 145)" fill="url(#emerald)" fill-opacity="0.95" stroke="url(#gold)" stroke-width="0.8"/>
+    <ellipse cx="48" cy="138" rx="13" ry="9" transform="rotate(25 48 138)" fill="url(#leafSoft)" fill-opacity="0.85"/>
+
+    <ellipse cx="25" cy="175" rx="17" ry="11" transform="rotate(-10 25 175)" fill="url(#leafSoft)" fill-opacity="0.9" stroke="url(#gold)" stroke-width="0.8"/>
+    <ellipse cx="50" cy="170" rx="14" ry="10" transform="rotate(35 50 170)" fill="url(#emerald)" fill-opacity="0.9"/>
+
+    <ellipse cx="38" cy="205" rx="15" ry="10" transform="rotate(10 38 205)" fill="url(#leafSoft)" fill-opacity="0.9"/>
+  </g>
+
+  <!-- Fern Spray (Bottom Right) -->
+  <g id="bottom-right-fern">
+    <!-- Main stem -->
+    <path d="M 350,290 Q 365,240 335,190" fill="none" stroke="url(#emerald)" stroke-width="2.5" stroke-linecap="round"/>
+    <!-- Fern fronds -->
+    <path d="M 345,280 C 365,282 375,275 380,270 C 368,272 355,275 344,276" fill="url(#emerald)"/>
+    <path d="M 346,265 C 370,265 382,255 388,248 C 372,254 358,258 344,260" fill="url(#leafSoft)"/>
+    <path d="M 345,250 C 366,245 378,235 382,228 C 368,236 356,242 342,244" fill="url(#emerald)"/>
+    <path d="M 341,232 C 360,224 370,214 372,206 C 360,216 350,223 338,226" fill="url(#leafSoft)"/>
+    <path d="M 336,215 C 352,204 358,194 360,186 C 350,196 342,204 332,208" fill="url(#emerald)"/>
+
+    <!-- Inner fronds -->
+    <path d="M 348,275 C 330,272 320,264 316,258 C 326,263 338,268 347,271" fill="url(#leafSoft)"/>
+    <path d="M 345,258 C 328,252 320,242 318,235 C 328,242 338,248 344,253" fill="url(#emerald)"/>
+    <path d="M 341,240 C 326,232 320,222 319,215 C 327,224 336,230 340,235" fill="url(#leafSoft)"/>
+  </g>
+
+  <!-- Elegant Floral Lilies & Golden Berries at Corners -->
+  <!-- Top Center Accent -->
+  <g id="top-apex">
+    <circle cx="200" cy="30" r="4" fill="url(#gold)"/>
+    <ellipse cx="185" cy="24" rx="10" ry="5" transform="rotate(-20 185 24)" fill="url(#leafSoft)"/>
+    <ellipse cx="215" cy="24" rx="10" ry="5" transform="rotate(20 215 24)" fill="url(#leafSoft)"/>
+    <circle cx="172" cy="18" r="2.5" fill="url(#gold)"/>
+    <circle cx="228" cy="18" r="2.5" fill="url(#gold)"/>
+  </g>
+
+  <!-- Bottom Apex Accent -->
+  <g id="bottom-apex">
+    <circle cx="200" cy="370" r="5" fill="url(#gold)" filter="url(#softGlow)"/>
+    <ellipse cx="180" cy="375" rx="12" ry="6" transform="rotate(15 180 375)" fill="url(#leafSoft)"/>
+    <ellipse cx="220" cy="375" rx="12" ry="6" transform="rotate(-15 220 375)" fill="url(#emerald)"/>
+    <!-- Golden dots / stars -->
+    <circle cx="160" cy="380" r="2.5" fill="url(#gold)"/>
+    <circle cx="240" cy="380" r="2.5" fill="url(#gold)"/>
+  </g>
+
+  <!-- Golden Spores / Shimmer Particles -->
+  <circle cx="70" cy="85" r="2" fill="url(#gold)" opacity="0.8"/>
+  <circle cx="85" cy="70" r="1.5" fill="url(#gold)" opacity="0.6"/>
+  <circle cx="45" cy="240" r="2.2" fill="url(#gold)" opacity="0.9"/>
+  <circle cx="360" cy="160" r="2" fill="url(#gold)" opacity="0.8"/>
+  <circle cx="375" cy="180" r="1.5" fill="url(#gold)" opacity="0.7"/>
+  <circle cx="325" cy="310" r="2.5" fill="url(#gold)" opacity="0.9"/>
+  <circle cx="310" cy="330" r="1.5" fill="url(#gold)" opacity="0.7"/>
+</svg>
