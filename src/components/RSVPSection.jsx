@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Check, X, Send } from 'lucide-react';
+import { Check, X, Send, Loader2 } from 'lucide-react';
 
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyn4MeYgGU1Z4cYzOnsVJKcvHX_HSLzjLiZvow12paTs0ebaPTlR_GFhWqVECn0pa6n/exec';
 const STORAGE_KEY = 'wedding_wishes_fahrul_sabrina';
 
 const DEFAULT_WISHES = [
@@ -18,47 +19,127 @@ const DEFAULT_WISHES = [
   }
 ];
 
+// Helper untuk format waktu ke jam & menit
+const formatWishTime = (timeStr) => {
+  if (!timeStr) return '';
+  if (timeStr === 'Baru saja' || timeStr.includes('yang lalu')) return timeStr;
+
+  const date = new Date(timeStr);
+  if (!isNaN(date.getTime()) && timeStr.includes('T')) {
+    return (
+      new Intl.DateTimeFormat('id-ID', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+      })
+        .format(date)
+        .replace('.', ':') + ' WIB'
+    );
+  }
+
+  return timeStr;
+};
+
 export default function RSVPSection({ guestName }) {
+  const [name, setName] = useState(guestName || '');
   const [attendance, setAttendance] = useState('Hadir');
   const [guestCount, setGuestCount] = useState('1');
   const [message, setMessage] = useState('');
   const [wishes, setWishes] = useState([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [showToast, setShowToast] = useState(false);
 
+  // Sinkronisasi jika nama tamu dari prop URL berubah
   useEffect(() => {
+    if (guestName) {
+      setName(guestName);
+    }
+  }, [guestName]);
+
+  // Fetch data terbaru dari Google Sheets
+  const fetchWishes = async () => {
+    try {
+      const res = await fetch(SCRIPT_URL);
+      const data = await res.json();
+      if (Array.isArray(data)) {
+        setWishes(data);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      }
+    } catch (err) {
+      console.warn('Gagal memuat ucapan dari Google Sheets, menggunakan cache lokal:', err);
+    }
+  };
+
+  useEffect(() => {
+    // 1. Muat dari localStorage jika ada untuk render awal
     const saved = localStorage.getItem(STORAGE_KEY);
-    if (!saved) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(DEFAULT_WISHES));
-      setWishes(DEFAULT_WISHES);
-    } else {
+    if (saved) {
       try {
         setWishes(JSON.parse(saved));
       } catch {
-        setWishes(DEFAULT_WISHES);
+        setWishes([]);
       }
     }
+
+    // 2. Tarik data riil dari Google Sheets
+    fetchWishes();
+
+    // 3. Polling tiap 30 detik agar ucapan tamu lain otomatis masuk
+    const interval = setInterval(fetchWishes, 30000);
+    return () => clearInterval(interval);
   }, []);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!message.trim()) return;
+    if (!name.trim() || !message.trim() || isSubmitting) return;
+
+    setIsSubmitting(true);
+
+    const now = new Date();
+    const formattedNow =
+      new Intl.DateTimeFormat('id-ID', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+      })
+        .format(now)
+        .replace('.', ':') + ' WIB';
 
     const newWish = {
-      name: guestName || 'Tamu Undangan',
+      name: name.trim(),
       attendance: attendance,
+      guestCount: parseInt(guestCount, 10) || 1,
       message: message.trim(),
-      time: 'Baru saja'
+      time: formattedNow
     };
 
+    // Optimistic UI update: langsung muncul seketika di layar tanpa menunggu respons jaringan
     const updated = [newWish, ...wishes];
     setWishes(updated);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
     setMessage('');
     setShowToast(true);
 
-    setTimeout(() => {
-      setShowToast(false);
-    }, 4000);
+    try {
+      await fetch(SCRIPT_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'text/plain;charset=utf-8',
+        },
+        body: JSON.stringify(newWish)
+      });
+    } catch (err) {
+      console.error('Gagal mengirim ke Google Sheets:', err);
+    } finally {
+      setIsSubmitting(false);
+      setTimeout(() => {
+        setShowToast(false);
+      }, 4000);
+    }
   };
 
   return (
@@ -81,9 +162,11 @@ export default function RSVPSection({ guestName }) {
             </label>
             <input
               type="text"
-              value={guestName}
-              readOnly
-              className="w-full px-3.5 py-2.5 rounded-lg bg-ivory-container/50 border border-gold/30 text-emerald-deep font-medium cursor-not-allowed outline-none text-xs font-sans"
+              required
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Tulis nama lengkap Anda..."
+              className="w-full px-3.5 py-2.5 rounded-lg bg-white border border-gold/30 text-emerald-deep font-medium outline-none focus:border-aqua transition-colors text-xs font-sans"
             />
           </div>
 
@@ -150,10 +233,20 @@ export default function RSVPSection({ guestName }) {
 
           <button
             type="submit"
-            className="gold-shimmer-btn w-full py-3 px-6 rounded-full text-emerald-deep font-bold text-xs tracking-wider uppercase flex items-center justify-center gap-2 shadow-glow-gold hover:brightness-105 active:scale-95 transition-all font-sans"
+            disabled={isSubmitting}
+            className="gold-shimmer-btn w-full py-3 px-6 rounded-full text-emerald-deep font-bold text-xs tracking-wider uppercase flex items-center justify-center gap-2 shadow-glow-gold hover:brightness-105 active:scale-95 transition-all font-sans disabled:opacity-60 disabled:cursor-not-allowed"
           >
-            <Send className="w-3.5 h-3.5 text-emerald-deep" />
-            Kirim Konfirmasi &amp; Doa
+            {isSubmitting ? (
+              <>
+                <Loader2 className="w-3.5 h-3.5 text-emerald-deep animate-spin" />
+                Mengirimkan...
+              </>
+            ) : (
+              <>
+                <Send className="w-3.5 h-3.5 text-emerald-deep" />
+                Kirim Konfirmasi &amp; Doa
+              </>
+            )}
           </button>
 
           {showToast && (
@@ -169,27 +262,24 @@ export default function RSVPSection({ guestName }) {
             Doa &amp; Ucapan Tamu
           </div>
           <div className="space-y-3 max-h-80 overflow-y-auto pr-1">
-            {wishes.map((w, index) => (
-              <div
-                key={index}
-                className="bg-white/80 border border-gold/25 rounded-xl p-3.5 text-xs text-charcoal shadow-xs"
-              >
-                <div className="flex justify-between items-center mb-1">
-                  <span className="font-bold text-emerald-deep text-xs font-sans">{w.name}</span>
-                  <span
-                    className={`text-[10px] font-semibold px-2 py-0.5 rounded-full font-sans ${
-                      w.attendance === 'Tidak Hadir'
-                        ? 'bg-gray-200 text-gray-600'
-                        : 'bg-aqua-tint text-aqua-deep'
-                    }`}
-                  >
-                    {w.attendance}
-                  </span>
-                </div>
-                <p className="text-charcoal-muted leading-relaxed mt-1 font-sans">{w.message}</p>
-                <div className="text-[10px] text-gray-400 mt-2 font-sans">{w.time}</div>
+            {wishes.length === 0 ? (
+              <div className="py-6 text-center text-xs text-charcoal-muted/70 italic font-sans">
+                Belum ada ucapan doa. Jadilah yang pertama memberikan doa restu!
               </div>
-            ))}
+            ) : (
+              wishes.map((w, index) => (
+                <div
+                  key={index}
+                  className="bg-white/80 border border-gold/25 rounded-xl p-3.5 text-xs text-charcoal shadow-xs"
+                >
+                  <div className="mb-1">
+                    <span className="font-bold text-emerald-deep text-xs font-sans">{w.name}</span>
+                  </div>
+                  <p className="text-charcoal-muted leading-relaxed mt-1 font-sans">{w.message}</p>
+                  <div className="text-[10px] text-gray-400 mt-2 font-sans">{formatWishTime(w.time)}</div>
+                </div>
+              ))
+            )}
           </div>
         </div>
       </div>
