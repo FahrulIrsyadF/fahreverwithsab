@@ -2,7 +2,7 @@ import React from 'react';
 
 export default function LoveStory() {
   return (
-    <section className="pt-6 pb-12 px-5 text-center">
+    <section className="pt-6 pb-12 px-5 text-center" id="kisah">
       <div className="text-center mb-8">
         <span className="text-[11px] font-bold text-gold uppercase tracking-[0.25em] block mb-1 font-sans">
           Our Journey

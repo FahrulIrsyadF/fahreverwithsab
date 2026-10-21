@@ -1,29 +1,28 @@
 import React, { useState, useEffect } from 'react';
-import { Heart, Calendar, Images, Mail } from 'lucide-react';
+import { Heart, Scroll, Calendar, Gift, MailCheck } from 'lucide-react';
 
 export default function NavbarBottom() {
   const [activeTab, setActiveTab] = useState('mempelai');
 
   const navItems = [
-    { id: 'mempelai', label: 'Mempelai', icon: Heart, fillOnActive: true },
-    { id: 'acara', label: 'Acara', icon: Calendar, fillOnActive: false },
-    { id: 'galeri', label: 'Galeri', icon: Images, fillOnActive: false },
-    { id: 'rsvp', label: 'RSVP', icon: Mail, fillOnActive: false },
+    { id: 'mempelai', label: 'MEMPELAI', icon: Heart },
+    { id: 'kisah', label: 'KISAH', icon: Scroll },
+    { id: 'acara', label: 'ACARA', icon: Calendar },
+    { id: 'kado', label: 'KADO', icon: Gift },
+    { id: 'rsvp', label: 'RSVP', icon: MailCheck },
   ];
 
   useEffect(() => {
     const handleScroll = () => {
-      const scrollPos = window.scrollY + 200;
-      navItems.forEach((item) => {
+      const scrollPos = window.scrollY + 220;
+      for (let i = navItems.length - 1; i >= 0; i--) {
+        const item = navItems[i];
         const el = document.getElementById(item.id);
-        if (el) {
-          const top = el.offsetTop;
-          const height = el.offsetHeight;
-          if (scrollPos >= top && scrollPos < top + height) {
-            setActiveTab(item.id);
-          }
+        if (el && scrollPos >= el.offsetTop) {
+          setActiveTab(item.id);
+          break;
         }
-      });
+      }
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
@@ -35,13 +34,18 @@ export default function NavbarBottom() {
     setActiveTab(id);
     const target = document.getElementById(id);
     if (target) {
-      target.scrollIntoView({ behavior: 'smooth' });
+      const yOffset = -70; // offset navbar atas
+      const y = target.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      window.scrollTo({ top: y, behavior: 'smooth' });
     }
   };
 
   return (
-    <nav className="fixed bottom-0 inset-x-0 z-40 bg-ivory/85 backdrop-blur-lg border-t border-gold/25 shadow-lg">
-      <div className="w-full max-w-lg mx-auto flex justify-around items-center px-2 py-1.5 h-16">
+    <nav
+      aria-label="Navigasi Undangan"
+      className="fixed bottom-5 sm:bottom-6 left-1/2 -translate-x-1/2 z-40 w-[calc(100%-2rem)] max-w-sm sm:max-w-md pointer-events-auto"
+    >
+      <div className="bg-ivory/90 backdrop-blur-xl border border-aqua/40 shadow-xl shadow-emerald-deep/12 rounded-full px-2 py-1.5 sm:px-3 sm:py-2 flex items-center justify-between">
         {navItems.map((item) => {
           const Icon = item.icon;
           const isActive = activeTab === item.id;
@@ -51,28 +55,25 @@ export default function NavbarBottom() {
               key={item.id}
               href={`#${item.id}`}
               onClick={(e) => scrollToSection(e, item.id)}
-              className={`flex flex-col items-center justify-center p-1 w-20 transition-all duration-200 active:scale-95 relative ${
-                isActive
-                  ? 'text-emerald font-bold'
-                  : 'text-charcoal-muted font-medium hover:text-emerald'
-              }`}
+              className="flex flex-col items-center justify-center py-1 px-1 sm:px-2 flex-1 min-w-0 transition-all duration-300 active:scale-95 group"
             >
               <Icon
-                strokeWidth={isActive ? 2.2 : 1.8}
-                className={`w-5 h-5 transition-transform ${
+                strokeWidth={isActive ? 2.2 : 1.7}
+                className={`w-4 h-4 sm:w-5 sm:h-5 transition-all duration-300 ${
                   isActive
-                    ? `${item.fillOnActive ? 'fill-emerald' : 'fill-none'} text-emerald scale-105`
-                    : 'fill-none text-charcoal-muted'
+                    ? 'text-aqua scale-110 drop-shadow-[0_2px_8px_rgba(35,157,142,0.35)]'
+                    : 'text-charcoal-muted/70 group-hover:text-emerald-deep'
                 }`}
               />
-              <span className="text-[11px] font-sans tracking-wide mt-1">
+              <span
+                className={`text-[9px] sm:text-[10px] font-sans font-bold tracking-wider uppercase mt-1 transition-colors duration-300 truncate ${
+                  isActive
+                    ? 'text-aqua'
+                    : 'text-charcoal-muted/70 group-hover:text-emerald-deep'
+                }`}
+              >
                 {item.label}
               </span>
-
-              {/* Active Gold Underline Bar */}
-              {isActive && (
-                <div className="absolute -bottom-1.5 w-10 h-0.5 bg-gold-metallic rounded-full"></div>
-              )}
             </a>
           );
         })}

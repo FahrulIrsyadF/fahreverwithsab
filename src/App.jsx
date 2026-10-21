@@ -11,6 +11,7 @@ import Countdown from './components/Countdown';
 import EventDetails from './components/EventDetails';
 import LoveStory from './components/LoveStory';
 import Gallery from './components/Gallery';
+import WeddingGift from './components/WeddingGift';
 import RSVPSection from './components/RSVPSection';
 import Footer from './components/Footer';
 
@@ -98,10 +99,10 @@ export default function App() {
           onOpen={handleOpenInvitation}
         />
 
-        {/* Konten Utama Undangan (dengan padding top untuk NavbarTop & padding bottom untuk NavbarBottom) */}
+        {/* Konten Utama Undangan (dengan padding top untuk NavbarTop & padding bottom untuk floating NavbarBottom) */}
         <main
           className={`relative z-10 transition-opacity duration-700 ${
-            isOpened ? 'opacity-100 pt-14 pb-20' : 'opacity-0'
+            isOpened ? 'opacity-100 pt-14 pb-28' : 'opacity-0'
           }`}
         >
           <OpeningVerse />
@@ -110,6 +111,7 @@ export default function App() {
           <EventDetails />
           <LoveStory />
           <Gallery />
+          <WeddingGift />
           <RSVPSection guestName={validatedGuest} />
           <Footer />
         </main>
