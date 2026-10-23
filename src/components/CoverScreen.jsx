@@ -34,23 +34,16 @@ export default function CoverScreen({ guestName, isOpened, onOpen }) {
       </div>
 
       {/* Top Header Bar */}
-      <header className="w-full flex items-center justify-between pt-1 px-2 relative z-10">
+      <header className="w-full flex items-center justify-between pt-2 px-8 relative z-10">
         <div className="flex items-center space-x-2">
-          <span className="text-[11px] font-bold text-aqua-soft tracking-[0.25em] uppercase font-sans drop-shadow-sm">
-            Fahrul &amp; Sabrina
-          </span>
-        </div>
-
-        <div className="flex items-center space-x-1.5 bg-[#012b23]/80 backdrop-blur-md px-3 py-1 rounded-full border border-aqua/35 shadow-sm">
-          <Volume2 className="w-3.5 h-3.5 text-gold-pale animate-pulse" />
-          <span className="text-[10px] tracking-wider text-ivory/85 font-semibold uppercase font-sans">
-            Audio Tersedia
+          <span className="text-[11px] font-bold text-aqua-soft tracking-[0.25em] font-sans drop-shadow-sm">
+            #FAHreverWithSAB
           </span>
         </div>
       </header>
 
       {/* Center Envelope Hero Card (Vellum Panel on Jewel Canvas) */}
-      <div className="my-auto py-2 relative z-10">
+      <div className="my-auto py-1 relative z-10">
         <div
           className={`vellum-panel rounded-[32px] p-6 sm:p-7 relative text-center overflow-hidden border border-gold/45 shadow-2xl transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
             isOpening ? 'scale-[1.02] -translate-y-1.5 shadow-glow-jewel' : 'scale-100 translate-y-0'
@@ -149,7 +142,6 @@ export default function CoverScreen({ guestName, isOpened, onOpen }) {
             >
               {isOpening ? (
                 <>
-                  <Sparkles className="w-4 h-4 text-emerald-deep animate-spin" />
                   <span className="tracking-widest uppercase font-bold text-xs text-emerald-deep font-sans">
                     Membuka Undangan...
                   </span>
