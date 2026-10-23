@@ -94,14 +94,18 @@ export default function App() {
       />
 
       {/* Container Mobile-First Max 512px Centered */}
-      <div className="w-full max-w-lg min-h-screen bg-ivory relative shadow-2xl overflow-x-hidden foliage-watermark paper-grain">
+      <div className="w-full max-w-lg min-h-screen bg-ivory relative shadow-2xl overflow-x-hidden foliage-watermark">
+        {/* Global Tactile Fine-Art Cotton Paper Grain Overlay */}
+        <div className="fixed inset-0 pointer-events-none z-30 flex justify-center">
+          <div className="w-full max-w-lg h-full paper-grain mix-blend-multiply opacity-75" />
+        </div>
+
         {/* Atmospheric Background Canvas dari Stitch */}
         <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden flex justify-center">
           <div className="w-full max-w-lg h-full relative">
             <div className="absolute -top-16 -left-20 w-80 h-96 bg-emerald/20 rounded-full blur-3xl mix-blend-multiply opacity-60"></div>
             <div className="absolute top-1/4 -right-24 w-80 h-96 bg-aqua-glow/20 rounded-full blur-3xl opacity-50"></div>
             <div className="absolute bottom-10 left-1/2 -translate-x-1/2 w-96 h-96 bg-gold-light/20 rounded-full blur-3xl opacity-70"></div>
-            <div className="absolute inset-8 border border-gold/15 rounded-full pointer-events-none"></div>
           </div>
         </div>
 
@@ -120,13 +124,13 @@ export default function App() {
           onOpen={handleOpenInvitation}
         />
 
-        {/* Konten Utama Undangan (dengan padding top untuk NavbarTop & padding bottom untuk floating NavbarBottom) */}
+        {/* Konten Utama Undangan (dengan padding top untuk NavbarTop) */}
         <main
           className={`relative z-10 transition-opacity duration-700 ${
-            isOpened ? 'opacity-100 pt-14 pb-28' : 'opacity-0'
+            isOpened ? 'opacity-100 pt-14' : 'opacity-0'
           }`}
         >
-          <OpeningVerse />
+          <OpeningVerse isOpened={isOpened} />
           <CoupleSection />
           <Countdown />
           <EventDetails />
