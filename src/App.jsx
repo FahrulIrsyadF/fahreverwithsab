@@ -94,7 +94,7 @@ export default function App() {
       />
 
       {/* Container Mobile-First Max 512px Centered */}
-      <div className="w-full max-w-lg min-h-screen bg-ivory relative shadow-2xl overflow-x-hidden foliage-watermark">
+      <div className="w-full max-w-lg min-h-screen bg-ivory relative shadow-2xl overflow-x-hidden foliage-watermark paper-grain">
         {/* Atmospheric Background Canvas dari Stitch */}
         <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden flex justify-center">
           <div className="w-full max-w-lg h-full relative">
