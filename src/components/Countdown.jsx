@@ -70,13 +70,12 @@ export default function Countdown() {
   return (
     <section
       ref={sectionRef}
-      className="pt-12 pb-8 px-5 text-center relative overflow-hidden bg-gradient-to-b from-[#00281F] via-[#003E36] to-[#004A41] rounded-t-[44px] border-t-2 border-gold/45 shadow-[0_-12px_35px_rgba(0,53,39,0.12)]"
+      className="pt-12 pb-8 px-5 text-center relative overflow-hidden bg-gradient-to-b from-[#00281F] via-[#003830] to-[#00443B] rounded-t-[44px] border-t-2 border-gold/45"
     >
-      {/* Ambient Aquamarine & Gold Radiance */}
-      <div className="absolute -top-16 -right-16 w-56 h-56 bg-aqua-glow/20 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-0 -left-16 w-56 h-56 bg-gold-light/15 rounded-full blur-3xl pointer-events-none" />
+      {/* Ambient Aquamarine Radiance (Hanya di bagian atas tengah agar sambungan bawah ke EventDetails 100% mulus) */}
+      <div className="absolute -top-20 left-1/2 -translate-x-1/2 w-72 h-48 bg-aqua-glow/15 rounded-full blur-3xl pointer-events-none" />
 
-      {/* Botanical Corner Ornaments with Organic Wind Sway */}
+      {/* Botanical Corner Ornament (Hanya di sudut kanan atas) */}
       <img
         src="/assets/botanical-crest.svg"
         alt=""
@@ -87,7 +86,7 @@ export default function Countdown() {
         src="/assets/botanical-crest.svg"
         alt=""
         aria-hidden="true"
-        className="absolute -bottom-10 -left-10 w-36 h-36 object-contain opacity-25 pointer-events-none animate-botanical-sway-bottom"
+        className="absolute -top-10 -left-10 w-36 h-36 object-contain opacity-20 pointer-events-none animate-botanical-sway"
       />
 
       <div className="relative z-10 max-w-md mx-auto">

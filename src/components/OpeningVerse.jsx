@@ -4,7 +4,7 @@ import BrandMonogram from './BrandMonogram';
 
 export default function OpeningVerse({ isOpened = true }) {
   return (
-    <section className="text-center pt-6 pb-12 px-5 relative overflow-hidden bg-gradient-to-b from-aqua-tint/55 via-ivory/90 to-ivory">
+    <section className="text-center pt-6 pb-12 px-5 relative overflow-hidden bg-gradient-to-b from-aqua-tint/45 via-transparent to-transparent">
       {/* Subtle Top Aquamarine & Gold Aurora */}
       <div className="absolute -top-12 left-1/2 -translate-x-1/2 w-80 h-48 bg-aqua-glow/20 rounded-full blur-3xl pointer-events-none" />
 
@@ -51,14 +51,12 @@ export default function OpeningVerse({ isOpened = true }) {
 
             {/* Caption Inside Bottom of Arch */}
             <div className="absolute inset-x-0 bottom-5 px-4 text-center z-10">
-              <span className="inline-flex items-center gap-1.5 text-[9px] font-bold tracking-[0.28em] uppercase text-aqua-soft font-sans mb-1">
-                <Sparkles className="w-2.5 h-2.5 text-gold-pale" />
-                <span>The Beginning of Forever</span>
-                <Sparkles className="w-2.5 h-2.5 text-gold-pale" />
-              </span>
-              <h1 className="font-headline text-3xl sm:text-4xl text-ivory tracking-tight font-normal drop-shadow-sm">
+              <h1 className="font-headline text-3xl text-ivory tracking-tight font-normal drop-shadow-sm">
                 Fahrul <span className="font-headline italic text-gold-pale font-normal">&amp;</span> Sabrina
               </h1>
+              <span className="inline-flex items-center gap-1.5 text-[8px] font-bold tracking-[0.28em] uppercase text-aqua-soft font-sans mb-1">
+                <span>The Beginning of Forever</span>
+              </span>
             </div>
           </div>
 
@@ -68,8 +66,6 @@ export default function OpeningVerse({ isOpened = true }) {
               isOpened ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-4 scale-90'
             }`}
           >
-            <BrandMonogram size="sm" variant="gold" showAmpersand={false} />
-            <span className="w-1 h-1 rounded-full bg-gold" />
             <span className="text-[11px] font-bold tracking-[0.22em] text-ivory font-sans">
               17 . 07 . 2027
             </span>

@@ -52,7 +52,7 @@ export default function Gallery() {
 
   return (
     <section
-      className="py-12 px-5 text-center relative overflow-hidden bg-gradient-to-b from-[#002820] via-[#003A33] to-[#00251D] rounded-[40px] border-y-2 border-gold/45 shadow-2xl my-2"
+      className="py-12 px-5 text-center relative overflow-hidden bg-gradient-to-b from-[#002820] via-[#003A33] to-[#00251D] rounded-[44px] border-y-2 border-gold/45"
       id="galeri"
       ref={sectionRef}
     >

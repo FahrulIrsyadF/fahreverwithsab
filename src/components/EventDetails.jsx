@@ -9,12 +9,12 @@ export default function EventDetails() {
 
   return (
     <section
-      className="pt-6 pb-16 px-5 relative overflow-hidden bg-gradient-to-b from-[#004A41] via-[#003B33] to-[#00261E] rounded-b-[44px] border-b-2 border-gold/45 shadow-[0_14px_35px_rgba(0,53,39,0.14)]"
+      className="-mt-px pt-6 pb-16 px-5 relative overflow-hidden bg-gradient-to-b from-[#00443B] via-[#003830] to-[#00261E] rounded-b-[44px] border-b-2 border-gold/45"
       id="acara"
     >
-      {/* Ambient Aquamarine & Gold Glow */}
-      <div className="absolute top-1/3 -right-20 w-64 h-64 bg-aqua-glow/20 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-6 -left-20 w-64 h-64 bg-gold/15 rounded-full blur-3xl pointer-events-none" />
+      {/* Ambient Aquamarine & Gold Glow (Di tengah-bawah agar tidak memotong sambungan atas dengan Countdown) */}
+      <div className="absolute top-1/2 -right-24 w-60 h-60 bg-aqua-glow/15 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-4 -left-24 w-60 h-60 bg-gold/10 rounded-full blur-3xl pointer-events-none" />
 
       {/* Section Header on Dark Jewel Canvas */}
       <div

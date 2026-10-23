@@ -8,7 +8,7 @@ export default function Footer() {
   return (
     <footer
       ref={sectionRef}
-      className="px-6 pt-14 pb-32 text-center jewel-canvas rounded-t-[44px] border-t-2 border-gold/50 mt-6 relative overflow-hidden text-ivory shadow-[0_-14px_35px_rgba(0,53,39,0.15)]"
+      className="px-6 pt-14 pb-32 text-center jewel-canvas rounded-t-[44px] border-t-2 border-gold/50 mt-6 relative overflow-hidden text-ivory"
     >
       {/* Ambient Aquamarine & Gold Glow */}
       <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-aqua-glow/15 rounded-full blur-3xl pointer-events-none" />

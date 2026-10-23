@@ -67,7 +67,7 @@ export default function LoveStory() {
 
   return (
     <section
-      className="pt-12 pb-16 px-5 text-center relative overflow-hidden bg-gradient-to-b from-ivory via-aqua-tint/35 to-ivory"
+      className="pt-12 pb-16 px-5 text-center relative overflow-hidden"
       id="kisah"
       ref={sectionRef}
     >
