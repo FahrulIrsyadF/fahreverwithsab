@@ -4,12 +4,12 @@ import BrandMonogram from './BrandMonogram';
 
 export default function NavbarTop({ isPlaying, onToggleMusic }) {
   return (
-    <header className="fixed top-0 inset-x-0 z-40 bg-ivory/85 backdrop-blur-md border-b border-gold/20 shadow-sm">
+    <header className="fixed top-0 inset-x-0 z-40 bg-ivory/90 backdrop-blur-md border-b border-aqua/20 shadow-sm transition-all duration-300">
       <div className="flex justify-between items-center w-full px-5 max-w-lg mx-auto h-14">
         {/* Left Leaf / Botanical Icon */}
-        <div className="text-emerald flex items-center justify-center">
+        <div className="text-aqua-teal flex items-center justify-center p-1 rounded-full bg-aqua-tint/60 border border-aqua/30">
           <svg
-            className="w-5 h-5"
+            className="w-4 h-4 text-aqua-teal"
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
@@ -35,13 +35,13 @@ export default function NavbarTop({ isPlaying, onToggleMusic }) {
           type="button"
           onClick={onToggleMusic}
           aria-label="Toggle Audio"
-          className="text-emerald hover:text-gold transition-colors duration-200 active:scale-90 flex items-center justify-center p-1 rounded-full cursor-pointer"
+          className="text-emerald hover:text-aqua transition-all duration-200 active:scale-90 flex items-center justify-center p-2 rounded-full cursor-pointer bg-white/60 border border-gold/30 hover:border-aqua/50"
           title={isPlaying ? 'Hentikan Musik' : 'Putar Musik'}
         >
           {isPlaying ? (
-            <Volume2 className="w-5 h-5 text-emerald animate-pulse" />
+            <Volume2 className="w-4 h-4 text-emerald animate-pulse" />
           ) : (
-            <VolumeX className="w-5 h-5 text-charcoal-muted" />
+            <VolumeX className="w-4 h-4 text-charcoal-muted" />
           )}
         </button>
       </div>
