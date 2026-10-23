@@ -74,11 +74,6 @@
   100% { transform: rotate(178deg) scale(0.99); }
 }
 
-@keyframes discRotate {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
 .animate-aura {
   animation: pulseGlow 4s ease-in-out infinite;
 }
@@ -89,8 +84,4 @@
 
 .animate-botanical-sway-bottom {
   animation: botanicalSwayBottom 9s ease-in-out infinite alternate;
-}
-
-.animate-disc-rotate {
-  animation: discRotate 4.5s linear infinite;
 }

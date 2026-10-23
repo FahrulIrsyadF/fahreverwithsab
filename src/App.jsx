@@ -80,7 +80,6 @@ export default function App() {
             <div className="absolute top-1/4 -right-24 w-80 h-96 bg-aqua-glow/20 rounded-full blur-3xl opacity-50"></div>
             <div className="absolute bottom-10 left-1/2 -translate-x-1/2 w-96 h-96 bg-gold-light/20 rounded-full blur-3xl opacity-70"></div>
             <div className="absolute inset-8 border border-gold/15 rounded-full pointer-events-none"></div>
-            <div className="absolute inset-14 border border-gold/10 rounded-full pointer-events-none rotate-45"></div>
           </div>
         </div>
 

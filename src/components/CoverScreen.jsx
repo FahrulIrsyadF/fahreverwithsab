@@ -1,5 +1,5 @@
 import React from 'react';
-import { Mail, Calendar, Volume2, Sparkles, Heart } from 'lucide-react';
+import { Mail, Calendar, Volume2 } from 'lucide-react';
 
 export default function CoverScreen({ guestName, isOpened, onOpen }) {
   return (
@@ -17,7 +17,6 @@ export default function CoverScreen({ guestName, isOpened, onOpen }) {
           <div className="absolute top-1/4 -right-24 w-80 h-96 bg-aqua-glow/25 rounded-full blur-3xl opacity-50"></div>
           <div className="absolute bottom-10 left-1/2 -translate-x-1/2 w-96 h-96 bg-gold-light/20 rounded-full blur-3xl opacity-70"></div>
           <div className="absolute inset-8 border border-gold/15 rounded-full pointer-events-none"></div>
-          <div className="absolute inset-14 border border-gold/10 rounded-full pointer-events-none rotate-45"></div>
         </div>
       </div>
 
@@ -54,8 +53,6 @@ export default function CoverScreen({ guestName, isOpened, onOpen }) {
                 <span className="font-headline text-lg text-gold-light tracking-wider font-semibold z-10">
                   F &amp; S
                 </span>
-                <div className="absolute -bottom-1.5 bg-ivory px-1.5 py-0.5 rounded-full border border-gold/50 flex items-center shadow-xs">
-                </div>
               </div>
             </div>
           </div>
