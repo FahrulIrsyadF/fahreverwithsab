@@ -11,15 +11,54 @@
 @layer utilities {
   .gold-shimmer-btn {
     background: linear-gradient(135deg, #e9c349 0%, #fed65b 45%, #d4af37 75%, #bfa034 100%);
-    box-shadow: 0 4px 20px -2px rgba(212, 175, 55, 0.4), 0 0 0 1px rgba(255, 224, 136, 0.6) inset;
+    box-shadow: 0 4px 20px -2px rgba(212, 175, 55, 0.45), 0 0 0 1px rgba(255, 224, 136, 0.65) inset;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .gold-shimmer-btn::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -60%;
+    width: 40%;
+    height: 200%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.45),
+      transparent
+    );
+    transform: rotate(25deg);
+    animation: sheenSweep 4.5s ease-in-out infinite;
+    pointer-events: none;
   }
 
   .vellum-panel {
-    background: rgba(250, 249, 244, 0.88);
+    background-color: rgba(250, 249, 244, 0.9);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140' viewBox='0 0 140 140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.065'/%3E%3C/svg%3E");
+    background-size: 140px 140px;
+    background-repeat: repeat;
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(233, 195, 73, 0.35);
-    box-shadow: 0 16px 40px -8px rgba(0, 53, 39, 0.12), 0 0 0 1px rgba(255, 255, 255, 0.8) inset;
+    border: 1px solid rgba(212, 175, 55, 0.38);
+    box-shadow: 0 16px 40px -8px rgba(0, 53, 39, 0.12), 0 0 0 1px rgba(255, 255, 255, 0.85) inset;
+  }
+
+  /* Fine-Art Cotton Paper Grain Texture (Tidak menimpa radial-gradient) */
+  .paper-grain {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='150' viewBox='0 0 150 150'%3E%3Cfilter id='grain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='150' height='150' filter='url(%23grain)' opacity='0.075'/%3E%3C/svg%3E");
+    background-size: 150px 150px;
+    background-repeat: repeat;
+  }
+
+  .foliage-watermark {
+    background-image:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='150' viewBox='0 0 150 150'%3E%3Cfilter id='grain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='150' height='150' filter='url(%23grain)' opacity='0.07'/%3E%3C/svg%3E"),
+      radial-gradient(circle at 10% 20%, rgba(114, 215, 202, 0.16) 0%, transparent 55%),
+      radial-gradient(circle at 90% 80%, rgba(212, 175, 55, 0.12) 0%, transparent 50%);
+    background-size: 150px 150px, 100% 100%, 100% 100%;
+    background-repeat: repeat, no-repeat, no-repeat;
   }
 
   /* Arch silhouette frames matching modern organic wedding cards */
@@ -41,9 +80,8 @@
     }
   }
 
-  .foliage-watermark {
-    background-image: radial-gradient(circle at 10% 20%, rgba(149, 211, 186, 0.12) 0%, transparent 60%),
-                      radial-gradient(circle at 90% 80%, rgba(233, 195, 73, 0.08) 0%, transparent 50%);
+  .photo-frame-cathedral {
+    border-radius: 160px 160px 28px 28px;
   }
 
   .jewel-canvas {
@@ -51,15 +89,13 @@
   }
 
   .jewel-card-dark {
-    background: rgba(0, 38, 32, 0.75);
+    background-color: rgba(0, 44, 37, 0.82);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140' viewBox='0 0 140 140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.055'/%3E%3C/svg%3E");
+    background-size: 140px 140px;
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(114, 215, 202, 0.25);
-    box-shadow: 0 16px 40px -8px rgba(0, 20, 15, 0.35), 0 0 0 1px rgba(212, 175, 55, 0.2) inset;
-  }
-
-  .paper-grain {
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.035'/%3E%3C/svg%3E");
+    border: 1px solid rgba(114, 215, 202, 0.28);
+    box-shadow: 0 20px 45px -10px rgba(0, 20, 15, 0.45), 0 0 0 1px rgba(212, 175, 55, 0.22) inset;
   }
 
   .tabular-nums {
@@ -67,45 +103,130 @@
   }
 
   .arch-offset-shadow-left {
-    box-shadow: -8px 8px 0px 0px rgba(0, 77, 70, 0.35), 0 16px 32px -4px rgba(0, 53, 39, 0.25);
+    box-shadow: -10px 10px 0px 0px rgba(0, 77, 70, 0.45), -10px 10px 0px 1px rgba(212, 175, 55, 0.4), 0 18px 36px -6px rgba(0, 53, 39, 0.28);
   }
 
   .arch-offset-shadow-right {
-    box-shadow: 8px 8px 0px 0px rgba(0, 77, 70, 0.35), 0 16px 32px -4px rgba(0, 53, 39, 0.25);
+    box-shadow: 10px 10px 0px 0px rgba(0, 77, 70, 0.45), 10px 10px 0px 1px rgba(212, 175, 55, 0.4), 0 18px 36px -6px rgba(0, 53, 39, 0.28);
   }
 
-  /* Editorial Staggered Scroll Reveal System */
-  .reveal-base {
+  /* Editorial Drop-Cap untuk Love Story */
+  .editorial-dropcap::first-letter {
+    float: left;
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: 2.65rem;
+    line-height: 0.85;
+    padding-top: 3px;
+    padding-right: 10px;
+    padding-bottom: 2px;
+    color: #004D46;
+    font-weight: 700;
+  }
+
+  /* Variasi Scroll Reveal System (Non-Basic Editorial Motion) */
+  .reveal-blur-up {
     opacity: 0;
-    transform: translateY(28px);
-    filter: blur(4px);
-    transition: opacity 850ms cubic-bezier(0.22, 1, 0.36, 1),
-                transform 850ms cubic-bezier(0.22, 1, 0.36, 1),
-                filter 850ms cubic-bezier(0.22, 1, 0.36, 1);
+    transform: translateY(32px);
+    filter: blur(6px);
+    transition: opacity 950ms cubic-bezier(0.22, 1, 0.36, 1),
+                transform 950ms cubic-bezier(0.22, 1, 0.36, 1),
+                filter 950ms cubic-bezier(0.22, 1, 0.36, 1);
   }
 
-  .reveal-active {
+  .reveal-slide-left {
+    opacity: 0;
+    transform: translateX(-36px) translateY(12px) rotate(-1deg);
+    filter: blur(4px);
+    transition: opacity 1000ms cubic-bezier(0.22, 1, 0.36, 1),
+                transform 1000ms cubic-bezier(0.22, 1, 0.36, 1),
+                filter 1000ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .reveal-slide-right {
+    opacity: 0;
+    transform: translateX(36px) translateY(12px) rotate(1deg);
+    filter: blur(4px);
+    transition: opacity 1000ms cubic-bezier(0.22, 1, 0.36, 1),
+                transform 1000ms cubic-bezier(0.22, 1, 0.36, 1),
+                filter 1000ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .reveal-scale-bloom {
+    opacity: 0;
+    transform: scale(0.88) translateY(20px);
+    filter: blur(6px);
+    transition: opacity 950ms cubic-bezier(0.16, 1, 0.3, 1),
+                transform 950ms cubic-bezier(0.16, 1, 0.3, 1),
+                filter 950ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .reveal-arch-curtain {
+    clip-path: inset(18% 8% 18% 8% round 120px);
+    opacity: 0;
+    transform: translateY(24px) scale(0.96);
+    transition: clip-path 1200ms cubic-bezier(0.22, 1, 0.36, 1),
+                opacity 900ms cubic-bezier(0.22, 1, 0.36, 1),
+                transform 1200ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .reveal-arch-curtain.is-revealed {
+    clip-path: inset(0% 0% 0% 0% round 160px 160px 28px 28px);
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
+  .is-revealed {
     opacity: 1 !important;
-    transform: translateY(0) scale(1) !important;
+    transform: translate(0, 0) scale(1) rotate(0deg) !important;
     filter: blur(0px) !important;
   }
 }
 
+@keyframes sheenSweep {
+  0% { left: -75%; }
+  35%, 100% { left: 135%; }
+}
+
 @keyframes pulseGlow {
   0%, 100% { transform: scale(1); opacity: 0.95; }
-  50% { transform: scale(1.02); opacity: 1; filter: drop-shadow(0 0 12px rgba(233, 195, 73, 0.5)); }
+  50% { transform: scale(1.03); opacity: 1; filter: drop-shadow(0 0 14px rgba(128, 229, 215, 0.45)); }
 }
 
 @keyframes botanicalSway {
   0% { transform: rotate(0deg) scale(1); }
-  50% { transform: rotate(3deg) scale(1.03); }
-  100% { transform: rotate(-2deg) scale(0.98); }
+  50% { transform: rotate(4deg) scale(1.04); }
+  100% { transform: rotate(-3deg) scale(0.98); }
 }
 
 @keyframes botanicalSwayBottom {
   0% { transform: rotate(180deg) scale(1); }
-  50% { transform: rotate(183deg) scale(1.02); }
-  100% { transform: rotate(178deg) scale(0.99); }
+  50% { transform: rotate(184deg) scale(1.03); }
+  100% { transform: rotate(177deg) scale(0.98); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scaleUp {
+  from { opacity: 0; transform: scale(0.92); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes tickerPop {
+  0% { opacity: 0; transform: translateY(65%) scale(0.9); filter: blur(2px); }
+  100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+}
+
+@keyframes waxRipple {
+  0% { transform: scale(0.9); opacity: 0.85; }
+  100% { transform: scale(2.4); opacity: 0; }
+}
+
+@keyframes scrollBounce {
+  0%, 100% { transform: translateY(0); opacity: 0.5; }
+  50% { transform: translateY(6px); opacity: 1; }
 }
 
 .animate-aura {
@@ -113,9 +234,29 @@
 }
 
 .animate-botanical-sway {
-  animation: botanicalSway 8s ease-in-out infinite alternate;
+  animation: botanicalSway 7s ease-in-out infinite alternate;
 }
 
 .animate-botanical-sway-bottom {
-  animation: botanicalSwayBottom 9s ease-in-out infinite alternate;
+  animation: botanicalSwayBottom 8s ease-in-out infinite alternate;
+}
+
+.animate-fadeIn {
+  animation: fadeIn 350ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.animate-scaleUp {
+  animation: scaleUp 380ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-ticker {
+  animation: tickerPop 320ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.animate-wax-ripple {
+  animation: waxRipple 700ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-scroll-indicator {
+  animation: scrollBounce 2.2s ease-in-out infinite;
 }
