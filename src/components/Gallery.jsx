@@ -3,7 +3,7 @@ import { X, ZoomIn } from 'lucide-react';
 import useScrollReveal from '../hooks/useScrollReveal';
 
 export default function Gallery() {
-  const [sectionRef, isVisible] = useScrollReveal({ threshold: 0.1 });
+  const [sectionRef, isVisible] = useScrollReveal({ threshold: 0.12 });
   const [activeImage, setActiveImage] = useState(null);
 
   const photos = [
@@ -12,22 +12,31 @@ export default function Gallery() {
       src: 'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80',
       caption: 'Langkah Awal Menuju Abadi',
       tag: 'FIG. 01 — PREWEDDING',
-      span: 'col-span-2 h-72 sm:h-80'
+      span: 'col-span-2',
+      imgHeight: 'h-64 sm:h-72',
+      revealClass: 'reveal-scale-bloom',
+      delay: 120,
     },
     {
       id: 2,
       src: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=500&q=80',
       caption: 'Tatap Teduh & Ketulusan',
-      tag: 'FIG. 02 — CEREMONY',
-      span: 'col-span-1 h-48 sm:h-52'
+      tag: 'FIG. 02 — INTIMATE',
+      span: 'col-span-1',
+      imgHeight: 'h-44 sm:h-48',
+      revealClass: 'reveal-slide-left',
+      delay: 260,
     },
     {
       id: 3,
       src: 'https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=500&q=80',
       caption: 'Dua Hati Bersatu',
-      tag: 'FIG. 03 — TOGETHER',
-      span: 'col-span-1 h-48 sm:h-52'
-    }
+      tag: 'FIG. 03 — FOREVER',
+      span: 'col-span-1',
+      imgHeight: 'h-44 sm:h-48',
+      revealClass: 'reveal-slide-right',
+      delay: 380,
+    },
   ];
 
   // Tutup lightbox dengan tombol Escape
@@ -42,50 +51,64 @@ export default function Gallery() {
   }, [activeImage]);
 
   return (
-    <section className="pt-8 pb-14 px-5 text-center relative overflow-hidden" id="galeri" ref={sectionRef}>
+    <section
+      className="py-12 px-5 text-center relative overflow-hidden bg-gradient-to-b from-[#002820] via-[#003A33] to-[#00251D] rounded-[40px] border-y-2 border-gold/45 shadow-2xl my-2"
+      id="galeri"
+      ref={sectionRef}
+    >
+      {/* Ambient Aquamarine & Gold Glow */}
+      <div className="absolute -top-12 left-1/2 -translate-x-1/2 w-64 h-64 bg-aqua-glow/15 rounded-full blur-3xl pointer-events-none" />
+
       {/* Section Header */}
       <div
-        className={`text-center mb-10 transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${
-          isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
+        className={`text-center mb-9 relative z-10 reveal-blur-up ${
+          isVisible ? 'is-revealed' : ''
         }`}
       >
-        <span className="text-[10px] sm:text-[11px] font-bold text-aqua-teal uppercase tracking-[0.28em] block mb-1 font-sans">
+        <span className="text-[10px] sm:text-[11px] font-bold text-aqua-soft uppercase tracking-[0.28em] block mb-1 font-sans">
           Momen Bahagia
         </span>
-        <h2 className="font-headline text-3xl sm:text-4xl text-emerald-deep font-normal">
+        <h2 className="font-headline text-3xl sm:text-4xl text-ivory font-normal">
           Galeri Foto
         </h2>
         <div className="w-12 h-0.5 bg-gradient-to-r from-transparent via-gold to-transparent mx-auto mt-2.5 rounded-full"></div>
       </div>
 
-      {/* Museum Matting Editorial Grid */}
-      <div className="grid grid-cols-2 gap-3.5 max-w-md mx-auto">
-        {photos.map((photo, index) => (
+      {/* Museum Matting Editorial Grid (Caption selalu terlihat di mobile & desktop) */}
+      <div className="grid grid-cols-2 gap-3.5 max-w-md mx-auto relative z-10">
+        {photos.map((photo) => (
           <div
             key={photo.id}
             onClick={() => setActiveImage(photo)}
-            className={`${photo.span} relative rounded-2xl p-2 bg-ivory/90 border border-gold/40 shadow-soft cursor-pointer group overflow-hidden transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${
-              isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-            }`}
-            style={{ transitionDelay: `${150 + index * 120}ms` }}
+            className={`${photo.span} ${photo.revealClass} ${
+              isVisible ? 'is-revealed' : ''
+            } relative rounded-2xl p-2 sm:p-2.5 pb-2.5 bg-ivory paper-grain border border-gold/50 shadow-xl cursor-pointer group overflow-hidden`}
+            style={{ transitionDelay: `${photo.delay}ms` }}
           >
-            <div className="w-full h-full rounded-xl overflow-hidden relative">
+            <div className={`w-full ${photo.imgHeight} rounded-xl overflow-hidden relative`}>
               <img
                 src={photo.src}
                 alt={photo.caption}
-                className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                className={`w-full h-full object-cover transition-transform duration-[1500ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-105 ${
+                  isVisible ? 'scale-100' : 'scale-125'
+                }`}
                 loading="lazy"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-emerald-deep/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-3 text-left">
-                <span className="text-[9px] font-bold tracking-widest text-gold-pale uppercase font-sans">
+              <div className="absolute inset-0 bg-gradient-to-t from-emerald-deep/40 via-transparent to-transparent pointer-events-none" />
+              <div className="absolute top-2.5 right-2.5 p-1.5 rounded-full bg-emerald-deep/75 backdrop-blur-sm text-gold-pale border border-gold/40 shadow-sm transition-transform duration-300 group-hover:scale-110">
+                <ZoomIn className="w-3.5 h-3.5" />
+              </div>
+            </div>
+
+            {/* Editorial Museum Matting Caption */}
+            <div className="pt-2 px-1 flex items-center justify-between gap-1 text-left">
+              <div className="min-w-0">
+                <span className="text-[8px] sm:text-[9px] font-bold tracking-[0.2em] text-aqua-teal uppercase block font-sans">
                   {photo.tag}
                 </span>
-                <span className="text-xs text-ivory font-medium font-sans">
+                <p className="font-headline italic text-xs sm:text-sm text-emerald-deep truncate">
                   {photo.caption}
-                </span>
-              </div>
-              <div className="absolute top-2 right-2 p-1.5 rounded-full bg-emerald-deep/50 text-gold-pale opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <ZoomIn className="w-3.5 h-3.5" />
+                </p>
               </div>
             </div>
           </div>
@@ -98,7 +121,7 @@ export default function Gallery() {
           role="dialog"
           aria-modal="true"
           onClick={() => setActiveImage(null)}
-          className="fixed inset-0 z-50 bg-[#011C15]/90 backdrop-blur-xl flex flex-col items-center justify-center p-4 transition-all duration-300 animate-fadeIn"
+          className="fixed inset-0 z-50 bg-[#011C15]/92 backdrop-blur-xl flex flex-col items-center justify-center p-4 animate-fadeIn"
         >
           <button
             type="button"
@@ -107,27 +130,27 @@ export default function Gallery() {
               setActiveImage(null);
             }}
             aria-label="Tutup Pratinjau Foto"
-            className="absolute top-5 right-5 p-2 rounded-full bg-white/10 text-ivory hover:bg-white/20 transition-colors border border-white/20 active:scale-95"
+            className="absolute top-5 right-5 p-2.5 rounded-full bg-white/10 text-ivory hover:bg-white/20 transition-colors border border-gold/40 active:scale-95"
           >
             <X className="w-5 h-5" />
           </button>
 
           <div
             onClick={(e) => e.stopPropagation()}
-            className="max-w-md w-full bg-ivory rounded-3xl p-3 border border-gold/50 shadow-2xl overflow-hidden animate-scaleUp"
+            className="max-w-md w-full bg-ivory paper-grain rounded-3xl p-3 border-2 border-gold/60 shadow-2xl overflow-hidden animate-scaleUp"
           >
-            <div className="rounded-2xl overflow-hidden max-h-[75vh]">
+            <div className="rounded-2xl overflow-hidden max-h-[72vh] bg-emerald-deep/10">
               <img
                 src={activeImage.src}
                 alt={activeImage.caption}
                 className="w-full h-auto max-h-[70vh] object-contain mx-auto"
               />
             </div>
-            <div className="pt-3 pb-1 px-2 text-center">
-              <span className="text-[10px] font-bold text-aqua-teal tracking-widest uppercase block font-sans">
+            <div className="pt-3 pb-1.5 px-2 text-center">
+              <span className="text-[10px] font-bold text-aqua-teal tracking-[0.25em] uppercase block font-sans">
                 {activeImage.tag}
               </span>
-              <p className="font-headline italic text-sm text-emerald-deep mt-0.5">
+              <p className="font-headline italic text-base text-emerald-deep mt-0.5">
                 {activeImage.caption}
               </p>
             </div>

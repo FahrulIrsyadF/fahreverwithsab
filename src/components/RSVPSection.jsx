@@ -151,8 +151,8 @@ export default function RSVPSection({ guestName }) {
     <section className="pt-8 pb-14 px-5 text-center relative overflow-hidden" id="rsvp" ref={sectionRef}>
       {/* Section Header */}
       <div
-        className={`text-center mb-10 transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${
-          isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
+        className={`text-center mb-10 reveal-blur-up ${
+          isVisible ? 'is-revealed' : ''
         }`}
       >
         <span className="text-[10px] sm:text-[11px] font-bold text-aqua-teal uppercase tracking-[0.28em] block mb-1 font-sans">
@@ -165,9 +165,10 @@ export default function RSVPSection({ guestName }) {
       </div>
 
       <div
-        className={`max-w-md mx-auto vellum-panel paper-grain rounded-3xl p-6 sm:p-8 shadow-soft border border-gold/40 text-left relative overflow-hidden transition-all duration-900 ease-[cubic-bezier(0.22,1,0.36,1)] ${
-          isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+        className={`max-w-md mx-auto vellum-panel rounded-3xl p-6 sm:p-8 shadow-soft border border-gold/40 text-left relative overflow-hidden reveal-scale-bloom ${
+          isVisible ? 'is-revealed' : ''
         }`}
+        style={{ transitionDelay: '140ms' }}
       >
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
@@ -180,7 +181,7 @@ export default function RSVPSection({ guestName }) {
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="Tulis nama lengkap Anda..."
-              className="w-full px-3.5 py-2.5 rounded-xl bg-white border border-gold/30 text-emerald-deep font-medium outline-none focus:border-aqua transition-colors text-xs font-sans shadow-xs"
+              className="w-full px-3.5 py-2.5 rounded-xl bg-white border border-gold/30 text-emerald-deep font-medium outline-none focus:border-aqua transition-colors text-xs font-sans shadow-sm"
             />
           </div>
 
@@ -192,7 +193,7 @@ export default function RSVPSection({ guestName }) {
               <button
                 type="button"
                 onClick={() => setAttendance('Hadir')}
-                className={`py-2.5 px-3 rounded-xl text-xs font-semibold flex items-center justify-center gap-2 border transition-all font-sans ${
+                className={`py-2.5 px-3 rounded-xl text-xs font-semibold flex items-center justify-center gap-2 border transition-all font-sans cursor-pointer ${
                   attendance === 'Hadir'
                     ? 'bg-aqua-tint border-aqua text-aqua-deep shadow-sm'
                     : 'bg-white/60 border-gold/30 text-charcoal-muted hover:border-gold'
@@ -205,7 +206,7 @@ export default function RSVPSection({ guestName }) {
               <button
                 type="button"
                 onClick={() => setAttendance('Tidak Hadir')}
-                className={`py-2.5 px-3 rounded-xl text-xs font-semibold flex items-center justify-center gap-2 border transition-all font-sans ${
+                className={`py-2.5 px-3 rounded-xl text-xs font-semibold flex items-center justify-center gap-2 border transition-all font-sans cursor-pointer ${
                   attendance === 'Tidak Hadir'
                     ? 'bg-red-50 border-red-300 text-red-700 shadow-sm'
                     : 'bg-white/60 border-gold/30 text-charcoal-muted hover:border-gold'
@@ -225,7 +226,7 @@ export default function RSVPSection({ guestName }) {
               <select
                 value={guestCount}
                 onChange={(e) => setGuestCount(e.target.value)}
-                className="w-full px-3.5 py-2.5 rounded-xl bg-white border border-gold/30 text-emerald-deep outline-none focus:border-aqua text-xs font-sans shadow-xs"
+                className="w-full px-3.5 py-2.5 rounded-xl bg-white border border-gold/30 text-emerald-deep outline-none focus:border-aqua text-xs font-sans shadow-sm"
               >
                 <option value="1">1 Orang</option>
                 <option value="2">2 Orang</option>
@@ -243,14 +244,14 @@ export default function RSVPSection({ guestName }) {
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               placeholder="Tuliskan doa restu untuk Fahrul & Sabrina..."
-              className="w-full px-3.5 py-2.5 rounded-xl bg-white border border-gold/30 text-emerald-deep outline-none focus:border-aqua transition-colors resize-none text-xs font-sans shadow-xs"
+              className="w-full px-3.5 py-2.5 rounded-xl bg-white border border-gold/30 text-emerald-deep outline-none focus:border-aqua transition-colors resize-none text-xs font-sans shadow-sm"
             />
           </div>
 
           <button
             type="submit"
             disabled={isSubmitting}
-            className="gold-shimmer-btn w-full py-3.5 px-6 rounded-full text-emerald-deep font-bold text-xs tracking-wider uppercase flex items-center justify-center gap-2 shadow-glow-gold hover:brightness-105 active:scale-95 transition-all font-sans disabled:opacity-60 disabled:cursor-not-allowed"
+            className="gold-shimmer-btn w-full py-3.5 px-6 rounded-full text-emerald-deep font-bold text-xs tracking-wider uppercase flex items-center justify-center gap-2 shadow-glow-gold hover:brightness-105 active:scale-95 transition-all font-sans disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
           >
             {isSubmitting ? (
               <>
@@ -290,10 +291,10 @@ export default function RSVPSection({ guestName }) {
                 return (
                   <div
                     key={index}
-                    className="bg-white/85 border border-gold/30 rounded-2xl p-4 text-xs text-charcoal shadow-sm flex items-start gap-3"
+                    className="bg-white/90 border border-gold/30 rounded-2xl p-4 text-xs text-charcoal shadow-sm flex items-start gap-3"
                   >
                     {/* User Initial Avatar in Emerald-Aqua Jewel Gradient */}
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-emerald-deep via-[#00483E] to-aqua text-gold-pale flex items-center justify-center font-headline font-bold text-xs shrink-0 shadow-xs border border-gold/40">
+                    <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-emerald-deep via-[#00483E] to-aqua text-gold-pale flex items-center justify-center font-headline font-bold text-xs shrink-0 shadow-sm border border-gold/40">
                       {initial}
                     </div>
 

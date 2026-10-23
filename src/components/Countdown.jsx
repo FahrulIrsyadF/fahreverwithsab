@@ -2,6 +2,29 @@ import React, { useState, useEffect } from 'react';
 import { CalendarPlus } from 'lucide-react';
 import useScrollReveal from '../hooks/useScrollReveal';
 
+function RollingUnit({ value, label, delay = 0, isVisible }) {
+  return (
+    <div
+      className={`p-3 sm:p-3.5 rounded-2xl bg-white/10 backdrop-blur-md border border-aqua-soft/30 shadow-inner reveal-scale-bloom ${
+        isVisible ? 'is-revealed' : ''
+      }`}
+      style={{ transitionDelay: `${delay}ms` }}
+    >
+      <div className="h-8 sm:h-9 overflow-hidden flex items-center justify-center mb-1">
+        <span
+          key={value}
+          className="font-headline text-2xl sm:text-3xl font-bold text-gold-pale block leading-none tabular-nums animate-ticker"
+        >
+          {value}
+        </span>
+      </div>
+      <span className="text-[9px] sm:text-[10px] uppercase tracking-wider text-aqua-soft font-semibold font-sans block">
+        {label}
+      </span>
+    </div>
+  );
+}
+
 export default function Countdown() {
   const [sectionRef, isVisible] = useScrollReveal({ threshold: 0.15 });
 
@@ -45,29 +68,30 @@ export default function Countdown() {
   const googleCalendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=The+Wedding+of+Fahrul+%26+Sabrina&dates=20270717T010000Z/20270717T080000Z&details=Pernikahan+Fahrul+Irsyad+Fianto+%26+Sabrina+Nabila+Kholiqin.+Sabtu,+17+Juli+2027.&location=Paiton,+Kabupaten+Probolinggo,+Jawa+Timur`;
 
   return (
-    <section className="py-8 px-5 text-center relative overflow-hidden" ref={sectionRef}>
-      <div
-        className={`p-6 sm:p-9 rounded-3xl bg-gradient-to-br from-[#003429] via-[#004B40] to-[#01261F] text-ivory border border-gold/40 shadow-2xl relative overflow-hidden transition-all duration-900 ease-[cubic-bezier(0.22,1,0.36,1)] ${
-          isVisible ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-95 translate-y-8'
-        }`}
-      >
-        {/* Ambient Aquamarine & Gold Radiance */}
-        <div className="absolute -top-16 -right-16 w-48 h-48 bg-aqua-glow/20 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute -bottom-16 -left-16 w-48 h-48 bg-gold-light/15 rounded-full blur-3xl pointer-events-none" />
+    <section
+      ref={sectionRef}
+      className="pt-12 pb-8 px-5 text-center relative overflow-hidden bg-gradient-to-b from-[#00281F] via-[#003E36] to-[#004A41] rounded-t-[44px] border-t-2 border-gold/45 shadow-[0_-12px_35px_rgba(0,53,39,0.12)]"
+    >
+      {/* Ambient Aquamarine & Gold Radiance */}
+      <div className="absolute -top-16 -right-16 w-56 h-56 bg-aqua-glow/20 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-0 -left-16 w-56 h-56 bg-gold-light/15 rounded-full blur-3xl pointer-events-none" />
 
-        {/* Botanical Corner Ornaments with Organic Wind Sway */}
-        <img
-          src="/assets/botanical-crest.svg"
-          alt="Botanical Corner"
-          className="absolute -top-12 -right-12 w-36 h-36 object-contain opacity-25 pointer-events-none animate-botanical-sway"
-        />
-        <img
-          src="/assets/botanical-crest.svg"
-          alt="Botanical Corner"
-          className="absolute -bottom-12 -left-12 w-36 h-36 object-contain opacity-25 pointer-events-none animate-botanical-sway-bottom"
-        />
+      {/* Botanical Corner Ornaments with Organic Wind Sway */}
+      <img
+        src="/assets/botanical-crest.svg"
+        alt=""
+        aria-hidden="true"
+        className="absolute -top-10 -right-10 w-36 h-36 object-contain opacity-25 pointer-events-none animate-botanical-sway"
+      />
+      <img
+        src="/assets/botanical-crest.svg"
+        alt=""
+        aria-hidden="true"
+        className="absolute -bottom-10 -left-10 w-36 h-36 object-contain opacity-25 pointer-events-none animate-botanical-sway-bottom"
+      />
 
-        <div className="relative z-10">
+      <div className="relative z-10 max-w-md mx-auto">
+        <div className={`reveal-blur-up ${isVisible ? 'is-revealed' : ''}`}>
           <span className="text-[10px] sm:text-[11px] font-bold text-aqua-soft uppercase tracking-[0.28em] block mb-1 font-sans">
             Menghitung Hari Bahagia
           </span>
@@ -75,58 +99,30 @@ export default function Countdown() {
             Save The Date
           </h2>
           <div className="w-12 h-0.5 bg-gradient-to-r from-transparent via-gold to-transparent mx-auto mb-7 rounded-full"></div>
+        </div>
 
-          {/* 4 Rolling Digits with Tabular Nums */}
-          <div className="grid grid-cols-4 gap-2.5 sm:gap-3.5 max-w-sm mx-auto mb-7">
-            <div className="p-3 sm:p-3.5 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 shadow-sm">
-              <span className="font-headline text-2xl sm:text-3xl font-bold text-gold-pale block leading-none mb-1 tabular-nums">
-                {timeLeft.days}
-              </span>
-              <span className="text-[9px] sm:text-[10px] uppercase tracking-wider text-ivory/80 font-semibold font-sans">
-                Hari
-              </span>
-            </div>
+        {/* 4 Rolling Digits with Vertical Ticker Animation & Tabular Nums */}
+        <div className="grid grid-cols-4 gap-2.5 sm:gap-3.5 max-w-sm mx-auto mb-7">
+          <RollingUnit value={timeLeft.days} label="Hari" delay={100} isVisible={isVisible} />
+          <RollingUnit value={timeLeft.hours} label="Jam" delay={180} isVisible={isVisible} />
+          <RollingUnit value={timeLeft.minutes} label="Menit" delay={260} isVisible={isVisible} />
+          <RollingUnit value={timeLeft.seconds} label="Detik" delay={340} isVisible={isVisible} />
+        </div>
 
-            <div className="p-3 sm:p-3.5 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 shadow-sm">
-              <span className="font-headline text-2xl sm:text-3xl font-bold text-gold-pale block leading-none mb-1 tabular-nums">
-                {timeLeft.hours}
-              </span>
-              <span className="text-[9px] sm:text-[10px] uppercase tracking-wider text-ivory/80 font-semibold font-sans">
-                Jam
-              </span>
-            </div>
-
-            <div className="p-3 sm:p-3.5 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 shadow-sm">
-              <span className="font-headline text-2xl sm:text-3xl font-bold text-gold-pale block leading-none mb-1 tabular-nums">
-                {timeLeft.minutes}
-              </span>
-              <span className="text-[9px] sm:text-[10px] uppercase tracking-wider text-ivory/80 font-semibold font-sans">
-                Menit
-              </span>
-            </div>
-
-            <div className="p-3 sm:p-3.5 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 shadow-sm">
-              <span className="font-headline text-2xl sm:text-3xl font-bold text-gold-pale block leading-none mb-1 tabular-nums">
-                {timeLeft.seconds}
-              </span>
-              <span className="text-[9px] sm:text-[10px] uppercase tracking-wider text-ivory/80 font-semibold font-sans">
-                Detik
-              </span>
-            </div>
-          </div>
-
-          {/* Add to Google Calendar CTA */}
-          <div className="flex justify-center">
-            <a
-              href={googleCalendarUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-xs font-semibold text-emerald-deep bg-gradient-to-r from-gold-pale via-gold to-gold-light hover:brightness-105 active:scale-95 transition-all shadow-md font-sans"
-            >
-              <CalendarPlus className="w-4 h-4 text-emerald-deep" />
-              <span>Simpan ke Google Calendar</span>
-            </a>
-          </div>
+        {/* Add to Google Calendar CTA */}
+        <div
+          className={`flex justify-center reveal-blur-up ${isVisible ? 'is-revealed' : ''}`}
+          style={{ transitionDelay: '420ms' }}
+        >
+          <a
+            href={googleCalendarUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="gold-shimmer-btn inline-flex items-center gap-2 px-6 py-3 rounded-full text-xs font-bold uppercase tracking-wider text-emerald-deep hover:brightness-105 active:scale-95 transition-all shadow-glow-gold font-sans"
+          >
+            <CalendarPlus className="w-4 h-4 text-emerald-deep" />
+            <span>Simpan ke Google Calendar</span>
+          </a>
         </div>
       </div>
     </section>
