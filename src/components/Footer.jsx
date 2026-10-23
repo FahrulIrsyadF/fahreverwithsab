@@ -52,12 +52,20 @@ export default function Footer() {
 
         <div className="w-12 h-0.5 bg-gradient-to-r from-transparent via-gold to-transparent mx-auto mb-5 rounded-full"></div>
 
-        <div className="text-[10px] sm:text-[11px] tracking-[0.25em] uppercase font-bold text-gold-pale mb-6 font-sans">
-          Keluarga Besar Maryanto &amp; Kholiqin
+        <div className="text-[10px] sm:text-[11px] tracking-[0.25em] font-bold text-gold-pale mb-6 font-sans">
+          #FAHreverWithSAB
         </div>
 
         <div className="pt-5 border-t border-aqua-soft/15 text-[10px] text-ivory/55 font-sans tracking-wider">
-          The Wedding of Fahrul &amp; Sabrina &bull; 17.07.2027
+          <p className="text-[10px] text-ivory/75 tracking-wider font-sans">
+            Artworks by the Bride &bull; Handcrafted by the Groom
+          </p>
+          <p className="">
+            The Wedding of Fahrul &amp; Sabrina
+          </p>
+          <p className="">
+            17.07.2027
+          </p>
         </div>
       </div>
     </footer>
