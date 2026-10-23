@@ -1,8 +1,12 @@
 import React from 'react';
+import BrandMonogram from './BrandMonogram';
 
 export default function Footer() {
   return (
     <footer className="px-6 pt-12 pb-24 text-center bg-white/70 border-t border-gold/25 mt-10">
+      <div className="mb-3 flex justify-center">
+        <BrandMonogram size="lg" variant="emerald" />
+      </div>
       <div className="font-headline text-3xl font-bold text-emerald-deep mb-2">
         Fahrul & Sabrina
       </div>

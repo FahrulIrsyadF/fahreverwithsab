@@ -1,4 +1,5 @@
 import React from 'react';
+import BrandMonogram from './BrandMonogram';
 
 export default function LoveStory() {
   return (
@@ -42,7 +43,7 @@ export default function LoveStory() {
         {/* Elegant Closure Accent */}
         <div className="flex items-center justify-center gap-2 mt-6 pt-4 border-t border-gold/20 relative z-10">
           <div className="w-8 h-px bg-gold/40"></div>
-          <span className="font-headline italic text-xs text-gold tracking-widest">F &amp; S</span>
+          <BrandMonogram size="sm" variant="gold" />
           <div className="w-8 h-px bg-gold/40"></div>
         </div>
       </div>

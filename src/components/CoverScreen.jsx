@@ -1,5 +1,6 @@
 import React from 'react';
 import { Mail, Calendar, Volume2 } from 'lucide-react';
+import BrandMonogram from './BrandMonogram';
 
 export default function CoverScreen({ guestName, isOpened, onOpen }) {
   return (
@@ -50,9 +51,9 @@ export default function CoverScreen({ guestName, isOpened, onOpen }) {
               />
               <div className="relative z-10 w-20 h-20 rounded-full bg-gradient-to-tr from-emerald to-emerald-deep flex flex-col items-center justify-center shadow-lg border-2 border-gold-light/60">
                 <div className="absolute inset-1 rounded-full border border-dashed border-gold-light/40 pointer-events-none"></div>
-                <span className="font-headline text-lg text-gold-light tracking-wider font-semibold z-10">
-                  F &amp; S
-                </span>
+                <div className="z-10">
+                  <BrandMonogram size="md" variant="gold" />
+                </div>
               </div>
             </div>
           </div>

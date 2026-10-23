@@ -1,5 +1,6 @@
 import React from 'react';
 import { Volume2, VolumeX } from 'lucide-react';
+import BrandMonogram from './BrandMonogram';
 
 export default function NavbarTop({ isPlaying, onToggleMusic }) {
   return (
@@ -26,10 +27,8 @@ export default function NavbarTop({ isPlaying, onToggleMusic }) {
           </svg>
         </div>
 
-        {/* Center Monogram F & S */}
-        <div className="font-headline text-lg sm:text-xl text-emerald-deep tracking-widest font-semibold select-none">
-          F <span className="font-headline italic text-gold font-normal">&amp;</span> S
-        </div>
+        {/* Center Monogram F & S / Logo */}
+        <BrandMonogram size="md" variant="emerald" />
 
         {/* Right Audio Controller Button */}
         <button
