@@ -6,8 +6,8 @@ export default function NavbarBottom() {
 
   const navItems = [
     { id: 'mempelai', label: 'MEMPELAI', icon: Heart },
-    { id: 'kisah', label: 'KISAH', icon: Scroll },
     { id: 'acara', label: 'ACARA', icon: Calendar },
+    { id: 'kisah', label: 'KISAH', icon: Scroll },
     { id: 'kado', label: 'KADO', icon: Gift },
     { id: 'rsvp', label: 'RSVP', icon: MailCheck },
   ];

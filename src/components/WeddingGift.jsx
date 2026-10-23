@@ -74,7 +74,7 @@ export default function WeddingGift() {
             onClick={() => setActiveTab('physical')}
             className={`flex-1 py-1.5 px-3 rounded-full text-xs font-semibold font-sans flex items-center justify-center gap-1.5 transition-all duration-300 ${
               activeTab === 'physical'
-                ? 'bg-emerald-deep text-ivory shadow-xs'
+                ? 'bg-emerald-deep text-ivory shadow-sm'
                 : 'text-charcoal-muted hover:text-emerald-deep'
             }`}
           >
@@ -86,7 +86,7 @@ export default function WeddingGift() {
             onClick={() => setActiveTab('transfer')}
             className={`flex-1 py-1.5 px-3 rounded-full text-xs font-semibold font-sans flex items-center justify-center gap-1.5 transition-all duration-300 ${
               activeTab === 'transfer'
-                ? 'bg-emerald-deep text-ivory shadow-xs'
+                ? 'bg-emerald-deep text-ivory shadow-sm'
                 : 'text-charcoal-muted hover:text-emerald-deep'
             }`}
           >
@@ -96,7 +96,7 @@ export default function WeddingGift() {
 
         {/* Tab 1: Kirim Kado Fisik (Tampil Awal) */}
         {activeTab === 'physical' && (
-          <div className="rounded-2xl p-5 sm:p-6 text-left bg-white/80 border border-gold/40 shadow-xs">
+          <div className="rounded-2xl p-5 sm:p-6 text-left bg-white/80 border border-gold/40 shadow-sm">
             <div className="flex items-center gap-2 text-emerald-deep font-sans font-bold text-sm mb-3">
               <MapPin className="w-4 h-4 text-emerald" />
               <span>Alamat Pengiriman Kado Fisik</span>
@@ -178,7 +178,7 @@ export default function WeddingGift() {
                 <button
                   type="button"
                   onClick={() => handleCopy(account.accountNumber, account.id)}
-                  className="w-full py-2.5 px-4 rounded-xl text-xs font-bold font-sans flex items-center justify-center gap-2 border transition-all active:scale-95 bg-gold/15 text-gold-pale hover:bg-gold hover:text-emerald-deep border-gold/40 shadow-xs"
+                  className="w-full py-2.5 px-4 rounded-xl text-xs font-bold font-sans flex items-center justify-center gap-2 border transition-all active:scale-95 bg-gold/15 text-gold-pale hover:bg-gold hover:text-emerald-deep border-gold/40 shadow-sm"
                 >
                   {copiedId === account.id ? (
                     <>

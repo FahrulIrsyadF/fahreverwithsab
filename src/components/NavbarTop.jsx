@@ -3,7 +3,7 @@ import { Volume2, VolumeX } from 'lucide-react';
 
 export default function NavbarTop({ isPlaying, onToggleMusic }) {
   return (
-    <header className="fixed top-0 inset-x-0 z-40 bg-ivory/85 backdrop-blur-md border-b border-gold/20 shadow-xs">
+    <header className="fixed top-0 inset-x-0 z-40 bg-ivory/85 backdrop-blur-md border-b border-gold/20 shadow-sm">
       <div className="flex justify-between items-center w-full px-5 max-w-lg mx-auto h-14">
         {/* Left Leaf / Botanical Icon */}
         <div className="text-emerald flex items-center justify-center">

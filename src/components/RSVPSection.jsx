@@ -73,14 +73,17 @@ export default function RSVPSection({ guestName }) {
   };
 
   useEffect(() => {
-    // 1. Muat dari localStorage jika ada untuk render awal
+    // 1. Muat dari localStorage jika ada untuk render awal, fallback ke DEFAULT_WISHES
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved) {
       try {
-        setWishes(JSON.parse(saved));
+        const parsed = JSON.parse(saved);
+        setWishes(Array.isArray(parsed) && parsed.length > 0 ? parsed : DEFAULT_WISHES);
       } catch {
-        setWishes([]);
+        setWishes(DEFAULT_WISHES);
       }
+    } else {
+      setWishes(DEFAULT_WISHES);
     }
 
     // 2. Tarik data riil dari Google Sheets
@@ -112,7 +115,7 @@ export default function RSVPSection({ guestName }) {
     const newWish = {
       name: name.trim(),
       attendance: attendance,
-      guestCount: parseInt(guestCount, 10) || 1,
+      guestCount: attendance === 'Hadir' ? (parseInt(guestCount, 10) || 1) : 0,
       message: message.trim(),
       time: formattedNow
     };
@@ -180,7 +183,7 @@ export default function RSVPSection({ guestName }) {
                 onClick={() => setAttendance('Hadir')}
                 className={`py-2.5 px-3 rounded-lg text-xs font-semibold flex items-center justify-center gap-2 border transition-all font-sans ${
                   attendance === 'Hadir'
-                    ? 'bg-aqua-tint border-aqua text-aqua-deep shadow-xs'
+                    ? 'bg-aqua-tint border-aqua text-aqua-deep shadow-sm'
                     : 'bg-white/60 border-gold/30 text-charcoal-muted hover:border-gold'
                 }`}
               >
@@ -193,7 +196,7 @@ export default function RSVPSection({ guestName }) {
                 onClick={() => setAttendance('Tidak Hadir')}
                 className={`py-2.5 px-3 rounded-lg text-xs font-semibold flex items-center justify-center gap-2 border transition-all font-sans ${
                   attendance === 'Tidak Hadir'
-                    ? 'bg-red-50 border-red-300 text-red-700 shadow-xs'
+                    ? 'bg-red-50 border-red-300 text-red-700 shadow-sm'
                     : 'bg-white/60 border-gold/30 text-charcoal-muted hover:border-gold'
                 }`}
               >
@@ -203,19 +206,21 @@ export default function RSVPSection({ guestName }) {
             </div>
           </div>
 
-          <div>
-            <label className="block text-[11px] font-bold text-emerald uppercase mb-1.5 tracking-wider font-sans">
-              Jumlah Tamu
-            </label>
-            <select
-              value={guestCount}
-              onChange={(e) => setGuestCount(e.target.value)}
-              className="w-full px-3.5 py-2.5 rounded-lg bg-white border border-gold/30 text-emerald-deep outline-none focus:border-aqua text-xs font-sans"
-            >
-              <option value="1">1 Orang</option>
-              <option value="2">2 Orang</option>
-            </select>
-          </div>
+          {attendance === 'Hadir' && (
+            <div>
+              <label className="block text-[11px] font-bold text-emerald uppercase mb-1.5 tracking-wider font-sans">
+                Jumlah Tamu
+              </label>
+              <select
+                value={guestCount}
+                onChange={(e) => setGuestCount(e.target.value)}
+                className="w-full px-3.5 py-2.5 rounded-lg bg-white border border-gold/30 text-emerald-deep outline-none focus:border-aqua text-xs font-sans"
+              >
+                <option value="1">1 Orang</option>
+                <option value="2">2 Orang</option>
+              </select>
+            </div>
+          )}
 
           <div>
             <label className="block text-[11px] font-bold text-emerald uppercase mb-1.5 tracking-wider font-sans">
@@ -270,7 +275,7 @@ export default function RSVPSection({ guestName }) {
               wishes.map((w, index) => (
                 <div
                   key={index}
-                  className="bg-white/80 border border-gold/25 rounded-xl p-3.5 text-xs text-charcoal shadow-xs"
+                  className="bg-white/80 border border-gold/25 rounded-xl p-3.5 text-xs text-charcoal shadow-sm"
                 >
                   <div className="mb-1">
                     <span className="font-bold text-emerald-deep text-xs font-sans">{w.name}</span>

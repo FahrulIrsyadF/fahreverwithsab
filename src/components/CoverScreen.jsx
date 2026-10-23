@@ -28,7 +28,7 @@ export default function CoverScreen({ guestName, isOpened, onOpen }) {
           </span>
         </div>
 
-        <div className="flex items-center space-x-1.5 bg-ivory-subtle/90 backdrop-blur-md px-3 py-1 rounded-full border border-gold/30 shadow-xs">
+        <div className="flex items-center space-x-1.5 bg-ivory-subtle/90 backdrop-blur-md px-3 py-1 rounded-full border border-gold/30 shadow-sm">
           <Volume2 className="w-3.5 h-3.5 text-gold-deep animate-pulse" />
           <span className="text-[10px] tracking-wider text-charcoal-muted font-semibold uppercase font-sans">
             Musik Latar
@@ -86,7 +86,7 @@ export default function CoverScreen({ guestName, isOpened, onOpen }) {
           </div>
 
           {/* Guest Validation Section (Kepada Yth) */}
-          <div className="bg-ivory/95 border border-gold/40 rounded-2xl p-4 shadow-xs relative overflow-hidden">
+          <div className="bg-ivory/95 border border-gold/40 rounded-2xl p-4 shadow-sm relative overflow-hidden">
             <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-transparent via-gold to-transparent"></div>
             <p className="text-[10px] text-charcoal-muted uppercase tracking-widest mb-1.5 font-medium font-sans">
               Kepada Yth. Bapak/Ibu/Saudara/i:

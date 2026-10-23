@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useRef } from 'react';
+import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { validateGuest } from './data/guests';
 import GateScreen from './components/GateScreen';
 import CoverScreen from './components/CoverScreen';
@@ -55,6 +55,28 @@ export default function App() {
         .catch(() => setIsPlaying(false));
     }
   };
+
+  // Lock body scroll during CoverScreen
+  useEffect(() => {
+    document.body.style.overflow = isOpened ? 'unset' : 'hidden';
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isOpened]);
+
+  // Auto-pause audio when user leaves browser tab
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (!audioRef.current || !isOpened) return;
+      if (document.hidden && isPlaying) {
+        audioRef.current.pause();
+      } else if (!document.hidden && isPlaying) {
+        audioRef.current.play().catch(() => {});
+      }
+    };
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
+  }, [isOpened, isPlaying]);
 
   // Jika nama tidak ada di whitelist / query param kosong: Kunci akses total
   if (!validatedGuest) {
