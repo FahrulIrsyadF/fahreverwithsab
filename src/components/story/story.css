@@ -1,0 +1,65 @@
+/* Love Story — section gelap; benang merah berakhir di badge "01", spine lama melanjutkan 01 → 02 → 03 */
+.story-sec { padding: 76px 20px 72px; }
+.story-quote {
+  position: relative; z-index: 2;
+  max-width: 300px; margin: 0 auto 56px; text-align: center;
+  font-family: var(--font-serif); font-style: italic; font-size: 19px; line-height: 1.5;
+  color: rgb(var(--ivory-rgb) / .8);
+}
+.story-timeline { position: relative; max-width: 28rem; margin: 0 auto; text-align: left; }
+/* jalur benang menuju badge 01: titik tepat di atas badge, segaris dengan spine */
+.story-lead { position: absolute; left: 16px; top: -44px; width: 0; height: 0; }
+
+.story-spine {
+  position: absolute; left: 16px; top: 16px; bottom: 64px; width: 2px; margin-left: -1px;
+  border-radius: 2px; background: rgb(var(--metal-rgb) / .25); overflow: hidden;
+}
+.story-spine-fill {
+  position: absolute; inset: 0; border-radius: 2px;
+  background: linear-gradient(180deg, var(--metal-bright), var(--accent) 55%, var(--metal-pale));
+  transform-origin: 50% 0; transform: scaleY(0);
+}
+
+.story-ch { position: relative; z-index: 2; padding-left: 44px; }
+.story-ch + .story-ch { margin-top: 32px; }
+.story-badge {
+  position: absolute; left: 16px; top: 16px; width: 32px; height: 32px; margin-left: -16px;
+  display: grid; place-items: center; border-radius: 50%;
+  font-family: var(--font-display); font-size: 11px; font-weight: 700; font-variant-numeric: tabular-nums;
+  background: var(--base-900); color: rgb(var(--ivory-rgb) / .55);
+  border: 2px solid rgb(var(--metal-rgb) / .4);
+  transform: scale(.92);
+  transition: transform .5s cubic-bezier(.2, .9, .25, 1), background-color .5s, color .5s, border-color .5s, box-shadow .5s;
+}
+.story-badge::after {
+  content: ''; position: absolute; inset: -2px; border-radius: 50%;
+  border: 2px solid var(--metal-pale); opacity: 0; pointer-events: none;
+}
+.story-ch.is-active .story-badge {
+  transform: scale(1.06);
+  background: radial-gradient(circle at 35% 30%, var(--base-700), var(--base-900));
+  color: var(--metal-pale); border-color: var(--metal-bright);
+  box-shadow: 0 0 0 5px rgb(var(--metal-pale-rgb) / .14), 0 0 18px rgb(var(--metal-bright-rgb) / .35);
+}
+/* denyut saat benang tiba di badge 01 */
+.story-ch.is-pulse .story-badge::after { animation: story-pulse 1.1s ease-out 2; }
+@keyframes story-pulse { from { transform: scale(1); opacity: .9; } to { transform: scale(2.1); opacity: 0; } }
+
+.story-card { border-radius: 18px; padding: 20px; transition: border-color .5s, box-shadow .5s; }
+.story-ch:not(.is-active) .story-card { border-color: rgb(var(--metal-rgb) / .25); }
+.story-card-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 8px; }
+.story-act { font-size: 10px; font-weight: 700; letter-spacing: .22em; color: var(--accent); }
+.story-loc {
+  font-size: 10px; font-weight: 600; padding: 2px 10px; border-radius: 999px;
+  color: var(--base-800); background: var(--accent-tint); border: 1px solid rgb(var(--accent-rgb) / .3);
+}
+.story-card h3 { margin: 0 0 10px; font-family: var(--font-display); font-weight: 700; font-size: 21px; line-height: 1.25; color: var(--base-800); }
+.story-card p { margin: 0; font-size: 13px; line-height: 1.7; color: rgb(var(--ink-rgb) / .9); }
+
+.story-close {
+  position: relative; z-index: 2; display: flex; align-items: center; justify-content: center; gap: 12px;
+  margin-top: 40px; padding-top: 16px; border-top: 1px solid rgb(var(--metal-rgb) / .25);
+}
+.story-close i { width: 48px; height: 1px; background: linear-gradient(90deg, transparent, rgb(var(--metal-rgb) / .6)); }
+.story-close i:last-child { transform: scaleX(-1); }
+@media (prefers-reduced-motion: reduce) { .story-ch.is-pulse .story-badge::after { animation: none; } }

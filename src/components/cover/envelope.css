@@ -1,0 +1,134 @@
+.cover {
+  position: fixed; inset: 0; z-index: 50;
+  width: 100%; max-width: 32rem; margin: 0 auto;
+  overflow: hidden;
+  display: grid; place-items: center;
+}
+.cover-tag {
+  position: absolute; top: max(18px, env(safe-area-inset-top)); left: 0; right: 0; z-index: 3;
+  margin: 0; text-align: center;
+  font-size: 11px; font-weight: 700; letter-spacing: .25em; color: var(--accent-soft);
+}
+.cover-credit {
+  position: absolute; bottom: max(14px, env(safe-area-inset-bottom)); left: 0; right: 0; z-index: 3;
+  margin: 0; text-align: center; font-size: 10px; letter-spacing: .08em; color: rgb(var(--ivory-rgb) / .55);
+}
+.cover-credit span { display: block; margin-top: 2px; font-size: 9px; letter-spacing: .2em; text-transform: uppercase; color: rgb(var(--metal-pale-rgb) / .55); }
+
+.env-scene {
+  position: relative; z-index: 2;
+  display: flex; flex-direction: column; align-items: center;
+  gap: 38px;
+  padding: 64px 16px 64px;
+  text-align: center;
+}
+
+.env-to .eyebrow { color: var(--accent-soft); margin: 0 0 10px; }
+.env-to h2 {
+  margin: 0; color: var(--ivory);
+  font-family: var(--font-display); font-weight: 400; font-size: clamp(24px, 7vw, 32px);
+}
+.env-note { margin: 6px 0 0; font-size: 11px; font-style: italic; color: rgb(var(--ivory-rgb) / .45); }
+.env-sub { margin: 8px 0 0; color: rgb(var(--ivory-rgb) / .6); font-family: var(--font-serif); font-style: italic; font-size: 17px; }
+
+.env-hint {
+  min-height: 1.4em; margin: 0;
+  color: rgb(var(--metal-pale-rgb) / .8);
+  font-size: 11px; letter-spacing: .24em; text-transform: uppercase;
+}
+
+/* ---------- amplop ---------- */
+.env-stage { position: relative; }
+.env-shadow {
+  position: absolute; left: 8%; right: 8%; bottom: -30px; height: 26px;
+  /* gradien lembut tanpa filter blur (blur pada elemen yang dianimasikan = berat) */
+  background: radial-gradient(closest-side, rgba(0, 0, 0, .5), rgba(0, 0, 0, .18) 60%, transparent);
+  will-change: transform, opacity;
+}
+.env-wrap { will-change: transform; }
+/* lapisan GPU terpisah: bagian yang berubah tiap frame tidak memaksa bagian statis dicat ulang */
+/* JANGAN di .flap-face: di WebKit lapisan terpisah merusak backface-visibility (sisi dalam tutup ikut terlihat) */
+.env-pocket, .letter, .seal-btn, .seal-ring, .seal-half, .seal-pulse { will-change: transform; }
+.env {
+  --w: min(84vw, 340px);
+  position: relative;
+  width: var(--w);
+  height: calc(var(--w) * 0.66);
+}
+.env > * { position: absolute; }
+.env-back { inset: 0; width: 100%; height: 100%; z-index: 0; border-radius: 8px; }
+.env-pocket { inset: 0; width: 100%; height: 100%; z-index: 3; overflow: visible; }
+
+.letter {
+  left: 5%; top: 5%; width: 90%; height: 90%;
+  z-index: 2;
+  border-radius: 4px;
+  box-shadow: 0 2px 10px rgb(var(--shade-rgb) / .2);
+}
+.letter-frame {
+  position: absolute; inset: 7%;
+  display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
+  padding-top: 6%;
+  border: 1px solid rgb(var(--metal-rgb) / .65);
+  outline: 1px solid rgb(var(--metal-rgb) / .3); outline-offset: 3px;
+}
+.letter-sprig { width: 13%; color: var(--metal); transform: rotate(90deg); margin-bottom: 2px; }
+.letter .eyebrow { font-size: calc(var(--w) * 0.024); color: var(--muted); margin: 0; letter-spacing: .3em; }
+.letter-names {
+  margin: 2px 0 0; color: var(--base-800);
+  font-family: var(--font-script); font-size: calc(var(--w) * 0.105); line-height: 1.1;
+}
+.letter-date { margin: 2px 0 0; font-family: var(--font-serif); font-size: calc(var(--w) * 0.04); color: var(--metal); letter-spacing: .2em; }
+
+.env-flap {
+  left: 0; top: 0; width: 100%; height: 62.5%;
+  z-index: 5;
+  transform-style: preserve-3d;
+}
+.flap-face {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  overflow: visible;
+  backface-visibility: hidden; -webkit-backface-visibility: hidden;
+}
+.flap-inner { transform: rotateX(180deg); }
+
+/* ---------- segel ---------- */
+.seal-wrap {
+  left: 50%; top: 59%;
+  width: calc(var(--w) * 0.27); aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  z-index: 6;
+}
+.seal-btn {
+  position: absolute; inset: 0;
+  padding: 0; border: 0; background: none; cursor: pointer;
+  border-radius: 50%;
+  touch-action: none; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none;
+}
+.seal-btn:focus-visible { outline: 2px solid var(--metal-pale); outline-offset: 6px; }
+.seal-half, .seal-crack { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.seal-crack { opacity: 0; }
+.seal-ring {
+  position: absolute; inset: -16%; width: 132%; height: 132%;
+  transform: rotate(-90deg); pointer-events: none; overflow: visible;
+}
+.seal-ring-track { fill: none; stroke: rgb(var(--metal-pale-rgb) / .18); stroke-width: 2; }
+.seal-ring-fill { fill: none; stroke: var(--metal-pale); stroke-width: 3; stroke-linecap: round; }
+.seal-ring-glow { stroke-width: 9; stroke-linecap: butt; opacity: .22; }
+.seal-pulse {
+  position: absolute; inset: 6%;
+  border-radius: 50%;
+  border: 1.5px solid rgb(var(--metal-pale-rgb) / .7);
+  pointer-events: none;
+}
+.spark {
+  position: absolute; left: 50%; top: 50%;
+  width: 5px; height: 5px; margin: -2.5px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--metal-light), var(--metal-bright) 60%, transparent 70%);
+  opacity: 0; pointer-events: none;
+}
+
+
+/* ornamen di dalam amplop yang sudah ikut miring tidak perlu goyang tambahan */
+.env-wrap .rose-sway { animation: none; will-change: auto; }

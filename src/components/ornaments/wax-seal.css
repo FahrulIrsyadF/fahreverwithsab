@@ -1,0 +1,5 @@
+.wax-seal { display: block; position: relative; aspect-ratio: 1; }
+.wax-seal > img, .wax-seal > svg {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  display: block; pointer-events: none; user-select: none; -webkit-user-select: none;
+}

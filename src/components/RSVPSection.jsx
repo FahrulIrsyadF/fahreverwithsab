@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Check, X, Send, Loader2 } from 'lucide-react';
-import useScrollReveal from '../hooks/useScrollReveal';
+import SectionSeam from './ornaments/SectionSeam';
+import { RoseCorner, RoseVine } from './ornaments/Roses';
 
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyn4MeYgGU1Z4cYzOnsVJKcvHX_HSLzjLiZvow12paTs0ebaPTlR_GFhWqVECn0pa6n/exec';
 const STORAGE_KEY = 'wedding_wishes_fahrul_sabrina';
@@ -44,7 +45,6 @@ const formatWishTime = (timeStr) => {
 };
 
 export default function RSVPSection({ guestName }) {
-  const [sectionRef, isVisible] = useScrollReveal({ threshold: 0.08 });
   const [name, setName] = useState(guestName || '');
   const [attendance, setAttendance] = useState('Hadir');
   const [guestCount, setGuestCount] = useState('1');
@@ -148,29 +148,18 @@ export default function RSVPSection({ guestName }) {
   };
 
   return (
-    <section className="pt-8 pb-14 px-5 text-center relative overflow-hidden" id="rsvp" ref={sectionRef}>
-      {/* Section Header */}
-      <div
-        className={`text-center mb-10 reveal-blur-up ${
-          isVisible ? 'is-revealed' : ''
-        }`}
-      >
-        <span className="text-[10px] sm:text-[11px] font-bold text-aqua-teal uppercase tracking-[0.28em] block mb-1 font-sans">
-          Kehadiran &amp; Doa
-        </span>
-        <h2 className="font-headline text-3xl sm:text-4xl text-emerald-deep font-normal">
-          Konfirmasi Kehadiran
-        </h2>
-        <div className="w-12 h-0.5 bg-gradient-to-r from-transparent via-gold to-transparent mx-auto mt-2.5 rounded-full"></div>
-      </div>
+    <section className="sec sec-light pt-20 pb-20 px-5 text-center" id="rsvp">
+      <SectionSeam into="light" side="left" seed={91} />
 
-      <div
-        className={`max-w-md mx-auto vellum-panel rounded-3xl p-6 sm:p-8 shadow-soft border border-gold/40 text-left relative overflow-hidden reveal-scale-bloom ${
-          isVisible ? 'is-revealed' : ''
-        }`}
-        style={{ transitionDelay: '140ms' }}
-      >
-        <form onSubmit={handleSubmit} className="space-y-4">
+      <header className="sec-head" data-reveal>
+        <p className="eyebrow">Kehadiran &amp; Doa</p>
+        <h2>Konfirmasi Kehadiran</h2>
+        <RoseVine className="sec-rule" w={220} h={40} seed={95} />
+      </header>
+
+      <div data-reveal className="sec-inner max-w-md mx-auto card-paper rounded-3xl p-6 sm:p-8 text-left overflow-hidden">
+        <RoseCorner className="card-corner card-corner-tr" seed={97} />
+        <form onSubmit={handleSubmit} className="relative space-y-4">
           <div>
             <label className="block text-[11px] font-bold text-emerald uppercase mb-1.5 tracking-wider font-sans">
               Nama Lengkap
@@ -208,7 +197,7 @@ export default function RSVPSection({ guestName }) {
                 onClick={() => setAttendance('Tidak Hadir')}
                 className={`py-2.5 px-3 rounded-xl text-xs font-semibold flex items-center justify-center gap-2 border transition-all font-sans cursor-pointer ${
                   attendance === 'Tidak Hadir'
-                    ? 'bg-red-50 border-red-300 text-red-700 shadow-sm'
+                    ? 'bg-paper-lo border-muted/50 text-ink-soft shadow-sm'
                     : 'bg-white/60 border-gold/30 text-charcoal-muted hover:border-gold'
                 }`}
               >
@@ -251,7 +240,7 @@ export default function RSVPSection({ guestName }) {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="gold-shimmer-btn w-full py-3.5 px-6 rounded-full text-emerald-deep font-bold text-xs tracking-wider uppercase flex items-center justify-center gap-2 shadow-glow-gold hover:brightness-105 active:scale-95 transition-all font-sans disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
+            className="gold-shimmer-btn relative w-full py-3.5 px-6 rounded-full text-emerald-deep font-bold text-xs tracking-wider uppercase flex items-center justify-center gap-2 shadow-glow-gold hover:brightness-105 active:scale-95 transition-all font-sans disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
           >
             {isSubmitting ? (
               <>
@@ -294,7 +283,7 @@ export default function RSVPSection({ guestName }) {
                     className="bg-white/90 border border-gold/30 rounded-2xl p-4 text-xs text-charcoal shadow-sm flex items-start gap-3"
                   >
                     {/* User Initial Avatar in Emerald-Aqua Jewel Gradient */}
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-emerald-deep via-[#00483E] to-aqua text-gold-pale flex items-center justify-center font-headline font-bold text-xs shrink-0 shadow-sm border border-gold/40">
+                    <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-base-900 via-base-700 to-accent text-gold-pale flex items-center justify-center font-headline font-bold text-xs shrink-0 shadow-sm border border-gold/40">
                       {initial}
                     </div>
 
@@ -305,7 +294,7 @@ export default function RSVPSection({ guestName }) {
                           className={`text-[9px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full border font-sans shrink-0 ${
                             isPresent
                               ? 'bg-aqua-tint text-aqua-deep border-aqua/30'
-                              : 'bg-gray-100 text-charcoal-muted border-gray-200'
+                              : 'bg-paper-lo text-muted border-paper-deep'
                           }`}
                         >
                           {isPresent ? 'Hadir' : 'Berhalangan'}

@@ -1,0 +1,32 @@
+.rose-fill { fill: currentColor; fill-opacity: .1; stroke: none; transition: fill-opacity 1.4s ease .4s; }
+
+/* mekar: tiap cincin kelopak membuka bergiliran dari tengah */
+.rose-ring {
+  transform-box: fill-box; transform-origin: 50% 50%;
+  transition: transform 1.4s cubic-bezier(.2, .9, .25, 1) calc(var(--i, 0) * .14s), opacity .9s ease calc(var(--i, 0) * .14s);
+}
+.rose-bloom:not(.is-bloom) .rose-ring { transform: scale(.3) rotate(-35deg); opacity: 0; }
+.rose-bloom:not(.is-bloom) .rose-fill { fill-opacity: 0; }
+
+/* goyang pelan tertiup angin. Dianimasikan di elemen <svg> (properti `rotate`, terpisah
+   dari `transform` penempatan) → dikerjakan GPU. JANGAN animasikan transform di dalam SVG:
+   itu memaksa seluruh SVG + induknya dicat ulang tiap frame (penyebab lag di Android). */
+.rose-sway {
+  display: block;
+  animation: rose-sway 6.5s ease-in-out infinite alternate;
+  will-change: transform;
+}
+.rose-sway-slow { animation-duration: 8s; }
+.rose-sway > svg { display: block; width: 100%; height: auto; overflow: visible; }
+@keyframes rose-sway { from { rotate: -1.4deg; } to { rotate: 1.4deg; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .rose-sway { animation: none; }
+  .rose-ring { transition: none; }
+}
+
+.rose-corner, .rose-vine { display: block; pointer-events: none; overflow: visible; }
+.rose-corner { aspect-ratio: 1; }
+
+/* di dalam kartu/amplop yang sudah ikut miring (giroskop), goyang tambahan tidak perlu */
+.foil-card .rose-sway, .env-wrap .rose-sway { animation: none; will-change: auto; }

@@ -1,71 +1,47 @@
-import React from 'react';
-import BrandMonogram from './BrandMonogram';
-import useScrollReveal from '../hooks/useScrollReveal';
+import { useRef } from 'react';
+import { gsap, useGSAP } from '../lib/gsap';
+import SectionSeam from './ornaments/SectionSeam';
+import GoldDust from './ornaments/GoldDust';
+import InkText from './ornaments/InkText';
+import WaxSeal from './ornaments/WaxSeal';
+import { RoseVine } from './ornaments/Roses';
+import { WEDDING } from '../data/wedding';
 
+/** Penutup — section gelap; nama ditulis tinta emas, segel lilin sebagai cap penutup. */
 export default function Footer() {
-  const [sectionRef, isVisible] = useScrollReveal({ threshold: 0.15 });
+  const root = useRef(null);
+
+  useGSAP(() => {
+    gsap.timeline({ scrollTrigger: { trigger: '.foot-inner', start: 'top 80%' } })
+      .from('.foot-seal', { scale: 0.4, rotation: -30, opacity: 0, duration: 1.1, ease: 'back.out(1.8)' })
+      .from('.foot-inner .eyebrow', { opacity: 0, letterSpacing: '0.6em', duration: 0.9, ease: 'power3.out' }, 0.2)
+      .to('.foot-inner .ink-text text', { strokeDashoffset: 0, duration: 2, ease: 'power1.inOut' }, 0.3)
+      .to('.foot-inner .ink-text text', { fillOpacity: 1, strokeOpacity: 0.3, duration: 0.8 }, '-=0.5')
+      .from('.foot-inner .reveal', { y: 16, opacity: 0, stagger: 0.1, duration: 0.8, ease: 'power3.out' }, '-=0.9');
+  }, { scope: root });
 
   return (
-    <footer
-      ref={sectionRef}
-      className="px-6 pt-14 pb-32 text-center jewel-canvas rounded-t-[44px] border-t-2 border-gold/50 mt-6 relative overflow-hidden text-ivory"
-    >
-      {/* Ambient Aquamarine & Gold Glow */}
-      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-aqua-glow/15 rounded-full blur-3xl pointer-events-none" />
+    <footer ref={root} className="sec sec-dark px-6 pt-20 pb-32 text-center text-ivory">
+      <SectionSeam into="dark" side="right" seed={101} />
+      <GoldDust count={40} />
 
-      {/* Botanical Corner Ornaments */}
-      <img
-        src="/assets/botanical-crest.svg"
-        alt=""
-        aria-hidden="true"
-        className="absolute -top-10 -right-10 w-36 h-36 object-contain opacity-20 pointer-events-none animate-botanical-sway"
-      />
-      <img
-        src="/assets/botanical-crest.svg"
-        alt=""
-        aria-hidden="true"
-        className="absolute -bottom-10 -left-10 w-36 h-36 object-contain opacity-20 pointer-events-none animate-botanical-sway-bottom"
-      />
+      <div className="foot-inner sec-inner max-w-sm mx-auto">
+        <WaxSeal monogram={WEDDING.monogram} className="foot-seal w-20 mx-auto mb-4" />
 
-      <div
-        className={`relative z-10 max-w-sm mx-auto reveal-scale-bloom ${
-          isVisible ? 'is-revealed' : ''
-        }`}
-      >
-        <div className="mb-4 flex justify-center">
-          <div className="w-16 h-16 rounded-full bg-gradient-to-tr from-emerald-deep via-aqua-teal to-emerald border-2 border-gold/60 flex items-center justify-center shadow-glow-jewel">
-            <BrandMonogram size="md" variant="gold" />
-          </div>
-        </div>
+        <p className="eyebrow text-accent-soft">Thank You</p>
+        <InkText text={WEDDING.names} fontSize={52} width={360} height={100} gradient="pale" className="w-full h-auto overflow-visible my-1" />
+        <RoseVine className="sec-rule reveal" w={220} h={40} seed={113} />
 
-        <span className="text-[10px] font-bold tracking-[0.28em] uppercase text-aqua-soft block mb-1 font-sans">
-          Thank You
-        </span>
-
-        <div className="font-headline text-3xl sm:text-4xl text-ivory font-normal mb-3 leading-snug">
-          Fahrul <span className="font-headline italic text-gold-pale font-normal">&amp;</span> Sabrina
-        </div>
-
-        <p className="text-xs sm:text-sm text-ivory/80 leading-relaxed max-w-xs mx-auto mb-6 font-sans">
+        <p className="reveal text-xs sm:text-sm text-ivory/80 leading-relaxed max-w-xs mx-auto mt-3 mb-6">
           Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir dan memberikan doa restu bagi lembaran baru kehidupan kami.
         </p>
 
-        <div className="w-12 h-0.5 bg-gradient-to-r from-transparent via-gold to-transparent mx-auto mb-5 rounded-full"></div>
+        <p className="reveal text-[10px] sm:text-[11px] tracking-[0.25em] font-bold text-metal-pale mb-6">{WEDDING.hashtag}</p>
 
-        <div className="text-[10px] sm:text-[11px] tracking-[0.25em] font-bold text-gold-pale mb-6 font-sans">
-          #FAHreverWithSAB
-        </div>
-
-        <div className="pt-5 border-t border-aqua-soft/15 text-[10px] text-ivory/55 font-sans tracking-wider">
-          <p className="text-[10px] text-ivory/75 tracking-wider font-sans">
-            Artworks by the Bride &bull; Handcrafted by the Groom
-          </p>
-          <p className="">
-            The Wedding of Fahrul &amp; Sabrina
-          </p>
-          <p className="">
-            17.07.2027
-          </p>
+        <div className="reveal pt-5 border-t border-accent-soft/15 text-[10px] text-ivory/55 tracking-wider">
+          <p className="text-ivory/75">Artworks by the Bride &bull; Handcrafted by the Groom</p>
+          <p>The Wedding of {WEDDING.names}</p>
+          <p>{WEDDING.dateCompact}</p>
         </div>
       </div>
     </footer>

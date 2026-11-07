@@ -1,168 +1,111 @@
-import React from 'react';
+import { useRef } from 'react';
 import { Instagram } from 'lucide-react';
-import useScrollReveal from '../hooks/useScrollReveal';
+import { gsap, useGSAP } from '../lib/gsap';
+import InkText from './ornaments/InkText';
+import SectionSeam from './ornaments/SectionSeam';
+import { RoseCorner } from './ornaments/Roses';
+import { COUPLE } from '../data/wedding';
+import './couple/couple.css';
 
+function Person({ p }) {
+  const left = p.side === 'left';
+  return (
+    <article className={`person person-${p.side}`}>
+      {/* jangkar benang: kanan foto pria → (simpul "&") → kiri foto wanita */}
+      <div className="arch-wrap" data-anchor={left ? '1.04,0.4' : '-0.04,0.55'}>
+        <div className="arch-frame" />
+        <RoseCorner className={`arch-corner arch-corner-${p.side}`} seed={left ? 6 : 13} />
+        <div className="arch">
+          {/* ukuran bingkai tetap (aspect-ratio) → tidak perlu refresh ScrollTrigger saat foto dimuat */}
+          <img src={p.photo} alt={p.full} loading="lazy" decoding="async" />
+        </div>
+      </div>
+      <div className="person-text">
+        <InkText
+          text={p.nick} fontSize={78} width={300} height={112} gradient="base"
+          className="person-nick" align={left ? 'end' : 'start'}
+        />
+        <p className="eyebrow person-line">{p.role}</p>
+        <p className="person-full person-line">{p.full}</p>
+        <p className="person-parents person-line">
+          {p.parents.map((l, i) => <span key={i}>{l}</span>)}
+        </p>
+        <a className="person-ig person-line" href={`https://instagram.com/${p.ig}`} target="_blank" rel="noopener noreferrer">
+          <Instagram aria-hidden="true" />@{p.ig}
+        </a>
+      </div>
+    </article>
+  );
+}
+
+/**
+ * Mempelai (lab demo 02): pintu lengkung terbuka mengikuti scroll, bingkai emas bergeser,
+ * nama ditulis tinta, simpul "&". Benang merah (ThreadLayer) DIMULAI di ranting sambungan atas
+ * section ini dan melingkari "&" (data-knot).
+ */
 export default function CoupleSection() {
-  const [headerRef, headerVisible] = useScrollReveal({ threshold: 0.15 });
-  const [groomRef, groomVisible] = useScrollReveal({ threshold: 0.18 });
-  const [knotRef, knotVisible] = useScrollReveal({ threshold: 0.3 });
-  const [brideRef, brideVisible] = useScrollReveal({ threshold: 0.18 });
+  const root = useRef(null);
+
+  useGSAP(() => {
+    gsap.from('.cp-head > *', {
+      y: 24, opacity: 0, stagger: 0.1, duration: 0.9, ease: 'power3.out',
+      scrollTrigger: { trigger: '.cp-head', start: 'top 80%' },
+    });
+
+    gsap.utils.toArray('.person').forEach((el) => {
+      const left = el.classList.contains('person-left');
+      const arch = el.querySelector('.arch');
+      // pintu lengkung terbuka dari bawah, foto zoom-out pelan
+      gsap.fromTo(arch, { clipPath: 'inset(100% 0% 0% 0% round 999px 999px 0px 0px)' }, {
+        clipPath: 'inset(0% 0% 0% 0% round 999px 999px 0px 0px)', ease: 'none',
+        scrollTrigger: { trigger: el, start: 'top 88%', end: 'top 30%', scrub: 1 },
+      });
+      gsap.fromTo(arch.querySelector('img'), { scale: 1.4, yPercent: -6 }, {
+        scale: 1, yPercent: 6, ease: 'none',
+        scrollTrigger: { trigger: el, start: 'top bottom', end: 'bottom top', scrub: true },
+      });
+      // bingkai emas bergeser keluar dari belakang foto (kedalaman)
+      gsap.fromTo(el.querySelector('.arch-frame'), { x: 0, y: 0, opacity: 0 }, {
+        x: left ? 14 : -14, y: 14, opacity: 1, ease: 'none',
+        scrollTrigger: { trigger: el, start: 'top 75%', end: 'top 25%', scrub: 1 },
+      });
+      // nama ditulis tinta, lalu detail muncul berurutan
+      gsap.timeline({ scrollTrigger: { trigger: el.querySelector('.person-text'), start: 'top 78%' } })
+        .from(el.querySelector('.eyebrow'), { opacity: 0, x: left ? 20 : -20, duration: 0.6 })
+        .to(el.querySelectorAll('.ink-text text'), { strokeDashoffset: 0, duration: 1.8, ease: 'power1.inOut' }, 0.1)
+        .to(el.querySelectorAll('.ink-text text'), { fillOpacity: 1, strokeOpacity: 0.3, duration: 0.7 }, '-=0.5')
+        .from(el.querySelectorAll('.person-full, .person-parents span, .person-ig'), {
+          y: 14, opacity: 0, filter: 'blur(5px)', stagger: 0.08, duration: 0.7, ease: 'power2.out', clearProps: 'filter',
+        }, '-=0.9');
+    });
+
+    // "&" memantul masuk, cincin emas berdenyut
+    gsap.timeline({ scrollTrigger: { trigger: '.cp-amp', start: 'top 75%' } })
+      .from('.cp-amp-glyph', { scale: 0.3, rotation: -25, opacity: 0, duration: 1.3, ease: 'elastic.out(1, 0.45)' })
+      .from('.cp-amp-ring', { scale: 0.4, opacity: 0, stagger: 0.15, duration: 1, ease: 'back.out(2)' }, 0.1);
+  }, { scope: root });
 
   return (
-    <section className="pt-10 pb-16 px-5 relative overflow-hidden" id="mempelai">
-      {/* Section Header */}
-      <div
-        ref={headerRef}
-        className={`text-center mb-10 reveal-blur-up ${
-          headerVisible ? 'is-revealed' : ''
-        }`}
-      >
-        <span className="text-[10px] sm:text-[11px] font-bold text-aqua-teal uppercase tracking-[0.28em] block mb-1 font-sans">
-          Dua Jiwa Bertaut
-        </span>
-        <h2 className="font-headline text-3xl sm:text-4xl text-emerald-deep font-normal">
-          Pasangan Mempelai
-        </h2>
-        <div className="w-12 h-0.5 bg-gradient-to-r from-transparent via-gold to-transparent mx-auto mt-2.5 rounded-full"></div>
+    <section className="sec sec-light cp-couple" id="mempelai" ref={root}>
+      {/* awal benang merah: ranting di sambungan kiri */}
+      <SectionSeam into="light" side="left" seed={12} anchor="0.7,0.55" />
+
+      <header className="cp-head" data-anchor="0.92,0.6">
+        <p className="eyebrow">Dua Jiwa Bertaut</p>
+        <h2>Assalamu’alaikum Wr. Wb.</h2>
+        <p>Dengan memohon rahmat dan ridho Allah SWT, kami bermaksud menyelenggarakan pernikahan putra-putri kami:</p>
+      </header>
+
+      <Person p={COUPLE[0]} />
+
+      <div className="cp-amp" data-anchor="0.5,0.5" data-knot>
+        <span className="cp-amp-ring" />
+        <span className="cp-amp-ring cp-amp-ring-2" />
+        <span className="cp-amp-glyph foil-text">&amp;</span>
       </div>
 
-      <div className="space-y-8 sm:space-y-10 max-w-md mx-auto">
-        {/* Groom Card - Editorial Asymmetric Left Slide + Image Zoom-Out Unveil */}
-        <div
-          ref={groomRef}
-          className={`vellum-panel rounded-[32px] p-6 sm:p-8 pt-8 sm:pt-10 text-center relative overflow-hidden reveal-slide-left ${
-            groomVisible ? 'is-revealed' : ''
-          }`}
-        >
-          {/* Subtle Ambient Accent */}
-          <div className="absolute -top-8 -left-8 w-36 h-36 bg-aqua-glow/15 rounded-full blur-2xl pointer-events-none" />
-          <div className="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-aqua via-gold to-transparent" />
-
-          {/* Asymmetric Arch Frame with Vertical Magazine Label & Offset Aquamarine Shadow */}
-          <div className="relative w-52 h-68 sm:w-56 sm:h-72 mx-auto mb-7 flex items-center justify-center">
-            {/* Vertical Editorial Side Label */}
-            <span className="absolute -left-7 sm:-left-8 top-1/2 -translate-y-1/2 -rotate-90 text-[9px] font-sans font-bold tracking-[0.3em] uppercase text-aqua-teal/80 whitespace-nowrap select-none">
-              THE GROOM &mdash; 01
-            </span>
-
-            <div className="w-48 h-64 sm:w-52 sm:h-72 photo-frame-arch-left overflow-hidden arch-offset-shadow-left border-2 border-gold/50 relative group">
-              <img
-                src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=500&q=80"
-                alt="Fahrul Irsyad Fianto"
-                className={`w-full h-full object-cover transition-transform duration-[1600ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-105 ${
-                  groomVisible ? 'scale-100' : 'scale-125'
-                }`}
-                loading="lazy"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-emerald-deep/35 via-transparent to-transparent pointer-events-none" />
-            </div>
-
-            {/* Editorial Corner Pill */}
-            <span className="absolute -bottom-2.5 right-1 bg-gradient-to-r from-emerald-deep to-aqua-teal text-gold-pale text-[9px] font-sans font-bold uppercase tracking-widest px-3 py-1 rounded-full border border-gold/50 shadow-md">
-              Mempelai Pria
-            </span>
-          </div>
-
-          {/* Name */}
-          <h3 className="font-headline text-2xl sm:text-[26px] font-bold text-emerald-deep mb-2.5 leading-snug">
-            Fahrul Irsyad Fianto, S.Tr.Kom.
-          </h3>
-
-          {/* Parents Information */}
-          <div className="text-xs sm:text-sm text-charcoal-muted leading-relaxed mb-6 font-sans">
-            <p className="text-charcoal-muted/80">Putra dari</p>
-            <p className="font-semibold text-charcoal-forest mt-0.5">
-              Bpk. Arief Maryanto &amp; Ibu Siti Rukayah Susanti
-            </p>
-          </div>
-
-          {/* Instagram Pill Button */}
-          <a
-            href="https://instagram.com/fahrulirsy"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-5 py-2 rounded-full text-xs font-semibold text-emerald-deep bg-ivory/90 hover:bg-aqua-tint border border-gold/45 hover:border-aqua transition-all duration-300 font-sans shadow-sm group active:scale-95"
-          >
-            <Instagram className="w-3.5 h-3.5 text-aqua-teal group-hover:scale-110 transition-transform" />
-            <span>@fahrulirsy</span>
-          </a>
-        </div>
-
-        {/* Ampersand Knot with Scale-Bloom Animation */}
-        <div
-          ref={knotRef}
-          className={`text-center my-2 flex items-center justify-center gap-4 reveal-scale-bloom ${
-            knotVisible ? 'is-revealed' : ''
-          }`}
-        >
-          <div className="w-16 h-px bg-gradient-to-r from-transparent via-gold/60 to-aqua/50"></div>
-          <div className="w-14 h-14 rounded-full bg-gradient-to-tr from-emerald-deep via-aqua-teal to-emerald border-2 border-gold/60 flex items-center justify-center shadow-glow-jewel">
-            <span className="font-headline italic text-2xl text-gold-pale font-normal leading-none">&amp;</span>
-          </div>
-          <div className="w-16 h-px bg-gradient-to-l from-transparent via-gold/60 to-aqua/50"></div>
-        </div>
-
-        {/* Bride Card - Editorial Asymmetric Right Slide + Image Zoom-Out Unveil */}
-        <div
-          ref={brideRef}
-          className={`vellum-panel rounded-[32px] p-6 sm:p-8 pt-8 sm:pt-10 text-center relative overflow-hidden reveal-slide-right ${
-            brideVisible ? 'is-revealed' : ''
-          }`}
-        >
-          {/* Subtle Ambient Accent */}
-          <div className="absolute -bottom-8 -right-8 w-36 h-36 bg-gold/15 rounded-full blur-2xl pointer-events-none" />
-          <div className="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-l from-aqua via-gold to-transparent" />
-
-          {/* Asymmetric Arch Frame with Vertical Magazine Label & Offset Aquamarine Shadow */}
-          <div className="relative w-52 h-68 sm:w-56 sm:h-72 mx-auto mb-7 flex items-center justify-center">
-            <div className="w-48 h-64 sm:w-52 sm:h-72 photo-frame-arch-right overflow-hidden arch-offset-shadow-right border-2 border-gold/50 relative group">
-              <img
-                src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=500&q=80"
-                alt="Sabrina Nabila Kholiqin"
-                className={`w-full h-full object-cover transition-transform duration-[1600ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-105 ${
-                  brideVisible ? 'scale-100' : 'scale-125'
-                }`}
-                loading="lazy"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-emerald-deep/35 via-transparent to-transparent pointer-events-none" />
-            </div>
-
-            {/* Vertical Editorial Side Label */}
-            <span className="absolute -right-7 sm:-right-8 top-1/2 -translate-y-1/2 rotate-90 text-[9px] font-sans font-bold tracking-[0.3em] uppercase text-aqua-teal/80 whitespace-nowrap select-none">
-              THE BRIDE &mdash; 02
-            </span>
-
-            {/* Editorial Corner Pill */}
-            <span className="absolute -bottom-2.5 left-1 bg-gradient-to-r from-emerald-deep to-aqua-teal text-gold-pale text-[9px] font-sans font-bold uppercase tracking-widest px-3 py-1 rounded-full border border-gold/50 shadow-md">
-              Mempelai Wanita
-            </span>
-          </div>
-
-          {/* Name */}
-          <h3 className="font-headline text-2xl sm:text-[26px] font-bold text-emerald-deep mb-2.5 leading-snug">
-            Sabrina Nabila Kholiqin, S.Pd.
-          </h3>
-
-          {/* Parents Information */}
-          <div className="text-xs sm:text-sm text-charcoal-muted leading-relaxed mb-6 font-sans">
-            <p className="text-charcoal-muted/80">Putri dari</p>
-            <p className="font-semibold text-charcoal-forest mt-0.5">
-              Bpk. Akhsanul Kholiqin &amp; Ibu Siti Nur Kusumawati
-            </p>
-          </div>
-
-          {/* Instagram Pill Button */}
-          <a
-            href="https://instagram.com/sabrinnkh"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-5 py-2 rounded-full text-xs font-semibold text-emerald-deep bg-ivory/90 hover:bg-aqua-tint border border-gold/45 hover:border-aqua transition-all duration-300 font-sans shadow-sm group active:scale-95"
-          >
-            <Instagram className="w-3.5 h-3.5 text-aqua-teal group-hover:scale-110 transition-transform" />
-            <span>@sabrinnkh</span>
-          </a>
-        </div>
-      </div>
+      <Person p={COUPLE[1]} />
+      <div className="cp-tail" data-anchor="0.78,0.6" />
     </section>
   );
 }

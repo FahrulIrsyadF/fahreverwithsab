@@ -1,0 +1,98 @@
+/*
+ * Token desain — palet "Marun & Mawar" (dari lab animasi).
+ * Nilai warna dibuat dari src/lib/palette.js: `node scripts/gen-tokens.mjs`.
+ * Pakai token, jangan menulis hex langsung: var(--base-900), rgb(var(--metal-pale-rgb) / .4)
+ *
+ *  base-950..700   latar gelap (velvet, section gelap)
+ *  accent(-soft)   warna kedua (eyebrow, garis)
+ *  metal-*         "emas" foil: dark → deep → mid → bright → soft → pale → light
+ *  paper-*         kertas terang; ivory = teks di latar gelap
+ *  ink/ink-soft/muted  teks di atas kertas
+ *  wax-*           segel lilin
+ *  thread*         benang merah (eksklusif untuk benang)
+ */
+:root {
+  /* palette:start */
+  --base-950: #1e070c;
+  --base-950-rgb: 30 7 12;
+  --base-900: #2d0b13;
+  --base-900-rgb: 45 11 19;
+  --base-800: #4a1221;
+  --base-800-rgb: 74 18 33;
+  --base-700: #65192d;
+  --base-700-rgb: 101 25 45;
+  --accent: #d0566e;
+  --accent-rgb: 208 86 110;
+  --accent-soft: #f0aebb;
+  --accent-soft-rgb: 240 174 187;
+  --accent-tint: #fbe9ec;
+  --accent-tint-rgb: 251 233 236;
+  --metal-dark: #6e5130;
+  --metal-dark-rgb: 110 81 48;
+  --metal-deep: #8f6e43;
+  --metal-deep-rgb: 143 110 67;
+  --metal-mid: #c9a76e;
+  --metal-mid-rgb: 201 167 110;
+  --metal: #cfb07f;
+  --metal-rgb: 207 176 127;
+  --metal-bright: #dcbd85;
+  --metal-bright-rgb: 220 189 133;
+  --metal-soft: #e9d2a2;
+  --metal-soft-rgb: 233 210 162;
+  --metal-pale: #f5e3bf;
+  --metal-pale-rgb: 245 227 191;
+  --metal-light: #fdf4e3;
+  --metal-light-rgb: 253 244 227;
+  --paper-deep: #cdbbb7;
+  --paper-deep-rgb: 205 187 183;
+  --paper-lo: #ebe1de;
+  --paper-lo-rgb: 235 225 222;
+  --paper: #f8f4f2;
+  --paper-rgb: 248 244 242;
+  --paper-hi: #fffdfc;
+  --paper-hi-rgb: 255 253 252;
+  --ivory: #fdf9f8;
+  --ivory-rgb: 253 249 248;
+  --ink: #2d0b13;
+  --ink-rgb: 45 11 19;
+  --ink-soft: #4d2a31;
+  --ink-soft-rgb: 77 42 49;
+  --muted: #7d6065;
+  --muted-rgb: 125 96 101;
+  --shade: #4a1a20;
+  --shade-rgb: 74 26 32;
+  --wax-hi: #a8384e;
+  --wax-hi-rgb: 168 56 78;
+  --wax: #721b2e;
+  --wax-rgb: 114 27 46;
+  --wax-lo: #45101b;
+  --wax-lo-rgb: 69 16 27;
+  --wax-rim: #87253c;
+  --wax-rim-rgb: 135 37 60;
+  --wax-core: #581526;
+  --wax-core-rgb: 88 21 38;
+  --wax-light: #fff0f2;
+  --wax-light-rgb: 255 240 242;
+  --thread: #d72844;
+  --thread-rgb: 215 40 68;
+  --thread-twist: #ffc2cb;
+  --thread-twist-rgb: 255 194 203;
+  --thread-glow: #ff6a80;
+  --thread-glow-rgb: 255 106 128;
+  --thread-tip: #fff0f2;
+  --thread-tip-rgb: 255 240 242;
+  /* palette:end */
+  --thread-glow-op: .3;
+
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-serif: 'Cormorant Garamond', Georgia, serif;
+  --font-script: 'Great Vibes', cursive;
+  --font-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --font-arabic: 'Amiri', serif;
+
+  /* Tekstur kertas dari SVG noise (background statis, bukan overlay fixed + blend) */
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .42 0 0 0 0 .35 0 0 0 0 .22 0 0 0 .16 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  --grain-light: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+
+  --metal-foil: linear-gradient(110deg, var(--metal-dark) 0%, var(--metal-mid) 16%, var(--metal-light) 28%, var(--metal-bright) 40%, var(--metal-deep) 52%, var(--metal-soft) 66%, var(--metal-light) 74%, var(--metal-deep) 86%, var(--metal-dark) 100%);
+}

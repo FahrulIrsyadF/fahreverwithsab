@@ -1,0 +1,56 @@
+/* Mempelai + pintu lengkung (lab demo 02) */
+/* ---------- mempelai (terang) ---------- */
+.cp-couple { padding: 70px 18px 90px; }
+.cp-head { position: relative; z-index: 2; max-width: 340px; margin: 0 auto 46px; text-align: center; }
+.cp-head .eyebrow { color: var(--accent); margin: 0; }
+.cp-head h2 { margin: 10px 0; font-family: var(--font-display); font-weight: 400; font-size: 26px; color: var(--base-800); }
+.cp-head p:last-child { margin: 0; font-family: var(--font-serif); font-size: 18px; line-height: 1.5; color: var(--muted); }
+
+.person { position: relative; z-index: 2; max-width: 420px; margin: 0 auto; }
+.arch-wrap { position: relative; width: 64%; aspect-ratio: 0.72; }
+.person-right .arch-wrap { margin-left: auto; }
+.arch {
+  position: absolute; inset: 0;
+  border-radius: 999px 999px 0 0;
+  overflow: hidden;
+  background: var(--paper-lo);
+  box-shadow: 0 30px 40px -24px rgb(var(--ink-rgb) / .55);
+}
+.arch img { width: 100%; height: 100%; object-fit: cover; filter: sepia(.08) saturate(.95); transform-origin: 50% 60%; }
+.arch-frame {
+  position: absolute; inset: 0;
+  border: 1.5px solid var(--metal);
+  border-radius: 999px 999px 0 0;
+}
+
+.person-text { position: relative; margin-top: -58px; }
+.person-left .person-text { text-align: right; padding-left: 26%; }
+.person-right .person-text { text-align: left; padding-right: 26%; }
+.person-nick { display: block; width: 100%; height: auto; overflow: visible; filter: drop-shadow(0 2px 0 var(--paper)) drop-shadow(0 -2px 0 var(--paper)); }
+.person-text .eyebrow { margin: -10px 0 6px; color: var(--metal); font-size: 10px; }
+.person-full { margin: 0 0 8px; font-family: var(--font-display); font-size: 18px; line-height: 1.3; color: var(--ink); }
+.person-parents { margin: 0; display: grid; font-family: var(--font-serif); font-size: 17px; line-height: 1.4; color: var(--muted); }
+.person-parents span:first-child { font-style: italic; }
+.person-ig {
+  display: inline-block; margin-top: 12px; padding: 7px 14px; border-radius: 999px;
+  border: 1px solid rgb(var(--base-800-rgb) / .3);
+  font-size: 12px; letter-spacing: .06em; color: var(--base-800); text-decoration: none;
+}
+
+.cp-amp { position: relative; z-index: 2; width: 110px; height: 110px; margin: 40px auto; display: grid; place-items: center; }
+.cp-amp-glyph {
+  --nx: .2;
+  font-family: var(--font-script); font-size: 96px; line-height: 1;
+  filter: drop-shadow(0 2px 1px rgb(var(--shade-rgb) / .35));
+  padding: 0 10px;
+}
+.cp-amp-ring { position: absolute; inset: 0; border-radius: 50%; border: 1px solid rgb(var(--metal-rgb) / .55); }
+.cp-amp-ring-2 { inset: 12px; border-style: dashed; border-color: rgb(var(--metal-rgb) / .4); }
+.cp-tail { height: 40px; }
+
+
+.arch-corner { position: absolute; z-index: 1; width: 46%; bottom: -22px; color: var(--metal); }
+.arch-corner-left { left: -22px; transform: rotate(270deg); }
+.arch-corner-right { right: -22px; transform: rotate(180deg); }
+.person-ig { display: inline-flex; align-items: center; gap: 6px; }
+.person-ig svg { width: 13px; height: 13px; color: var(--accent); }

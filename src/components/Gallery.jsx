@@ -1,161 +1,97 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { X, ZoomIn } from 'lucide-react';
-import useScrollReveal from '../hooks/useScrollReveal';
+import SectionSeam from './ornaments/SectionSeam';
+import { RoseVine } from './ornaments/Roses';
+import { GALLERY } from '../data/wedding';
 
+/**
+ * Galeri — sengaja TIDAK memakai demo polaroid (belum cocok); grid + lightbox lama dipertahankan,
+ * hanya diselaraskan dengan palet, Seam, dan reveal GSAP.
+ */
 export default function Gallery() {
-  const [sectionRef, isVisible] = useScrollReveal({ threshold: 0.12 });
   const [activeImage, setActiveImage] = useState(null);
-
-  const photos = [
-    {
-      id: 1,
-      src: 'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80',
-      caption: 'Langkah Awal Menuju Abadi',
-      tag: 'FIG. 01 — PREWEDDING',
-      span: 'col-span-2',
-      imgHeight: 'h-64 sm:h-72',
-      revealClass: 'reveal-scale-bloom',
-      delay: 120,
-    },
-    {
-      id: 2,
-      src: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=500&q=80',
-      caption: 'Tatap Teduh & Ketulusan',
-      tag: 'FIG. 02 — INTIMATE',
-      span: 'col-span-1',
-      imgHeight: 'h-44 sm:h-48',
-      revealClass: 'reveal-slide-left',
-      delay: 260,
-    },
-    {
-      id: 3,
-      src: 'https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=500&q=80',
-      caption: 'Dua Hati Bersatu',
-      tag: 'FIG. 03 — FOREVER',
-      span: 'col-span-1',
-      imgHeight: 'h-44 sm:h-48',
-      revealClass: 'reveal-slide-right',
-      delay: 380,
-    },
-  ];
 
   // Tutup lightbox dengan tombol Escape
   useEffect(() => {
-    const handleKeyDown = (e) => {
-      if (e.key === 'Escape') setActiveImage(null);
-    };
-    if (activeImage) {
-      window.addEventListener('keydown', handleKeyDown);
-    }
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    if (!activeImage) return;
+    const onKey = (e) => e.key === 'Escape' && setActiveImage(null);
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
   }, [activeImage]);
 
   return (
-    <section
-      className="py-12 px-5 text-center relative overflow-hidden bg-gradient-to-b from-[#002820] via-[#003A33] to-[#00251D] rounded-[44px] border-y-2 border-gold/45"
-      id="galeri"
-      ref={sectionRef}
-    >
-      {/* Ambient Aquamarine & Gold Glow */}
-      <div className="absolute -top-12 left-1/2 -translate-x-1/2 w-64 h-64 bg-aqua-glow/15 rounded-full blur-3xl pointer-events-none" />
+    <section className="sec sec-light pt-20 pb-20 px-5" id="galeri">
+      <SectionSeam into="light" side="left" seed={67} />
 
-      {/* Section Header */}
-      <div
-        className={`text-center mb-9 relative z-10 reveal-blur-up ${
-          isVisible ? 'is-revealed' : ''
-        }`}
-      >
-        <span className="text-[10px] sm:text-[11px] font-bold text-aqua-soft uppercase tracking-[0.28em] block mb-1 font-sans">
-          Momen Bahagia
-        </span>
-        <h2 className="font-headline text-3xl sm:text-4xl text-ivory font-normal">
-          Galeri Foto
-        </h2>
-        <div className="w-12 h-0.5 bg-gradient-to-r from-transparent via-gold to-transparent mx-auto mt-2.5 rounded-full"></div>
-      </div>
+      <header className="sec-head" data-reveal>
+        <p className="eyebrow">Momen Bahagia</p>
+        <h2>Galeri Foto</h2>
+        <RoseVine className="sec-rule" w={220} h={40} seed={71} />
+      </header>
 
-      {/* Museum Matting Editorial Grid (Caption selalu terlihat di mobile & desktop) */}
-      <div className="grid grid-cols-2 gap-3.5 max-w-md mx-auto relative z-10">
-        {photos.map((photo) => (
-          <div
+      <div className="sec-inner grid grid-cols-2 gap-3.5 max-w-md mx-auto">
+        {GALLERY.map((photo, i) => (
+          <button
+            type="button"
             key={photo.id}
             onClick={() => setActiveImage(photo)}
-            className={`${photo.span} ${photo.revealClass} ${
-              isVisible ? 'is-revealed' : ''
-            } relative rounded-2xl p-2 sm:p-2.5 pb-2.5 bg-ivory paper-grain border border-gold/50 shadow-xl cursor-pointer group overflow-hidden`}
-            style={{ transitionDelay: `${photo.delay}ms` }}
+            data-reveal={photo.wide ? 'up' : i % 2 ? 'left' : 'right'}
+            className={`${photo.wide ? 'col-span-2' : 'col-span-1'} text-left rounded-2xl p-2 sm:p-2.5 pb-2.5 bg-paper-hi paper-grain border border-metal/50 shadow-xl cursor-pointer group overflow-hidden`}
           >
-            <div className={`w-full ${photo.imgHeight} rounded-xl overflow-hidden relative`}>
+            <div className={`w-full ${photo.wide ? 'aspect-[4/3]' : 'aspect-[3/4]'} rounded-xl overflow-hidden relative`}>
               <img
                 src={photo.src}
                 alt={photo.caption}
-                className={`w-full h-full object-cover transition-transform duration-[1500ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-105 ${
-                  isVisible ? 'scale-100' : 'scale-125'
-                }`}
+                className="w-full h-full object-cover transition-transform duration-[1500ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-105"
                 loading="lazy"
+                decoding="async"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-emerald-deep/40 via-transparent to-transparent pointer-events-none" />
-              <div className="absolute top-2.5 right-2.5 p-1.5 rounded-full bg-emerald-deep/75 backdrop-blur-sm text-gold-pale border border-gold/40 shadow-sm transition-transform duration-300 group-hover:scale-110">
+              <div className="absolute inset-0 bg-gradient-to-t from-base-900/40 via-transparent to-transparent pointer-events-none" />
+              <div className="absolute top-2.5 right-2.5 p-1.5 rounded-full bg-base-900/75 text-metal-pale border border-metal/40 shadow-sm transition-transform duration-300 group-hover:scale-110">
                 <ZoomIn className="w-3.5 h-3.5" />
               </div>
             </div>
 
-            {/* Editorial Museum Matting Caption */}
-            <div className="pt-2 px-1 flex items-center justify-between gap-1 text-left">
-              <div className="min-w-0">
-                <span className="text-[8px] sm:text-[9px] font-bold tracking-[0.2em] text-aqua-teal uppercase block font-sans">
-                  {photo.tag}
-                </span>
-                <p className="font-headline italic text-xs sm:text-sm text-emerald-deep truncate">
-                  {photo.caption}
-                </p>
-              </div>
+            <div className="pt-2 px-1 min-w-0">
+              <span className="text-[8px] sm:text-[9px] font-bold tracking-[0.2em] text-accent uppercase block">{photo.tag}</span>
+              <p className="font-headline italic text-xs sm:text-sm text-base-800 truncate">{photo.caption}</p>
             </div>
-          </div>
+          </button>
         ))}
       </div>
 
-      {/* Interactive Lightbox Modal */}
-      {activeImage && (
+      {/* Lightbox (portal ke body agar di atas navbar) */}
+      {activeImage && createPortal(
         <div
           role="dialog"
           aria-modal="true"
           onClick={() => setActiveImage(null)}
-          className="fixed inset-0 z-50 bg-[#011C15]/92 backdrop-blur-xl flex flex-col items-center justify-center p-4 animate-fadeIn"
+          className="fixed inset-0 z-50 bg-base-950/95 flex flex-col items-center justify-center p-4 animate-fadeIn"
         >
           <button
             type="button"
-            onClick={(e) => {
-              e.stopPropagation();
-              setActiveImage(null);
-            }}
+            onClick={(e) => { e.stopPropagation(); setActiveImage(null); }}
             aria-label="Tutup Pratinjau Foto"
-            className="absolute top-5 right-5 p-2.5 rounded-full bg-white/10 text-ivory hover:bg-white/20 transition-colors border border-gold/40 active:scale-95"
+            className="absolute top-5 right-5 p-2.5 rounded-full bg-white/10 text-ivory hover:bg-white/20 transition-colors border border-metal/40 active:scale-95"
           >
             <X className="w-5 h-5" />
           </button>
 
           <div
             onClick={(e) => e.stopPropagation()}
-            className="max-w-md w-full bg-ivory paper-grain rounded-3xl p-3 border-2 border-gold/60 shadow-2xl overflow-hidden animate-scaleUp"
+            className="max-w-md w-full bg-paper-hi paper-grain rounded-3xl p-3 border-2 border-metal/60 shadow-2xl overflow-hidden animate-scaleUp"
           >
-            <div className="rounded-2xl overflow-hidden max-h-[72vh] bg-emerald-deep/10">
-              <img
-                src={activeImage.src}
-                alt={activeImage.caption}
-                className="w-full h-auto max-h-[70vh] object-contain mx-auto"
-              />
+            <div className="rounded-2xl overflow-hidden max-h-[72vh] bg-base-900/10">
+              <img src={activeImage.src} alt={activeImage.caption} className="w-full h-auto max-h-[70vh] object-contain mx-auto" />
             </div>
             <div className="pt-3 pb-1.5 px-2 text-center">
-              <span className="text-[10px] font-bold text-aqua-teal tracking-[0.25em] uppercase block font-sans">
-                {activeImage.tag}
-              </span>
-              <p className="font-headline italic text-base text-emerald-deep mt-0.5">
-                {activeImage.caption}
-              </p>
+              <span className="text-[10px] font-bold text-accent tracking-[0.25em] uppercase block">{activeImage.tag}</span>
+              <p className="font-headline italic text-base text-base-800 mt-0.5">{activeImage.caption}</p>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body,
       )}
     </section>
   );

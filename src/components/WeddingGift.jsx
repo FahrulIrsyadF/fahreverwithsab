@@ -1,34 +1,26 @@
-import React, { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { ScrollTrigger } from '../lib/gsap';
 import { Gift, Copy, Check, MapPin, CreditCard } from 'lucide-react';
-import useScrollReveal from '../hooks/useScrollReveal';
+import SectionSeam from './ornaments/SectionSeam';
+import GoldDust from './ornaments/GoldDust';
+import { RoseCorner, RoseVine } from './ornaments/Roses';
+import { GIFT } from '../data/wedding';
 
 export default function WeddingGift() {
-  const [sectionRef, isVisible] = useScrollReveal({ threshold: 0.12 });
   const [activeTab, setActiveTab] = useState('physical'); // 'physical' | 'transfer'
   const [copiedId, setCopiedId] = useState(null);
 
-  const bankAccounts = [
-    {
-      id: 'groom',
-      bankName: 'Bank BCA',
-      accountNumber: '1234567890',
-      accountHolder: 'Fahrul Irsyad Fianto',
-      label: 'Rekening Mempelai Pria',
-    },
-    {
-      id: 'bride',
-      bankName: 'Bank Mandiri',
-      accountNumber: '0987654321000',
-      accountHolder: 'Sabrina Nabila Kholiqin',
-      label: 'Rekening Mempelai Wanita',
-    },
-  ];
+  // Ganti tab mengubah tinggi halaman → posisi trigger section di bawahnya perlu dihitung ulang
+  // (aksi user, bukan saat scroll; jadi aman — lihat aturan performa §8).
+  const firstTab = useRef(true);
+  useEffect(() => {
+    if (firstTab.current) { firstTab.current = false; return; }
+    const id = requestAnimationFrame(() => ScrollTrigger.refresh());
+    return () => cancelAnimationFrame(id);
+  }, [activeTab]);
 
-  const physicalAddress = {
-    recipient: 'Sabrina Nabila & Fahrul Irsyad',
-    phone: '0812-3456-7890',
-    fullAddress: 'Jl. Kotaanyar, RT.24/RW.7, Dusun Krajan, Sumberanyar, Kec. Paiton, Kabupaten Probolinggo, Jawa Timur 67291',
-  };
+  const bankAccounts = GIFT.accounts;
+  const physicalAddress = GIFT.address;
 
   const handleCopy = (text, id) => {
     if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -48,33 +40,21 @@ export default function WeddingGift() {
   };
 
   return (
-    <section className="pt-12 pb-14 px-5 text-center relative overflow-hidden" id="kado" ref={sectionRef}>
-      {/* Section Header */}
-      <div
-        className={`text-center mb-9 reveal-blur-up ${
-          isVisible ? 'is-revealed' : ''
-        }`}
-      >
-        <span className="text-[10px] sm:text-[11px] font-bold text-aqua-teal uppercase tracking-[0.28em] block mb-1 font-sans">
-          Tanda Kasih
-        </span>
-        <h2 className="font-headline text-3xl sm:text-4xl text-emerald-deep font-normal">
-          Amplop Digital
-        </h2>
-        <div className="w-12 h-0.5 bg-gradient-to-r from-transparent via-gold to-transparent mx-auto mt-2.5 rounded-full"></div>
-      </div>
+    <section className="sec sec-dark pt-20 pb-20 px-5 text-center" id="kado">
+      <SectionSeam into="dark" side="right" seed={79} />
+      <GoldDust count={26} />
 
-      <div
-        className={`max-w-md mx-auto vellum-panel rounded-3xl p-6 sm:p-8 shadow-soft border border-gold/40 text-center relative overflow-hidden reveal-scale-bloom ${
-          isVisible ? 'is-revealed' : ''
-        }`}
-        style={{ transitionDelay: '140ms' }}
-      >
-        {/* Subtle Ambient Light */}
-        <div className="absolute -top-12 -right-12 w-32 h-32 bg-aqua-glow/15 rounded-full blur-2xl pointer-events-none" />
-        <div className="absolute -bottom-12 -left-12 w-32 h-32 bg-gold/10 rounded-full blur-2xl pointer-events-none" />
+      <header className="sec-head" data-reveal>
+        <p className="eyebrow">Tanda Kasih</p>
+        <h2>Amplop Digital</h2>
+        <RoseVine className="sec-rule" w={220} h={40} seed={83} />
+      </header>
 
-        <p className="text-xs sm:text-sm text-charcoal-muted leading-relaxed font-sans mb-6 max-w-sm mx-auto">
+      <div data-reveal className="sec-inner max-w-md mx-auto card-paper rounded-3xl p-6 sm:p-8 text-center overflow-hidden">
+        <RoseCorner className="card-corner card-corner-tl" seed={86} />
+        <RoseCorner className="card-corner card-corner-tr" seed={88} />
+
+        <p className="relative text-xs sm:text-sm text-charcoal-muted leading-relaxed font-sans mt-6 mb-6 max-w-sm mx-auto">
           Doa restu Anda merupakan karunia terindah bagi kami. Namun jika memberi adalah ungkapan tanda kasih Anda, kami dengan penuh ketulusan menerimanya.
         </p>
 
@@ -82,7 +62,7 @@ export default function WeddingGift() {
         <div className="relative grid grid-cols-2 p-1 bg-ivory-container/90 border border-gold/40 rounded-full max-w-xs mx-auto mb-6 shadow-inner">
           {/* Sliding Background Pill */}
           <div
-            className="absolute top-1 bottom-1 left-1 w-[calc(50%-4px)] rounded-full bg-gradient-to-r from-emerald-deep via-aqua-teal to-emerald shadow-md transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] pointer-events-none"
+            className="absolute top-1 bottom-1 left-1 w-[calc(50%-4px)] rounded-full bg-gradient-to-r from-base-900 via-base-700 to-base-800 shadow-md transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] pointer-events-none"
             style={{
               transform: activeTab === 'physical' ? 'translateX(0%)' : 'translateX(100%)',
             }}
@@ -117,7 +97,7 @@ export default function WeddingGift() {
 
         {/* Tab 1: Kirim Kado Fisik */}
         {activeTab === 'physical' && (
-          <div className="rounded-2xl p-5 sm:p-6 text-left bg-ivory/95 paper-grain border border-gold/40 shadow-sm animate-fadeIn">
+          <div className="rounded-2xl p-5 sm:p-6 text-left bg-paper-hi paper-grain border border-gold/40 shadow-sm animate-fadeIn">
             <div className="flex items-center gap-2 text-emerald-deep font-sans font-bold text-sm mb-3">
               <MapPin className="w-4 h-4 text-aqua-teal" />
               <span>Alamat Pengiriman Kado Fisik</span>
@@ -143,7 +123,7 @@ export default function WeddingGift() {
             <button
               type="button"
               onClick={() => handleCopy(physicalAddress.fullAddress, 'address')}
-              className="w-full py-2.5 px-4 rounded-xl text-xs font-bold font-sans flex items-center justify-center gap-2 border border-gold/60 transition-all active:scale-95 bg-gradient-to-r from-emerald-deep to-aqua-teal text-gold-pale hover:brightness-110 shadow-sm cursor-pointer"
+              className="w-full py-2.5 px-4 rounded-xl text-xs font-bold font-sans flex items-center justify-center gap-2 border border-gold/60 transition-all active:scale-95 bg-gradient-to-r from-base-900 to-base-700 text-gold-pale hover:brightness-110 shadow-sm cursor-pointer"
             >
               {copiedId === 'address' ? (
                 <>
@@ -166,16 +146,13 @@ export default function WeddingGift() {
             {bankAccounts.map((account) => (
               <div
                 key={account.id}
-                className="relative rounded-2xl p-5 sm:p-6 text-left bg-gradient-to-br from-[#003429] via-[#004A40] to-[#01241D] text-ivory border border-gold/50 shadow-xl overflow-hidden group"
+                className="relative rounded-2xl p-5 sm:p-6 text-left bg-gradient-to-br from-base-800 via-base-700 to-base-950 text-ivory border border-gold/50 shadow-xl overflow-hidden group"
               >
                 {/* Periodic Metallic Diagonal Sheen Sweep */}
                 <div
                   className="absolute -top-1/2 -left-3/4 w-1/3 h-[200%] bg-gradient-to-r from-transparent via-white/15 to-transparent rotate-[25deg] pointer-events-none"
                   style={{ animation: 'sheenSweep 5.5s ease-in-out infinite' }}
                 />
-
-                {/* Subtle Sheen / Ambient Glow */}
-                <div className="absolute top-0 right-0 w-36 h-36 bg-aqua-glow/20 rounded-full blur-2xl pointer-events-none" />
 
                 <div className="flex justify-between items-start mb-4 relative z-10">
                   <div>

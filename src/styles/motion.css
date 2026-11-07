@@ -1,0 +1,119 @@
+/* Kelas bersama untuk animasi & ornamen dari lab (dipakai lintas section). */
+
+.velvet {
+  background:
+    var(--grain-light),
+    radial-gradient(120% 80% at 50% 28%, var(--base-700) 0%, var(--base-900) 52%, var(--base-950) 100%);
+}
+.paper {
+  background-color: var(--ivory);
+  background-image: var(--grain);
+}
+.gold-dust {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  pointer-events: none;
+}
+
+.eyebrow {
+  font-family: var(--font-sans); font-size: 11px; font-weight: 600;
+  letter-spacing: .32em; text-transform: uppercase;
+}
+.foil-text {
+  background: var(--metal-foil);
+  background-size: 260% 100%;
+  background-position: calc(50% + var(--nx, 0) * 45%) 50%;
+  -webkit-background-clip: text; background-clip: text;
+  color: transparent;
+}
+.btn-gold {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 13px 26px; border: 0; border-radius: 999px; cursor: pointer;
+  background: var(--metal-foil); background-size: 220% 100%;
+  color: var(--base-900); font-weight: 700; font-size: 12px; letter-spacing: .18em; text-transform: uppercase;
+  box-shadow: 0 10px 30px -8px rgb(var(--metal-bright-rgb) / .55), inset 0 1px 0 rgba(255, 255, 255, .5);
+  text-decoration: none;
+  transition: background-position .8s ease;
+}
+.btn-gold:hover { background-position: 100% 0; }
+.btn-ghost {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 10px 20px; border-radius: 999px; cursor: pointer;
+  border: 1px solid rgb(var(--metal-pale-rgb) / .45); background: transparent; color: var(--metal-pale);
+  font-size: 12px; letter-spacing: .14em; text-transform: uppercase; text-decoration: none;
+}
+
+/* ---------- section terang / gelap (bergantian, dihubungkan Seam + ranting) ----------
+   PENTING: section TIDAK boleh membuat stacking context (z-index, transform, opacity<1, filter),
+   agar benang merah (z-index 1) lewat di atas latar section tetapi di bawah konten ber-z-index 2. */
+.sec { position: relative; }
+.sec-light {
+  color: var(--ink);
+  background-color: var(--paper);
+  background-image: var(--grain), radial-gradient(100% 40% at 50% 0%, var(--paper-hi), transparent);
+}
+.sec-dark {
+  color: var(--ivory);
+  background: var(--grain-light), linear-gradient(180deg, var(--base-900) 0%, var(--base-950) 100%);
+}
+.sec-inner { position: relative; z-index: 2; }
+.sec-head { position: relative; z-index: 2; text-align: center; margin: 0 auto 40px; max-width: 340px; }
+.sec-head .eyebrow { margin: 0; color: var(--accent); }
+.sec-head h2 { margin: 10px 0 0; font-family: var(--font-display); font-weight: 400; font-size: clamp(28px, 8vw, 36px); line-height: 1.15; color: var(--base-800); }
+.sec-head p:not(.eyebrow) { margin: 10px 0 0; font-family: var(--font-serif); font-size: 18px; line-height: 1.5; color: var(--muted); }
+.sec-dark .sec-head .eyebrow { color: var(--accent-soft); }
+.sec-dark .sec-head h2 { color: var(--ivory); }
+.sec-dark .sec-head p:not(.eyebrow) { color: rgb(var(--ivory-rgb) / .65); font-style: italic; }
+.sec-rule { display: block; width: min(56vw, 200px); height: auto; margin: 6px auto 0; color: var(--metal); }
+.sec-dark .sec-rule { color: var(--metal-pale); opacity: .85; }
+
+/* ---------- sambungan antar-section ---------- */
+.seam {
+  position: absolute; left: 0; right: 0;
+  pointer-events: none;
+}
+.seam svg { display: block; width: 100%; height: 100%; }
+.seam-top { bottom: calc(100% - 1px); }
+.seam-torn { filter: drop-shadow(0 -3px 4px rgba(0, 0, 0, .25)); }
+.seam-dots { position: absolute; left: 0; right: 0; display: flex; justify-content: space-around; transform: translateY(-50%); }
+.seam-dots span { width: 5px; height: 5px; border-radius: 50%; background: var(--metal-bright); box-shadow: 0 0 6px rgb(var(--metal-pale-rgb) / .7); }
+
+.seam-sprig { position: absolute; z-index: 2; width: 100px; color: var(--metal); pointer-events: none; }
+.seam-sprig svg { width: 100%; height: auto; }
+.seam-sprig-l { left: -8px; top: -96px; transform: rotate(28deg); }
+.seam-sprig-r { right: -8px; top: -100px; transform: rotate(-150deg) scaleX(-1); }
+.seam-on-dark { color: var(--metal-pale); }
+.seam-vine { position: absolute; left: 0; width: 100%; height: auto; top: -30px; z-index: 2; color: var(--metal); pointer-events: none; }
+.seam-vine.seam-on-dark { top: -28px; color: var(--metal-pale); opacity: .85; }
+
+/* ---------- benang merah ---------- */
+.thread {
+  position: absolute; left: 0; top: 0; width: 100%;
+  z-index: 1; pointer-events: none; overflow: visible;
+}
+.thread path { fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.thread-line { stroke: var(--thread); stroke-width: 2.2; }
+.thread-twist { stroke: var(--thread-twist); stroke-width: .9; stroke-dasharray: 2.5 3.5; opacity: .75; }
+/* cahaya tanpa filter blur (blur di SVG setinggi halaman berat di HP) */
+.thread-glow { stroke: var(--thread-glow); stroke-width: 5.5; opacity: var(--thread-glow-op); }
+.thread-tip {
+  position: absolute; left: 0; top: 0; z-index: 3;
+  width: 10px; height: 10px; margin: -5px 0 0 -5px; border-radius: 50%;
+  background: radial-gradient(circle, var(--thread-tip) 0 25%, var(--thread) 55%, transparent 72%);
+  box-shadow: 0 0 14px 4px rgb(var(--thread-glow-rgb) / .45);
+  pointer-events: none; opacity: 0;
+}
+
+/* ---------- kartu kertas terang (pengganti vellum ber-backdrop-blur) ---------- */
+.card-paper {
+  position: relative;
+  background-color: var(--paper-hi);
+  background-image: var(--grain);
+  border: 1px solid rgb(var(--metal-rgb) / .45);
+  box-shadow: 0 18px 40px -18px rgb(var(--shade-rgb) / .45), inset 0 0 0 1px rgb(255 255 255 / .7);
+  color: var(--ink);
+}
+.card-corner { position: absolute; width: 74px; color: var(--metal); opacity: .7; pointer-events: none; }
+.card-corner-tr { right: 8px; top: 8px; transform: rotate(90deg); }
+.card-corner-br { right: 8px; bottom: 8px; transform: rotate(180deg); }
+.card-corner-bl { left: 8px; bottom: 8px; transform: rotate(270deg); }
+.card-corner-tl { left: 8px; top: 8px; }

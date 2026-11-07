@@ -1,173 +1,317 @@
-import React, { useState } from 'react';
-import { Mail, Calendar, Volume2, Sparkles } from 'lucide-react';
-import BrandMonogram from './BrandMonogram';
+import { useRef, useState } from 'react';
+import { gsap, useGSAP, vibrate, reduceMotion } from '../lib/gsap';
+import { useTilt, requestGyro } from '../lib/useTilt';
+import WaxSeal, { CRACK_POINTS } from './ornaments/WaxSeal';
+import Sprig from './ornaments/Sprig';
+import GoldDust from './ornaments/GoldDust';
+import { WEDDING } from '../data/wedding';
+import './cover/envelope.css';
 
-export default function CoverScreen({ guestName, isOpened, onOpen }) {
-  const [isOpening, setIsOpening] = useState(false);
+const HOLD_SECONDS = 0.9;
+const RING_C = 2 * Math.PI * 52;
+const POCKET_BOTTOM = 'M0 220 Q140 130 160 116 Q170 109 180 116 Q200 130 340 220 L340 218 Q340 224 334 224 L6 224 Q0 224 0 218 Z';
 
-  const handleOpenClick = () => {
-    if (isOpening) return;
-    setIsOpening(true);
-    // Beri waktu 520ms agar animasi Wax Seal Ripple & Card Lift terlihat menawan sebelum tirai terangkat
-    setTimeout(() => {
-      onOpen();
-    }, 520);
+/** Tekstur serat kertas: noise acak digambar SEKALI ke canvas → PNG
+ *  (feTurbulence terlalu berat di iPhone saat amplop memantul / segel ditahan). */
+let grainUrl = null;
+function paperGrain() {
+  if (grainUrl) return grainUrl;
+  const n = 96, c = document.createElement('canvas');
+  c.width = c.height = n;
+  const g = c.getContext('2d');
+  const d = g.createImageData(n, n);
+  for (let i = 0; i < d.data.length; i += 4) {
+    const v = Math.random();
+    d.data[i] = 115; d.data[i + 1] = 94; d.data[i + 2] = 56;
+    d.data[i + 3] = v > 0.55 ? (v - 0.55) * 90 : 0;
+  }
+  g.putImageData(d, 0, 0);
+  return (grainUrl = c.toDataURL('image/png'));
+}
+
+/** Definisi SVG bersama: motif liner amplop + tekstur kertas + bayangan. */
+function EnvelopeDefs() {
+  return (
+    <svg width="0" height="0" style={{ position: 'absolute' }} aria-hidden="true">
+      <defs>
+        <pattern id="env-liner" width="26" height="26" patternUnits="userSpaceOnUse">
+          <rect width="26" height="26" style={{ fill: 'var(--base-800)' }} />
+          <path d="M13 5 L16.5 13 L13 21 L9.5 13Z" fill="none" style={{ stroke: 'var(--metal-bright)' }} strokeOpacity=".55" strokeWidth=".8" />
+          <circle cx="0" cy="0" r="1.3" style={{ fill: 'var(--metal-bright)' }} fillOpacity=".55" />
+          <circle cx="26" cy="0" r="1.3" style={{ fill: 'var(--metal-bright)' }} fillOpacity=".55" />
+          <circle cx="0" cy="26" r="1.3" style={{ fill: 'var(--metal-bright)' }} fillOpacity=".55" />
+          <circle cx="26" cy="26" r="1.3" style={{ fill: 'var(--metal-bright)' }} fillOpacity=".55" />
+        </pattern>
+        <pattern id="env-grain" width="48" height="48" patternUnits="userSpaceOnUse">
+          <image href={paperGrain()} width="48" height="48" />
+        </pattern>
+        <filter id="env-lift" x="-10%" y="-30%" width="120%" height="160%">
+          <feDropShadow dx="0" dy="-1.5" stdDeviation="2.5" style={{ floodColor: 'var(--shade)' }} floodOpacity=".22" />
+        </filter>
+        <filter id="env-flapshadow" x="-10%" y="-10%" width="120%" height="140%">
+          <feDropShadow dx="0" dy="3" stdDeviation="3" style={{ floodColor: 'var(--shade)' }} floodOpacity=".28" />
+        </filter>
+        <linearGradient id="env-side-l" x1="0" x2="1">
+          <stop offset="0" style={{ stopColor: 'var(--paper-lo)' }} />
+          <stop offset="1" style={{ stopColor: 'var(--paper)' }} />
+        </linearGradient>
+        <linearGradient id="env-side-r" x1="1" x2="0">
+          <stop offset="0" style={{ stopColor: 'var(--paper-lo)' }} />
+          <stop offset="1" style={{ stopColor: 'var(--paper)' }} />
+        </linearGradient>
+        <linearGradient id="env-bottom" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" style={{ stopColor: 'var(--paper-hi)' }} />
+          <stop offset="1" style={{ stopColor: 'var(--paper-lo)' }} />
+        </linearGradient>
+        <linearGradient id="env-flap" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" style={{ stopColor: 'var(--paper)' }} />
+          <stop offset="1" style={{ stopColor: 'var(--paper-lo)' }} />
+        </linearGradient>
+      </defs>
+    </svg>
+  );
+}
+
+/**
+ * Cover undangan: amplop 3D dengan segel lilin tekan-tahan (dari lab, demo 01).
+ *  - onOpen()       : dipanggil saat "menyelam" ke surat → halaman undangan mulai tampil di bawah cover
+ *  - onDone()       : animasi cover selesai → cover boleh dilepas dari DOM
+ *  - onStartAudio() : dipanggil dari gesture user. Di iOS, `pointerdown` TIDAK dihitung aktivasi, jadi
+ *                     musik juga dicoba lagi di `pointerup` (segel sudah terbuka saat jari masih menekan).
+ */
+export default function CoverScreen({ guestName, onOpen, onDone, onStartAudio }) {
+  const root = useRef(null);
+  const tiltRef = useRef(null);
+  const phase = useRef('closed');
+  const progress = useRef({ v: 0 });
+  const holdTween = useRef(null);
+  const tremble = useRef(null);
+  const floatTl = useRef(null);
+  const pressedAt = useRef(0);
+  const [hint, setHint] = useState('Tekan & tahan segel untuk membuka');
+
+  useTilt(tiltRef, { max: 7 });
+  const tilt = (on) => {
+    const el = tiltRef.current;
+    if (!el) return;
+    if (on) delete el.dataset.tiltPaused; else el.dataset.tiltPaused = '1';
+  };
+
+  const { contextSafe } = useGSAP(() => {
+    gsap.set('.seal-ring-fill', { strokeDasharray: RING_C, strokeDashoffset: RING_C, opacity: 0 });
+    gsap.set('.env-flap', { transformPerspective: 1100, transformOrigin: '50% 0%' });
+
+    // Amplop "dijatuhkan" ke meja: pantulan + squash & stretch.
+    // Miring 3D dihentikan saat amplop bergerak sendiri (GPU iPhone tidak mengerjakan dua hal berat sekaligus).
+    tilt(false);
+    gsap.timeline({ onComplete: () => phase.current === 'closed' && tilt(true) })
+      .from('.env-wrap', { y: -window.innerHeight * 0.75, rotation: -10, duration: 1.35, ease: 'envDrop' })
+      .to('.env-wrap', { scaleY: 0.93, scaleX: 1.05, transformOrigin: '50% 100%', duration: 1.35, ease: 'envDrop-squash' }, 0)
+      .from('.env-shadow', { scale: 0.2, opacity: 0, duration: 1.35, ease: 'envDrop' }, 0)
+      .from('.env-to > *', { y: 16, opacity: 0, stagger: 0.12, duration: 0.8, ease: 'power3.out' }, 0.7)
+      .from('.env-hint, .cover-tag, .cover-credit', { opacity: 0, y: 10, duration: 0.6 }, 1.1);
+
+    floatTl.current = gsap.timeline({ repeat: -1, yoyo: true, delay: 1.4 })
+      .to('.env-float', { y: -9, duration: 2.4, ease: 'sine.inOut' })
+      .to('.env-shadow', { scale: 0.88, opacity: 0.7, duration: 2.4, ease: 'sine.inOut' }, 0);
+
+    gsap.to('.seal-pulse', { scale: 1.55, opacity: 0, duration: 1.9, repeat: -1, ease: 'power1.out', delay: 1.6 });
+  }, { scope: root });
+
+  // sembunyikan saat 0 agar ujung bulat (linecap) tidak tampil sebagai titik
+  const setRing = () => {
+    const v = progress.current.v, on = v > 0.005;
+    gsap.set('.seal-ring-fill', { strokeDashoffset: RING_C * (1 - v) });
+    gsap.set('.seal-ring-fill:not(.seal-ring-glow)', { opacity: on ? 1 : 0 });
+    gsap.set('.seal-ring-glow', { opacity: on ? 0.22 : 0 });
+  };
+
+  const burst = () => {
+    root.current.querySelectorAll('.spark').forEach((s) => {
+      gsap.fromTo(s, { x: 0, y: 0, opacity: 1, scale: gsap.utils.random(0.6, 1.4) }, {
+        physics2D: { velocity: gsap.utils.random(120, 300), angle: gsap.utils.random(190, 350), gravity: 520 },
+        opacity: 0, duration: gsap.utils.random(0.8, 1.3), ease: 'power1.in',
+      });
+    });
+  };
+
+  const open = contextSafe(() => {
+    if (phase.current !== 'closed') return;
+    phase.current = 'opening';
+    tremble.current?.kill();
+    floatTl.current?.pause();
+    vibrate([14, 50, 24]);
+    onStartAudio?.(); // berhasil di desktop / keyboard; di iOS dicoba lagi saat jari dilepas
+    setHint('');
+
+    const seal = root.current.querySelector('.seal-wrap').getBoundingClientRect();
+    const floorY = window.innerHeight - seal.bottom + seal.height * 0.15;
+    const fast = reduceMotion() ? 0.25 : 1;
+
+    gsap.timeline({ defaults: { overwrite: 'auto' }, onComplete: () => onDone?.() })
+      .to('.env-hint, .seal-ring, .seal-pulse', { opacity: 0, duration: 0.2 })
+      .to('.seal-crack', { opacity: 1, duration: 0.06 }, '<')
+      .to('.seal-btn', { scale: 1.1, duration: 0.12, ease: 'power2.out' }, '<')
+      .add(burst, '<')
+      .addLabel('split', '+=0.05')
+      // dua belahan segel jatuh & memantul di dasar layar
+      .to('.seal-half-l', { x: -70, rotation: -42, duration: 1.3 * fast, ease: 'power1.out' }, 'split')
+      .to('.seal-half-l', { y: floorY, duration: 1.3 * fast, ease: 'bounce.out' }, 'split')
+      .to('.seal-half-r', { x: 84, rotation: 50, duration: 1.35 * fast, ease: 'power1.out' }, 'split+=0.05')
+      .to('.seal-half-r', { y: floorY, duration: 1.35 * fast, ease: 'bounce.out' }, 'split+=0.05')
+      .to('.seal-crack', { opacity: 0, duration: 0.1 }, 'split')
+      .to('.seal-half', { opacity: 0, duration: 0.5 }, 'split+=1.6')
+      // flap terbuka ke arah penonton, pindah ke belakang surat di titik 90°
+      .to('.env-flap', { rotationX: 90, duration: 0.42 * fast, ease: 'power2.in' }, 'split+=0.2')
+      .set('.env-flap', { zIndex: 1 })
+      .to('.env-flap', { rotationX: 180, duration: 0.6 * fast, ease: 'back.out(1.8)' })
+      // surat keluar dengan sedikit overshoot
+      .to('.letter', { yPercent: -66, duration: 1.05 * fast, ease: 'back.out(1.5)' }, '-=0.35')
+      .addLabel('lift', '+=0.05')
+      .to('.env-drop', { y: () => window.innerHeight, rotation: 7, duration: 0.95 * fast, ease: 'power3.in' }, 'lift')
+      .to('.env-shadow', { opacity: 0, duration: 0.5 }, 'lift')
+      .set('.letter', { zIndex: 8 }, 'lift+=0.5')
+      .to('.letter', { yPercent: -20, scale: 1.18, rotation: 0, duration: 0.85 * fast, ease: 'power2.inOut' }, 'lift+=0.35')
+      // "menyelam" ke dalam surat → halaman undangan tampil di bawah cover
+      .addLabel('dive')
+      .add(() => onOpen?.(), 'dive')
+      .to('.letter', { scale: 4.5, opacity: 0, duration: 0.9 * fast, ease: 'power2.in' }, 'dive')
+      .to('.env-to, .cover-tag, .cover-credit', { opacity: 0, y: -20, duration: 0.5 }, 'dive')
+      .to(root.current, { autoAlpha: 0, duration: 0.9 * fast, ease: 'power2.inOut' }, 'dive+=0.3');
+  });
+
+  const startHold = contextSafe((e) => {
+    if (phase.current !== 'closed') return;
+    e.currentTarget.setPointerCapture?.(e.pointerId);
+    requestGyro();
+    tilt(false);
+    pressedAt.current = performance.now();
+    holdTween.current?.kill();
+    holdTween.current = gsap.to(progress.current, {
+      v: 1, duration: HOLD_SECONDS * (1 - progress.current.v), ease: 'none',
+      onUpdate: setRing, onComplete: open,
+    });
+    gsap.to('.seal-btn', { scale: 0.9, duration: 0.25, ease: 'power2.out' });
+    tremble.current = gsap.to('.env-wrap', { x: 1.4, duration: 0.05, repeat: -1, yoyo: true, ease: 'none' });
+    vibrate(8);
+  });
+
+  const endHold = contextSafe(() => {
+    if (phase.current !== 'closed') {
+      // segel sudah terbuka saat jari masih menekan → ini gesture yang diakui iOS untuk memutar audio
+      onStartAudio?.();
+      return;
+    }
+    tilt(true);
+    holdTween.current?.kill();
+    tremble.current?.kill();
+    gsap.to('.env-wrap', { x: 0, duration: 0.2 });
+    gsap.to(progress.current, { v: 0, duration: 0.35, onUpdate: setRing });
+    gsap.to('.seal-btn', { scale: 1, duration: 0.5, ease: 'elastic.out(1, 0.4)' });
+    if (performance.now() - pressedAt.current < 350) {
+      setHint('Tahan sedikit lebih lama…');
+      gsap.fromTo('.env-hint', { x: -6 }, { x: 0, duration: 0.5, ease: 'elastic.out(1, 0.3)' });
+    }
+  });
+
+  const onKey = (e) => {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); }
   };
 
   return (
-    <div
-      className={`fixed inset-0 w-full max-w-lg mx-auto h-screen z-50 flex flex-col justify-between px-5 py-6 transition-all duration-[1250ms] ease-[cubic-bezier(0.76,0,0.24,1)] overflow-hidden ${
-        isOpened
-          ? '-translate-y-full opacity-0 pointer-events-none scale-110 blur-md'
-          : 'translate-y-0 opacity-100 scale-100 blur-0 jewel-canvas'
-      }`}
-    >
-      {/* Atmospheric Background Blobs & Aquamarine Aurora */}
-      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden flex justify-center">
-        <div className="w-full max-w-lg h-full relative paper-grain">
-          <div className="absolute -top-16 -left-20 w-80 h-96 bg-emerald-rich/35 rounded-full blur-3xl mix-blend-screen opacity-75"></div>
-          <div className="absolute top-1/3 -right-20 w-80 h-96 bg-aqua-glow/25 rounded-full blur-3xl opacity-65"></div>
-          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 w-96 h-80 bg-gold/15 rounded-full blur-3xl opacity-65"></div>
-          <div className="absolute inset-5 border border-gold/20 rounded-[36px] pointer-events-none"></div>
-          <div className="absolute inset-7 border border-aqua-soft/10 rounded-[30px] pointer-events-none"></div>
+    <div className="cover velvet" ref={root}>
+      <EnvelopeDefs />
+      <GoldDust count={60} />
+      <p className="cover-tag">{WEDDING.hashtag}</p>
+
+      <div className="env-scene">
+        <div className="env-to">
+          <p className="eyebrow">Kepada Yth. Bapak/Ibu/Saudara/i</p>
+          <h2>{guestName}</h2>
+          <p className="env-sub">Anda diundang ke pernikahan kami</p>
+          <p className="env-note">Mohon maaf apabila ada kesalahan penulisan nama/gelar</p>
         </div>
-      </div>
 
-      {/* Top Header Bar */}
-      <header className="w-full flex items-center justify-between pt-2 px-8 relative z-10">
-        <div className="flex items-center space-x-2">
-          <span className="text-[11px] font-bold text-aqua-soft tracking-[0.25em] font-sans drop-shadow-sm">
-            #FAHreverWithSAB
-          </span>
-        </div>
-      </header>
+        <div className="env-stage">
+          <div className="env-float">
+            <div className="env-wrap" ref={tiltRef}>
+              <div className="env">
+                {/* bagian dalam amplop (liner) */}
+                <svg className="env-back env-drop" viewBox="0 0 340 224" preserveAspectRatio="none" aria-hidden="true">
+                  <rect width="340" height="224" rx="8" fill="url(#env-liner)" />
+                </svg>
 
-      {/* Center Envelope Hero Card (Vellum Panel on Jewel Canvas) */}
-      <div className="my-auto py-1 relative z-10">
-        <div
-          className={`vellum-panel rounded-[32px] p-6 sm:p-7 relative text-center overflow-hidden border border-gold/45 shadow-2xl transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
-            isOpening ? 'scale-[1.02] -translate-y-1.5 shadow-glow-jewel' : 'scale-100 translate-y-0'
-          }`}
-        >
-          {/* Ambient Top Gold-Aqua Bar */}
-          <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-emerald via-aqua to-gold" />
+                {/* surat undangan */}
+                <div className="letter paper">
+                  <div className="letter-frame">
+                    <Sprig className="letter-sprig" length={60} bend={14} leafSize={10} seed={9} />
+                    <p className="eyebrow">The Wedding of</p>
+                    <p className="letter-names">{WEDDING.names}</p>
+                    <p className="letter-date">{WEDDING.dateDots}</p>
+                  </div>
+                </div>
 
-          {/* Crest With Botanical Gold Frame & Wax Seal Ripple */}
-          <div className="flex justify-center mb-2">
-            <div className="relative w-36 h-36 sm:w-40 sm:h-40 flex items-center justify-center my-1 animate-aura">
-              <img
-                src="/assets/botanical-crest.svg"
-                alt="Botanical Gold Frame"
-                className="absolute inset-0 w-full h-full object-contain pointer-events-none drop-shadow-sm select-none animate-botanical-sway"
-              />
+                {/* kantong depan */}
+                <svg className="env-pocket env-drop" viewBox="0 0 340 224" preserveAspectRatio="none" aria-hidden="true">
+                  <path d="M0 0 L166 122 L0 224 Z" fill="url(#env-side-l)" />
+                  <path d="M340 0 L174 122 L340 224 Z" fill="url(#env-side-r)" />
+                  <path d="M0 0 L166 122 L0 224 Z M340 0 L174 122 L340 224 Z" fill="url(#env-grain)" />
+                  <path d={POCKET_BOTTOM} fill="url(#env-bottom)" filter="url(#env-lift)" />
+                  <path d={POCKET_BOTTOM} fill="url(#env-grain)" />
+                </svg>
 
-              {/* Concentric Wax Seal Ripples saat tombol Buka Undangan ditekan */}
-              {isOpening && (
-                <>
-                  <span className="absolute w-20 h-20 rounded-full border-2 border-gold animate-wax-ripple pointer-events-none" />
-                  <span
-                    className="absolute w-20 h-20 rounded-full border border-aqua-glow animate-wax-ripple pointer-events-none"
-                    style={{ animationDelay: '140ms' }}
-                  />
-                </>
-              )}
+                {/* tutup amplop (flap) — dua sisi */}
+                <div className="env-flap env-drop">
+                  <svg className="flap-face flap-outer" viewBox="0 0 340 140" preserveAspectRatio="none" aria-hidden="true">
+                    <path d="M0 0 L340 0 L184 126 Q170 138 156 126 Z" fill="url(#env-flap)" filter="url(#env-flapshadow)" />
+                    <path d="M0 0 L340 0 L184 126 Q170 138 156 126 Z" fill="url(#env-grain)" />
+                  </svg>
+                  <svg className="flap-face flap-inner" viewBox="0 0 340 140" preserveAspectRatio="none" aria-hidden="true">
+                    <path d="M0 140 L340 140 L184 14 Q170 2 156 14 Z" fill="url(#env-liner)" />
+                    <path d="M0 140 L340 140 L184 14 Q170 2 156 14 Z" fill="none" style={{ stroke: 'var(--metal-bright)' }} strokeOpacity=".5" />
+                  </svg>
+                </div>
 
-              <div
-                className={`relative z-10 w-20 h-20 rounded-full bg-gradient-to-tr from-emerald-deep via-[#00483E] to-aqua-teal flex flex-col items-center justify-center shadow-lg border-2 border-gold-light/80 transition-all duration-500 ${
-                  isOpening ? 'scale-110 rotate-6 shadow-glow-jewel' : 'scale-100 rotate-0'
-                }`}
-              >
-                <div className="absolute inset-1 rounded-full border border-dashed border-gold-light/45 pointer-events-none"></div>
-                <div className="z-10">
-                  <BrandMonogram size="md" variant="gold" />
+                {/* segel lilin (tombol tekan-tahan) */}
+                <div className="seal-wrap">
+                  <span className="seal-pulse" />
+                  <svg className="seal-ring" viewBox="0 0 120 120" aria-hidden="true">
+                    <circle cx="60" cy="60" r="52" className="seal-ring-track" />
+                    {/* cahaya = lingkaran lebar transparan (bukan filter drop-shadow yang dicat ulang tiap frame) */}
+                    <circle cx="60" cy="60" r="52" className="seal-ring-fill seal-ring-glow" />
+                    <circle cx="60" cy="60" r="52" className="seal-ring-fill" />
+                  </svg>
+                  <button
+                    type="button"
+                    className="seal-btn"
+                    aria-label="Tekan dan tahan untuk membuka undangan"
+                    onPointerDown={startHold}
+                    onPointerUp={endHold}
+                    onPointerCancel={endHold}
+                    onKeyDown={onKey}
+                    onContextMenu={(e) => e.preventDefault()}
+                  >
+                    <WaxSeal monogram={WEDDING.monogram} half="left" className="seal-half seal-half-l" />
+                    <WaxSeal monogram={WEDDING.monogram} half="right" className="seal-half seal-half-r" />
+                    <svg className="seal-crack" viewBox="0 0 200 200" aria-hidden="true">
+                      <polyline points={CRACK_POINTS} fill="none" style={{ stroke: 'var(--base-950)' }} strokeWidth="3" strokeLinejoin="round" />
+                    </svg>
+                  </button>
+                  {Array.from({ length: 18 }, (_, i) => <span key={i} className="spark" />)}
                 </div>
               </div>
             </div>
           </div>
-
-          {/* Over-title Section */}
-          <div className="space-y-1 mb-1">
-            <p className="text-[10px] sm:text-[11px] font-bold text-aqua-teal tracking-[0.28em] uppercase font-sans">
-              THE WEDDING CELEBRATION OF
-            </p>
-            <div className="h-0.5 w-12 bg-gradient-to-r from-transparent via-gold to-transparent mx-auto rounded-full"></div>
-          </div>
-
-          {/* Main Names Editorial Script Pairing */}
-          <h1 className="font-headline text-4xl sm:text-5xl text-emerald-deep tracking-tight leading-tight my-1.5 font-normal">
-            Fahrul <span className="font-headline italic font-normal text-gold">&amp;</span> Sabrina
-          </h1>
-
-          {/* Ceremonial Date Tag */}
-          <div className="inline-flex items-center space-x-2 my-2 px-4 py-1.5 rounded-full bg-aqua-tint/70 border border-aqua/30 shadow-sm">
-            <Calendar className="w-3.5 h-3.5 text-aqua-teal" />
-            <p className="text-xs text-emerald-deep font-semibold tracking-wide font-sans">
-              Sabtu, 17 Juli 2027
-            </p>
-          </div>
-
-          {/* Soft Divider with Diamond */}
-          <div className="flex items-center justify-center space-x-3 my-3 opacity-75">
-            <div className="h-[1px] w-12 bg-gradient-to-r from-transparent to-gold/50"></div>
-            <div className="w-1.5 h-1.5 bg-gold rotate-45"></div>
-            <div className="h-[1px] w-12 bg-gradient-to-l from-transparent to-gold/50"></div>
-          </div>
-
-          {/* Guest Validation Section (Kepada Yth) */}
-          <div className="bg-ivory/95 border border-gold/40 rounded-2xl p-4 shadow-sm relative overflow-hidden">
-            <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-transparent via-aqua/60 to-transparent"></div>
-            <p className="text-[10px] text-charcoal-muted uppercase tracking-widest mb-1.5 font-medium font-sans">
-              Kepada Yth. Bapak/Ibu/Saudara/i:
-            </p>
-
-            <div className="my-1.5 py-1.5 px-3.5 bg-ivory-subtle rounded-xl border border-gold/40 inline-block max-w-full shadow-sm">
-              <h2 className="font-headline text-lg sm:text-xl text-emerald-deep tracking-tight font-semibold truncate px-2">
-                {guestName}
-              </h2>
-            </div>
-            <p className="text-[11px] text-charcoal-muted italic mt-1 leading-snug font-sans">
-              Mohon maaf apabila ada kesalahan penulisan nama/gelar
-            </p>
-          </div>
-
-          {/* Call To Action Button (Buka Undangan) */}
-          <div className="mt-5 pt-1">
-            <button
-              onClick={handleOpenClick}
-              disabled={isOpening}
-              type="button"
-              className={`gold-shimmer-btn w-full py-3.5 px-6 rounded-full text-emerald-deep flex items-center justify-center space-x-2.5 transition-all duration-300 cursor-pointer shadow-glow-gold hover:brightness-105 active:scale-95 ${
-                isOpening ? 'scale-95 brightness-110' : ''
-              }`}
-            >
-              {isOpening ? (
-                <>
-                  <span className="tracking-widest uppercase font-bold text-xs text-emerald-deep font-sans">
-                    Membuka Undangan...
-                  </span>
-                </>
-              ) : (
-                <>
-                  <Mail className="w-4 h-4 text-emerald-deep" />
-                  <span className="tracking-widest uppercase font-bold text-xs text-emerald-deep font-sans">
-                    Buka Undangan
-                  </span>
-                </>
-              )}
-            </button>
-          </div>
+          <div className="env-shadow" />
         </div>
+
+        <p className="env-hint" aria-live="polite">{hint}</p>
       </div>
 
-      {/* Bottom Botanical Footer Signature */}
-      <footer className="w-full text-center pb-3 pt-1 relative z-10">
-        <p className="text-[10px] text-ivory/75 tracking-wider font-sans">
-          Artworks by the Bride &bull; Handcrafted by the Groom
-        </p>
-        <p className="text-[9px] text-gold-pale/65 tracking-widest uppercase mt-0.5 font-sans">
-          Made with love &bull; From Us
-        </p>
-      </footer>
+      <p className="cover-credit">
+        Artworks by the Bride • Handcrafted by the Groom
+        <span>Made with love • From Us</span>
+      </p>
     </div>
   );
 }

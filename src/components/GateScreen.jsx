@@ -1,14 +1,9 @@
-import React from 'react';
 import { Lock } from 'lucide-react';
 
 export default function GateScreen() {
   return (
-    <div className="min-h-screen w-full flex items-center justify-center p-4 bg-[#051C13] selection:bg-gold-light selection:text-emerald-deep">
-      <div className="w-full max-w-md vellum-panel rounded-3xl p-8 sm:p-10 shadow-vellum text-center border border-gold/40 relative overflow-hidden">
-        {/* Ambient Jewel Glow */}
-        <div className="absolute -top-16 -right-16 w-44 h-44 bg-aqua-glow/20 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute -bottom-16 -left-16 w-44 h-44 bg-emerald/30 rounded-full blur-3xl pointer-events-none" />
-
+    <div className="min-h-screen w-full flex items-center justify-center p-4 velvet">
+      <div className="w-full max-w-md vellum-panel rounded-3xl p-8 sm:p-10 text-center border border-gold/40 relative overflow-hidden">
         <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-gradient-to-tr from-emerald-deep to-emerald text-gold-pale flex items-center justify-center shadow-md border border-gold/40">
           <Lock className="w-7 h-7 text-gold-pale" />
         </div>

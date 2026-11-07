@@ -1,0 +1,48 @@
+/* Halaman hasil "menyelam" ke surat amplop — section pertama undangan (in-flow, bukan overlay) */
+.hero {
+  position: relative;
+  min-height: calc(100vh - 3.5rem);
+  min-height: calc(100svh - 3.5rem);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 48px 16px 64px;
+  text-align: center;
+  background-color: var(--paper);
+  background-image: var(--grain), radial-gradient(90% 70% at 50% 45%, var(--paper-hi) 0%, var(--paper) 100%);
+}
+.hero::before {
+  content: ''; position: absolute; inset: 14px 14px 30px;
+  border: 1px solid rgb(var(--metal-rgb) / .45);
+  outline: 1px solid rgb(var(--metal-rgb) / .2); outline-offset: 5px;
+  border-radius: 200px 200px 18px 18px;
+  pointer-events: none;
+}
+.hero > * { position: relative; }
+.hero .eyebrow { color: var(--accent); margin: 0 0 4px; }
+.hero-names { width: min(100%, 400px); height: auto; overflow: visible; }
+.hero-date { margin: 0; font-family: var(--font-display); font-size: 20px; color: var(--base-800); }
+.hero-place { margin: 6px 0 0; font-family: var(--font-serif); font-style: italic; font-size: 17px; color: var(--muted); }
+.hero-to { margin: 28px 0 0; font-size: 13px; color: var(--muted); }
+.hero-to strong { display: block; margin-top: 4px; font-family: var(--font-display); font-weight: 500; font-size: 19px; color: var(--ink); }
+.hero-sprig { position: absolute !important; width: 90px; color: var(--metal); opacity: .9; }
+.hero-sprig-r { right: 6%; top: 9%; transform: rotate(160deg); }
+.hero-cue {
+  margin-top: 34px; display: flex; flex-direction: column; align-items: center; gap: 8px;
+  font-size: 9px; font-weight: 600; letter-spacing: .25em; text-transform: uppercase; color: var(--muted);
+}
+.hero-cue i {
+  position: relative; display: block; width: 22px; height: 36px;
+  border: 1.5px solid rgb(var(--metal-rgb) / .7); border-radius: 12px;
+}
+.hero-cue i::after {
+  content: ''; position: absolute; left: 50%; top: 7px; width: 4px; height: 7px; margin-left: -2px;
+  border-radius: 2px; background: var(--metal);
+  animation: hero-cue 1.8s ease-in-out infinite;
+}
+@keyframes hero-cue { 0%, 100% { transform: translateY(0); opacity: 1; } 50% { transform: translateY(9px); opacity: .25; } }
+
+/* ---------- ornamen mawar ---------- */
+.hero-corner { position: absolute !important; width: 128px; color: var(--metal); opacity: .9; }
+.hero-corner-bl { left: 10px; bottom: 26px; transform: rotate(270deg); }
+.hero-corner-br { right: 10px; bottom: 26px; transform: rotate(180deg); }
+.hero-vine { width: min(64vw, 240px); height: auto; margin: 0 0 12px; color: var(--metal); }
+

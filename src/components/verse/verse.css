@@ -1,0 +1,91 @@
+/* Gulungan ayat (lab demo 03). Section di-pin; benang merah baru mulai SETELAH section ini (opsi a). */
+.verse-sec { padding-top: 84px; }
+.verse-intro { position: relative; z-index: 2; text-align: center; padding: 0 16px 8px; }
+.verse-intro .eyebrow { margin: 0; color: var(--accent-soft); }
+.verse-intro h2 {
+  margin: 12px auto; max-width: 13ch;
+  font-family: var(--font-display); font-weight: 400; font-size: clamp(30px, 9vw, 42px); line-height: 1.15; color: var(--ivory);
+}
+.verse-intro p:not(.eyebrow) { margin: 0; font-family: var(--font-serif); font-style: italic; font-size: 18px; color: rgb(var(--ivory-rgb) / .65); }
+.scroll-cue {
+  position: relative; width: 24px; height: 40px; margin: 22px auto 0;
+  border: 1.5px solid rgb(var(--metal-pale-rgb) / .5); border-radius: 12px;
+}
+.scroll-cue span { position: absolute; left: 50%; top: 8px; width: 4px; height: 8px; margin-left: -2px; border-radius: 2px; background: var(--metal-pale); }
+
+.scroll-pin {
+  position: relative; height: 100vh; height: 100svh;
+  display: flex; align-items: center; justify-content: center;
+  padding: 3.5rem 16px 0; /* ruang untuk NavbarTop yang fixed */
+}
+.scroll-wrap { position: relative; z-index: 2; width: min(84vw, 360px); }
+
+/* ---------- gulungan ---------- */
+.roll { position: relative; height: 30px; z-index: 2; }
+.roll-rod {
+  position: absolute; left: -16px; right: -16px; top: 10px; height: 10px; border-radius: 5px;
+  background: linear-gradient(180deg, var(--metal-dark) 0%, var(--metal-mid) 30%, var(--metal-light) 46%, var(--metal-soft) 58%, var(--metal-dark) 100%);
+}
+.roll-rod::before, .roll-rod::after {
+  content: ''; position: absolute; top: 50%; width: 20px; height: 20px; margin-top: -10px; border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, var(--metal-light), var(--metal-bright) 45%, var(--metal-dark) 100%);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, .45);
+}
+.roll-rod::before { left: -10px; }
+.roll-rod::after { right: -10px; }
+.roll-paper {
+  position: absolute; inset: 0; border-radius: 15px / 50%;
+  background:
+    repeating-linear-gradient(180deg, rgb(var(--shade-rgb) / .0) 0 7px, rgb(var(--shade-rgb) / .14) 7px 8px),
+    linear-gradient(180deg, var(--paper-deep) 0%, var(--paper) 28%, var(--paper-hi) 46%, var(--paper-lo) 72%, var(--paper-deep) 100%);
+  box-shadow: 0 6px 12px -2px rgba(0, 0, 0, .45);
+}
+.roll-bottom { transform-origin: 50% 0; }
+
+.scroll-paper {
+  position: relative; z-index: 1;
+  height: 0; overflow: hidden;
+  margin: -12px 4px;
+  background-image: var(--grain), linear-gradient(90deg, var(--paper-lo) 0%, var(--paper-hi) 8%, var(--paper-hi) 50%, var(--paper-hi) 92%, var(--paper-lo) 100%);
+  box-shadow: inset 0 14px 14px -12px rgb(var(--shade-rgb) / .45), inset 0 -14px 14px -12px rgb(var(--shade-rgb) / .45);
+}
+.scroll-content {
+  position: relative;
+  padding: 30px 22px 30px;
+  text-align: center; color: var(--ink);
+}
+/* ornamen diputar 90° — dibungkus agar tinggi layout tetap kecil */
+.scroll-orn { position: relative; height: 30px; color: var(--metal); }
+.scroll-orn .sprig {
+  position: absolute; left: 50%; top: 50%; height: 120px; width: auto;
+  transform: translate(-50%, -50%) rotate(90deg);
+}
+.scroll-orn-b { margin-top: 6px; }
+.scroll-orn-b .sprig { transform: translate(-50%, -50%) rotate(-90deg); }
+.scroll-bismillah { margin: 6px 0 8px; font-family: var(--font-arabic); font-size: clamp(22px, 3.2vh, 27px); color: var(--base-800); }
+.scroll-arabic { margin: 0; font-family: var(--font-arabic); font-size: clamp(16px, 2.3vh, 19px); line-height: 2; color: var(--ink); }
+.scroll-rule { position: relative; height: 14px; margin: 8px auto; width: 120px; }
+.scroll-rule span { position: absolute; top: 50%; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, var(--metal), transparent); }
+.scroll-rule::after { content: ''; position: absolute; left: 50%; top: 50%; width: 6px; height: 6px; background: var(--metal); transform: translate(-50%, -50%) rotate(45deg); }
+.scroll-translation { margin: 0; font-family: var(--font-serif); font-style: italic; font-size: clamp(15px, 2.1vh, 17px); line-height: 1.5; color: var(--ink-soft); }
+.scroll-ref { margin: 12px 0 0; font-size: 11px; font-weight: 600; letter-spacing: .3em; text-transform: uppercase; color: var(--accent); }
+
+/* ---------- pita penutup ---------- */
+.ribbon { position: absolute; left: 50%; top: 0; width: 34px; height: 60px; margin-left: -17px; z-index: 3; pointer-events: none; }
+.ribbon-band {
+  position: absolute; left: 7px; right: 7px; top: -6px; bottom: -6px;
+  background: linear-gradient(90deg, var(--base-900), var(--base-700) 50%, var(--base-900));
+  box-shadow: 0 3px 6px rgba(0, 0, 0, .4);
+}
+.ribbon-knot {
+  position: absolute; left: 50%; top: 50%; width: 30px; height: 30px; margin: -15px 0 0 -15px; border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, var(--metal-light), var(--metal-bright) 45%, var(--metal-dark) 100%);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, .45), inset 0 0 0 3px rgb(var(--shade-rgb) / .5);
+}
+
+/* ---------- ornamen mawar ---------- */
+.scroll-vine { display: block; width: 200px; height: auto; margin: 4px auto 8px; color: var(--metal); }
+.scroll-corner { position: absolute; width: 74px; color: var(--metal); opacity: .75; }
+.scroll-corner-tl { left: 6px; top: 8px; }
+.scroll-corner-br { right: 6px; bottom: 8px; transform: rotate(180deg); }
+.scroll-orn .rose-sway > svg { height: 120px; width: auto; }
