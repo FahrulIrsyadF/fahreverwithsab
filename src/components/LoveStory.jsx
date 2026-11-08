@@ -91,13 +91,15 @@ export default function LoveStory() {
           <div key={ch.act} className="story-ch">
             {/* badge 01 = ujung benang merah */}
             <div className="story-badge" {...(i === 0 ? { 'data-anchor': '0.5,0.5' } : {})}>{ch.iconText}</div>
-            <div className="story-card card-paper">
-              <div className="story-card-top">
+            {/* teks langsung di atas beludru (tanpa kartu): baris kecil babak · tempat, judul, paragraf serif */}
+            <div className="story-card">
+              <p className="story-meta">
                 <span className="story-act">{ch.act}</span>
+                <i aria-hidden="true" />
                 <span className="story-loc">{ch.location}</span>
-              </div>
+              </p>
               <h3>{ch.title}</h3>
-              <p className="editorial-dropcap">{ch.text}</p>
+              <p className="story-text">{ch.text}</p>
             </div>
           </div>
         ))}
