@@ -21,7 +21,7 @@ export default {
         ink: { DEFAULT: t('ink'), soft: t('ink-soft') },
         muted: t('muted'),
 
-        // Nama lama (palet zamrud) dipetakan ke palet marun, untuk sisa kelas lama
+        // Nama lama (palet zamrud) dipetakan ke token palet aktif, untuk sisa kelas lama
         emerald: { deep: t('base-900'), DEFAULT: t('base-800'), rich: t('base-700'), light: t('base-700'), tint: t('accent-tint'), surface: t('accent-tint') },
         gold: { deep: t('metal-dark'), DEFAULT: t('metal'), metallic: t('metal-bright'), light: t('metal-soft'), pale: t('metal-pale') },
         aqua: { deep: t('base-900'), teal: t('accent'), DEFAULT: t('accent'), soft: t('accent-soft'), glow: t('accent-soft'), tint: t('accent-tint') },
