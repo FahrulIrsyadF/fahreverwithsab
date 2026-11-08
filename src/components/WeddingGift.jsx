@@ -6,7 +6,7 @@ import { RoseVine } from './ornaments/Roses';
 import { GIFT, WEDDING } from '../data/wedding';
 import './gift/gift.css';
 
-const TABS = [['transfer', 'Transfer'], ['physical', 'Kirim Kado']];
+const TABS = [['physical', 'Kirim Kado'], ['transfer', 'Transfer']];
 
 function copyText(text) {
   if (navigator.clipboard?.writeText) return navigator.clipboard.writeText(text);
@@ -34,7 +34,7 @@ function CopyButton({ text, id, copiedId, onCopy, children }) {
  * kartu bank asli, alamat kado ditulis seperti label kiriman (tanpa kartu di dalam kartu).
  */
 export default function WeddingGift() {
-  const [activeTab, setActiveTab] = useState('transfer');
+  const [activeTab, setActiveTab] = useState('physical');
   const [copiedId, setCopiedId] = useState(null);
 
   // Ganti tab mengubah tinggi halaman → posisi trigger section di bawahnya perlu dihitung ulang
@@ -83,7 +83,7 @@ export default function WeddingGift() {
               {label}
             </button>
           ))}
-          <span className="gift-tabs-bar" style={{ transform: `translateX(${activeTab === 'transfer' ? 0 : 100}%)` }} />
+          <span className="gift-tabs-bar" style={{ transform: `translateX(${activeTab === 'physical' ? 0 : 100}%)` }} />
         </div>
 
         {activeTab === 'transfer' && (
