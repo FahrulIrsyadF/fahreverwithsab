@@ -1,75 +1,71 @@
-import { Calendar, MapPin, ExternalLink, Clock } from 'lucide-react';
+import { Fragment } from 'react';
+import { MapPin } from 'lucide-react';
 import SectionSeam from './ornaments/SectionSeam';
 import GoldDust from './ornaments/GoldDust';
-import { RoseCorner, RoseVine } from './ornaments/Roses';
+import { RoseVine } from './ornaments/Roses';
+import ThreadStitch from './thread/ThreadStitch';
 import { EVENTS } from '../data/wedding';
+import './event/event.css';
 
-/** Akad & Resepsi — belum ada demo lab: ikut sistem Seam + ranting + reveal GSAP (data-reveal). */
+/** "Sabtu, 17 Juli 2027" → ['Sabtu', '17', 'Juli 2027'] */
+function splitDate(s) {
+  const [day, rest = ''] = s.split(', ');
+  const [num, ...tail] = rest.split(' ');
+  return [day, num, tail.join(' ')];
+}
+
+/**
+ * Rangkaian Acara — gaya kartu undangan cetak: bingkai lengkung emas bergaris ganda di atas
+ * beludru hijau (satu lapis, tanpa kartu di dalam kartu). Benang merah menyusur tepi kanan,
+ * menyeberang di antara dua acara (ThreadStitch), lalu turun di tepi kiri menuju Galeri.
+ */
 export default function EventDetails() {
   return (
-    <section className="sec sec-dark pt-20 pb-20 px-5" id="acara">
-      <SectionSeam into="dark" side="right" seed={53} />
+    <section className="sec sec-dark ev-sec" id="acara">
+      <SectionSeam into="dark" side="right" seed={53} anchor="0.3,0.5" />
       <GoldDust count={30} />
 
-      <header className="sec-head" data-reveal>
+      <header className="sec-head" data-reveal data-anchor="1.04,0.7">
         <p className="eyebrow">Rangkaian Acara</p>
         <h2>Akad &amp; Resepsi</h2>
         <RoseVine className="sec-rule" w={220} h={40} seed={57} />
       </header>
 
-      <div className="sec-inner space-y-7 max-w-md mx-auto">
-        {EVENTS.map((ev, i) => (
-          <article
-            key={ev.id}
-            data-reveal={i % 2 ? 'right' : 'left'}
-            className="card-paper rounded-3xl p-6 sm:p-8 text-left overflow-hidden"
-          >
-            <RoseCorner className="card-corner card-corner-br" seed={60 + i * 7} />
+      <div className="sec-inner ev-list">
+        {EVENTS.map((ev, i) => {
+          const [day, num, monthYear] = splitDate(ev.date);
+          const [label] = ev.badge.split(' • ');
+          return (
+            <Fragment key={ev.id}>
+              {i > 0 && <ThreadStitch from="right" />}
+              <article className="ev" data-reveal>
+                <p className="ev-no">{String(i + 1).padStart(2, '0')}</p>
+                <p className="eyebrow ev-label">{label}</p>
+                <h3 className="ev-title">{ev.title}</h3>
 
-            <div className="inline-flex items-center gap-1.5 text-[10px] font-bold tracking-widest uppercase text-base-800 bg-accent-tint px-3.5 py-1 rounded-full mb-3.5 border border-accent/30">
-              <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
-              <span>{ev.badge}</span>
-            </div>
-
-            <h3 className="font-headline text-2xl font-bold text-base-800 mb-4 leading-snug">{ev.title}</h3>
-
-            <div className="space-y-3.5 mb-6 relative">
-              <div className="flex items-start gap-3">
-                <div className="w-8 h-8 rounded-xl bg-accent-tint border border-accent/30 flex items-center justify-center shrink-0 mt-0.5">
-                  <Calendar className="w-4 h-4 text-accent" />
+                <div className="ev-date" aria-label={ev.date}>
+                  <span>{day}</span>
+                  <b>{num}</b>
+                  <span>{monthYear}</span>
                 </div>
-                <div>
-                  <div className="text-xs font-bold text-base-800">{ev.date}</div>
-                  <div className="text-[11px] text-muted flex items-center gap-1.5 mt-0.5">
-                    <Clock className="w-3 h-3 text-metal-deep" />
-                    <span>{ev.time}</span>
-                  </div>
-                </div>
-              </div>
+                <p className="ev-time">{ev.time}</p>
 
-              <div className="flex items-start gap-3">
-                <div className="w-8 h-8 rounded-xl bg-accent-tint border border-accent/30 flex items-center justify-center shrink-0 mt-0.5">
-                  <MapPin className="w-4 h-4 text-accent" />
-                </div>
-                <div className="pr-10">
-                  <div className="text-xs font-bold text-base-800">{ev.venue}</div>
-                  <div className="text-[11px] text-muted leading-relaxed mt-0.5">{ev.address}</div>
-                </div>
-              </div>
-            </div>
+                <RoseVine className="ev-vine" w={180} h={34} seed={61 + i * 5} />
 
-            <a
-              href={ev.maps}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="relative w-full py-3 px-4 rounded-xl border border-metal/60 text-ivory bg-gradient-to-r from-base-900 via-base-700 to-base-900 hover:brightness-110 transition-[filter] duration-300 text-xs font-semibold flex items-center justify-center gap-2 shadow-md active:scale-95"
-            >
-              <ExternalLink className="w-3.5 h-3.5 text-metal-pale" />
-              <span>Buka Petunjuk Lokasi (Google Maps)</span>
-            </a>
-          </article>
-        ))}
+                <p className="ev-venue">{ev.venue}</p>
+                <p className="ev-addr">{ev.address}</p>
+
+                <a className="btn-ghost ev-map" href={ev.maps} target="_blank" rel="noopener noreferrer">
+                  <MapPin className="w-3.5 h-3.5" aria-hidden="true" />
+                  Petunjuk Lokasi
+                </a>
+              </article>
+            </Fragment>
+          );
+        })}
       </div>
+      {/* benang turun di tepi kiri menuju ranting sambungan Galeri */}
+      <div className="ev-tail" data-anchor="0.04,0.5" aria-hidden="true" />
     </section>
   );
 }

@@ -1,0 +1,74 @@
+/* Kehadiran & Doa — formulir di atas kertas (garis tulis) + buku tamu tanpa kartu */
+.rsvp-sec { padding: 80px 28px 76px; }
+.rsvp-form { max-width: 360px; margin: 0 auto; display: grid; gap: 24px; text-align: left; }
+
+.rsvp-field { display: grid; gap: 6px; margin: 0; padding: 0; border: 0; min-width: 0; }
+.rsvp-label {
+  padding: 0; font-size: 10px; font-weight: 700; letter-spacing: .24em; text-transform: uppercase; color: var(--accent);
+}
+.rsvp-field input,
+.rsvp-field textarea {
+  width: 100%; padding: 8px 0 9px; border: 0; border-radius: 0; outline: 0; resize: none;
+  background: transparent;
+  border-bottom: 1px solid rgb(var(--metal-rgb) / .8);
+  font-family: var(--font-serif); font-size: 19px; line-height: 1.4; color: var(--ink);
+  transition: border-color .3s;
+}
+/* textarea: garis-garis buku tulis */
+.rsvp-field textarea {
+  border-bottom: 0; padding: 0;
+  line-height: 32px;
+  background-image: repeating-linear-gradient(180deg, transparent 0 31px, rgb(var(--metal-rgb) / .65) 31px 32px);
+}
+.rsvp-field input::placeholder,
+.rsvp-field textarea::placeholder { color: rgb(var(--muted-rgb) / .75); font-style: italic; }
+.rsvp-field input:focus { border-bottom-color: var(--base-800); }
+
+.rsvp-choice, .rsvp-count { display: flex; flex-wrap: wrap; gap: 6px 22px; }
+.rsvp-choice button, .rsvp-count button {
+  display: inline-flex; align-items: center; gap: 9px; padding: 6px 0;
+  border: 0; background: none; cursor: pointer;
+  font-family: var(--font-serif); font-size: 18px; color: var(--muted);
+  transition: color .3s;
+}
+/* lingkaran pilihan seperti formulir cetak */
+.rsvp-choice button svg {
+  width: 22px; height: 22px; padding: 4px; flex-shrink: 0; border-radius: 50%;
+  border: 1px solid rgb(var(--metal-deep-rgb) / .7); color: transparent;
+  transition: background-color .3s, color .3s, border-color .3s;
+}
+.rsvp-count button::before {
+  content: ''; width: 18px; height: 18px; flex-shrink: 0; border-radius: 50%;
+  border: 1px solid rgb(var(--metal-deep-rgb) / .7);
+}
+.rsvp-choice button.is-on, .rsvp-count button.is-on { color: var(--base-800); }
+.rsvp-choice button.is-on svg { background: var(--base-800); border-color: var(--base-800); color: var(--metal-pale); }
+.rsvp-count button.is-on::before { border-color: var(--base-800); background: radial-gradient(circle, var(--base-800) 0 36%, transparent 42%); }
+
+.rsvp-submit { justify-self: center; margin-top: 4px; }
+.rsvp-submit:disabled { opacity: .6; cursor: not-allowed; }
+.rsvp-toast { margin: 0; text-align: center; font-family: var(--font-serif); font-style: italic; font-size: 17px; color: var(--base-800); }
+
+/* ---------- buku tamu ---------- */
+.rsvp-wishes { max-width: 380px; margin: 60px auto 0; }
+.rsvp-wishes-head { display: flex; align-items: center; gap: 12px; margin-bottom: 4px; }
+.rsvp-wishes-head span { flex-shrink: 0; font-size: 10px; font-weight: 700; letter-spacing: .24em; text-transform: uppercase; color: var(--accent); }
+.rsvp-wishes-head i { flex: 1; height: 1px; background: rgb(var(--metal-rgb) / .7); }
+.rsvp-list {
+  list-style: none; margin: 0; padding: 0 4px 0 0; text-align: left;
+  max-height: 26rem; overflow-y: auto; overscroll-behavior: contain;
+  -webkit-mask-image: linear-gradient(180deg, #000 85%, transparent);
+  mask-image: linear-gradient(180deg, #000 85%, transparent);
+}
+.rsvp-list li { padding: 16px 0; border-bottom: 1px solid rgb(var(--metal-rgb) / .4); }
+.rsvp-list li:last-child { border-bottom: 0; padding-bottom: 44px; }
+.rsvp-who { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
+.rsvp-who b {
+  min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  font-family: var(--font-display); font-weight: 400; font-size: 17px; color: var(--base-800);
+}
+.rsvp-who span { flex-shrink: 0; font-size: 9px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: var(--muted); }
+.rsvp-who span.is-yes { color: var(--accent); }
+.rsvp-list p { margin: 6px 0 0; font-family: var(--font-serif); font-style: italic; font-size: 17px; line-height: 1.45; color: var(--ink-soft); }
+.rsvp-list time { display: block; margin-top: 6px; font-size: 10px; color: rgb(var(--muted-rgb) / .85); }
+.rsvp-empty { font-family: var(--font-serif); font-style: italic; color: var(--muted); }

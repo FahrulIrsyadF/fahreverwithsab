@@ -55,6 +55,11 @@
   color: var(--ivory);
   background: var(--grain-light), linear-gradient(180deg, var(--base-900) 0%, var(--base-950) 100%);
 }
+.sec-blue {
+  color: var(--ink);
+  background-color: var(--paper-lo);
+  background-image: var(--grain), radial-gradient(110% 45% at 50% 0%, rgb(var(--paper-hi-rgb) / .55), transparent);
+}
 .sec-inner { position: relative; z-index: 2; }
 .sec-head { position: relative; z-index: 2; text-align: center; margin: 0 auto 40px; max-width: 340px; }
 .sec-head .eyebrow { margin: 0; color: var(--accent); }
@@ -86,6 +91,10 @@
 .seam-vine.seam-on-dark { top: -28px; color: var(--metal-pale); opacity: .85; }
 
 /* ---------- benang merah ---------- */
+/* "jahitan": celah antar-blok tempat benang menyeberang dari satu tepi ke tepi lain
+   (benang menyusur tepi layar, tidak menyilang kartu/foto) */
+.thread-stitch { position: relative; height: 56px; pointer-events: none; }
+.thread-stitch span { position: absolute; width: 0; height: 0; }
 .thread {
   position: absolute; left: 0; top: 0; width: 100%;
   z-index: 1; pointer-events: none; overflow: visible;

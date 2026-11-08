@@ -1,0 +1,29 @@
+/* Galeri editorial (tanpa kartu): foto besar berpuncak lengkung + dua foto berselang */
+.gal-sec { padding: 80px 30px 24px; }
+.gal { display: grid; grid-template-columns: 1fr 1fr; gap: 18px 16px; max-width: 380px; margin: 0 auto; }
+.gal-item { margin: 0; min-width: 0; }
+.gal-hero { grid-column: 1 / -1; }
+.gal-small-2 { margin-top: 56px; } /* berselang: foto kanan lebih rendah */
+
+.gal-photo {
+  display: block; width: 100%; padding: 0; border: 0; cursor: zoom-in;
+  position: relative; overflow: hidden; background: var(--paper-lo);
+  box-shadow: 0 24px 34px -22px rgb(var(--ink-rgb) / .55);
+}
+.gal-hero .gal-photo { aspect-ratio: 4 / 4.4; border-radius: 999px 999px 6px 6px / 46% 46% 6px 6px; }
+.gal-small .gal-photo { aspect-ratio: 3 / 4; border-radius: 6px; }
+.gal-photo img {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+  transition: transform 1.4s cubic-bezier(.22, 1, .36, 1);
+}
+.gal-photo:hover img { transform: scale(1.04); }
+/* garis emas tipis di dalam foto */
+.gal-photo::after {
+  content: ''; position: absolute; inset: 8px; border-radius: inherit; pointer-events: none;
+  border: 1px solid rgb(255 255 255 / .55);
+}
+
+.gal-item figcaption { display: grid; gap: 2px; padding: 10px 2px 0; }
+.gal-hero figcaption { text-align: center; }
+.gal-tag { font-size: 9px; font-weight: 700; letter-spacing: .22em; text-transform: uppercase; color: var(--accent); }
+.gal-cap { font-family: var(--font-serif); font-style: italic; font-size: 17px; line-height: 1.3; color: var(--base-800); }

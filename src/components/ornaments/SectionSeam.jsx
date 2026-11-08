@@ -7,17 +7,18 @@ import { RoseVine } from './Roses';
  * dan TIDAK `overflow: hidden`, karena sobekan & ranting menjorok ke section sebelumnya).
  *  - into="light": section ini terang, sebelumnya gelap → kertas sobek (torn)
  *  - into="dark" : section ini gelap, sebelumnya terang → renda (lace)
+ *  - into="blue" : section biru powder (`.sec-blue`) → kertas sobek berwarna biru
  * Ranting di sisi `side` (bergantian kiri/kanan antar sambungan) tumbuh mengikuti scroll
  * (animasi di App: `.seam-sprig`). `anchor` = jangkar benang merah (opsional).
  */
 export default function SectionSeam({ into = 'light', side = 'left', seed = 7, anchor, vine = true }) {
-  const torn = into === 'light';
+  const torn = into !== 'dark';
   const dark = torn ? '' : ' seam-on-dark';
   return (
     <>
       <Seam
         variant={torn ? 'torn' : 'lace'}
-        color={torn ? 'var(--paper)' : 'var(--base-900)'}
+        color={into === 'blue' ? 'var(--paper-lo)' : torn ? 'var(--paper)' : 'var(--base-900)'}
         seed={seed}
         height={torn ? 44 : 40}
         className="seam-top"

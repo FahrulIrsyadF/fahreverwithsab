@@ -1,13 +1,16 @@
 import { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { X, ZoomIn } from 'lucide-react';
+import { X } from 'lucide-react';
 import SectionSeam from './ornaments/SectionSeam';
 import { RoseVine } from './ornaments/Roses';
+import ThreadStitch from './thread/ThreadStitch';
 import { GALLERY } from '../data/wedding';
+import './gallery/gallery.css';
 
 /**
- * Galeri — sengaja TIDAK memakai demo polaroid (belum cocok); grid + lightbox lama dipertahankan,
- * hanya diselaraskan dengan palet, Seam, dan reveal GSAP.
+ * Galeri — tata letak editorial: satu foto besar berpuncak lengkung + dua foto berselang,
+ * keterangan di bawah foto (tanpa bingkai kartu). Ukuran bingkai tetap (aspect-ratio) supaya
+ * benang merah tidak bergeser saat foto dimuat. Benang menyusur tepi kiri lalu menyeberang ke kanan.
  */
 export default function Gallery() {
   const [activeImage, setActiveImage] = useState(null);
@@ -20,46 +23,32 @@ export default function Gallery() {
     return () => window.removeEventListener('keydown', onKey);
   }, [activeImage]);
 
+  const [hero, ...rest] = GALLERY;
   return (
-    <section className="sec sec-light pt-20 pb-20 px-5" id="galeri">
-      <SectionSeam into="light" side="left" seed={67} />
+    <section className="sec sec-light gal-sec" id="galeri">
+      <SectionSeam into="light" side="left" seed={67} anchor="0.7,0.55" />
 
-      <header className="sec-head" data-reveal>
+      <header className="sec-head" data-reveal data-anchor="-0.04,0.9">
         <p className="eyebrow">Momen Bahagia</p>
         <h2>Galeri Foto</h2>
         <RoseVine className="sec-rule" w={220} h={40} seed={71} />
       </header>
 
-      <div className="sec-inner grid grid-cols-2 gap-3.5 max-w-md mx-auto">
-        {GALLERY.map((photo, i) => (
-          <button
-            type="button"
-            key={photo.id}
-            onClick={() => setActiveImage(photo)}
-            data-reveal={photo.wide ? 'up' : i % 2 ? 'left' : 'right'}
-            className={`${photo.wide ? 'col-span-2' : 'col-span-1'} text-left rounded-2xl p-2 sm:p-2.5 pb-2.5 bg-paper-hi paper-grain border border-metal/50 shadow-xl cursor-pointer group overflow-hidden`}
-          >
-            <div className={`w-full ${photo.wide ? 'aspect-[4/3]' : 'aspect-[3/4]'} rounded-xl overflow-hidden relative`}>
-              <img
-                src={photo.src}
-                alt={photo.caption}
-                className="w-full h-full object-cover transition-transform duration-[1500ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-105"
-                loading="lazy"
-                decoding="async"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-base-900/40 via-transparent to-transparent pointer-events-none" />
-              <div className="absolute top-2.5 right-2.5 p-1.5 rounded-full bg-base-900/75 text-metal-pale border border-metal/40 shadow-sm transition-transform duration-300 group-hover:scale-110">
-                <ZoomIn className="w-3.5 h-3.5" />
-              </div>
-            </div>
-
-            <div className="pt-2 px-1 min-w-0">
-              <span className="text-[8px] sm:text-[9px] font-bold tracking-[0.2em] text-accent uppercase block">{photo.tag}</span>
-              <p className="font-headline italic text-xs sm:text-sm text-base-800 truncate">{photo.caption}</p>
-            </div>
-          </button>
+      <div className="sec-inner gal">
+        {[hero, ...rest].map((photo, i) => (
+          <figure key={photo.id} className={`gal-item ${i === 0 ? 'gal-hero' : `gal-small gal-small-${i}`}`} data-reveal={i === 0 ? 'up' : i % 2 ? 'left' : 'right'}>
+            <button type="button" className="gal-photo" onClick={() => setActiveImage(photo)} aria-label={`Perbesar foto: ${photo.caption}`}>
+              <img src={photo.src} alt={photo.caption} loading="lazy" decoding="async" />
+            </button>
+            <figcaption>
+              <span className="gal-tag">{photo.tag}</span>
+              <span className="gal-cap">{photo.caption}</span>
+            </figcaption>
+          </figure>
         ))}
       </div>
+      {/* benang menyeberang ke kanan, menuju ranting sambungan Kisah */}
+      <ThreadStitch from="left" height={120} />
 
       {/* Lightbox (portal ke body agar di atas navbar) */}
       {activeImage && createPortal(

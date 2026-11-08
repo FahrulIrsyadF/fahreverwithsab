@@ -77,22 +77,24 @@
 .foil-day { margin: 0; font-family: var(--font-display); font-size: 21px; color: var(--ivory); }
 .foil-place { margin: 4px 0 16px; font-family: var(--font-serif); font-style: italic; font-size: 17px; color: rgb(var(--ivory-rgb) / .65); }
 
-.foil-tip { margin: 0; max-width: 300px; text-align: center; font-size: 12px; color: var(--muted); }
+.foil-tip { margin: 0; max-width: 300px; text-align: center; font-size: 12px; color: var(--ink-soft); }
 .foil-gyro { color: var(--base-800); border-color: rgb(var(--base-800-rgb) / .35); }
 .coin-value-sm { font-size: 22px; }
 
 /* ---------- countdown di bawah kartu foil ---------- */
 .cd { position: relative; z-index: 2; margin: 34px auto 0; max-width: 360px; text-align: center; }
 .cd .eyebrow { margin: 0 0 14px; color: var(--accent); }
-.cd-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
-.cd-unit {
-  padding: 12px 4px 10px; border-radius: 16px;
-  background: var(--paper-hi); border: 1px solid rgb(var(--metal-rgb) / .45);
-  box-shadow: 0 10px 24px -14px rgb(var(--shade-rgb) / .5), inset 0 0 0 3px rgb(var(--paper-rgb));
+.cd .eyebrow { color: var(--base-800); }
+/* angka besar dipisah garis tipis (tanpa kotak) */
+.cd-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  padding: 14px 0; border-top: 1px solid rgb(var(--base-800-rgb) / .25); border-bottom: 1px solid rgb(var(--base-800-rgb) / .25);
 }
-.cd-num { display: block; height: 32px; overflow: hidden; }
-.cd-num span { display: block; font-family: var(--font-display); font-size: 28px; font-weight: 700; line-height: 32px; color: var(--base-800); font-variant-numeric: tabular-nums; }
-.cd-label { display: block; margin-top: 4px; font-size: 9px; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; color: var(--metal-deep); }
+.cd-unit { padding: 0 4px; }
+.cd-unit + .cd-unit { border-left: 1px solid rgb(var(--base-800-rgb) / .2); }
+.cd-num { display: block; height: 46px; overflow: hidden; }
+.cd-num span { display: block; font-family: var(--font-display); font-size: 40px; font-weight: 400; line-height: 46px; color: var(--base-900); font-variant-numeric: tabular-nums; }
+.cd-label { display: block; margin-top: 2px; font-size: 9px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: var(--accent); }
 .cd-cta { margin-top: 22px; }
 
 /* ---------- ornamen mawar ---------- */

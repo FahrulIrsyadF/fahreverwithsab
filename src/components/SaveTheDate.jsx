@@ -211,8 +211,8 @@ export default function SaveTheDate() {
   };
 
   return (
-    <section className="sec sec-light date-sec" id="tanggal" ref={root}>
-      <SectionSeam into="light" side="left" seed={41} />
+    <section className="sec sec-blue date-sec" id="tanggal" ref={root}>
+      <SectionSeam into="blue" side="left" seed={41} />
       <Confetti ref={confetti} />
 
       <div className="foil-stage">

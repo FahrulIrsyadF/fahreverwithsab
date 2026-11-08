@@ -142,14 +142,17 @@ export default function App() {
         >
           <ThreadLayer pageRef={mainRef} active={isOpened} />
           <Hero guestName={validatedGuest} play={isOpened} />
+          {/* Urutan (usulan calon istri): isi amplop → Save the Date + countdown → ayat → mempelai →
+              acara → galeri → kisah → kehadiran & doa → amplop digital → penutup.
+              Benang merah: Mempelai → Acara → Galeri → badge 01 Kisah (ayat ter-pin berada SEBELUM benang). */}
+          <SaveTheDate />
           <VerseScroll />
           <CoupleSection />
-          <LoveStory />
-          <SaveTheDate />
           <EventDetails />
           <Gallery />
-          <WeddingGift />
+          <LoveStory />
           <RSVPSection guestName={validatedGuest} />
+          <WeddingGift />
           <Footer />
         </main>
 

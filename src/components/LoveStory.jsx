@@ -13,7 +13,7 @@ import './story/story.css';
 const LINE = '62%';
 
 /**
- * Kisah Cinta — dipindah tepat setelah Mempelai. Benang merah berakhir di badge "01"
+ * Kisah Cinta — setelah Galeri. Benang merah (dari Mempelai, lewat Acara & Galeri) berakhir di badge "01"
  * (badge menyala + berdenyut saat benang tiba), lalu spine timeline melanjutkan 01 → 02 → 03.
  * Spine digerakkan GSAP (transform scaleY, scrub) — tanpa setState per frame.
  */

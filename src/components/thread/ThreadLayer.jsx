@@ -170,7 +170,7 @@ export default function ThreadLayer({ pageRef, active }) {
 
   return (
     <>
-      {/* benang merah takdir yang menjahit Mempelai → Love Story */}
+      {/* benang merah takdir: Mempelai → Acara → Galeri → Love Story */}
       <svg className="thread" aria-hidden="true" preserveAspectRatio="none">
         <path className="thread-glow" />
         <path className="thread-line" />

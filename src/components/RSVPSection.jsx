@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Check, X, Send, Loader2 } from 'lucide-react';
 import SectionSeam from './ornaments/SectionSeam';
-import { RoseCorner, RoseVine } from './ornaments/Roses';
+import { RoseVine } from './ornaments/Roses';
+import './rsvp/rsvp.css';
 
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyn4MeYgGU1Z4cYzOnsVJKcvHX_HSLzjLiZvow12paTs0ebaPTlR_GFhWqVECn0pa6n/exec';
 const STORAGE_KEY = 'wedding_wishes_fahrul_sabrina';
@@ -148,167 +149,116 @@ export default function RSVPSection({ guestName }) {
   };
 
   return (
-    <section className="sec sec-light pt-20 pb-20 px-5 text-center" id="rsvp">
+    <section className="sec sec-light rsvp-sec" id="rsvp">
       <SectionSeam into="light" side="left" seed={91} />
 
       <header className="sec-head" data-reveal>
         <p className="eyebrow">Kehadiran &amp; Doa</p>
         <h2>Konfirmasi Kehadiran</h2>
+        <p>Kehadiran dan doa Anda adalah hadiah paling berarti bagi kami.</p>
         <RoseVine className="sec-rule" w={220} h={40} seed={95} />
       </header>
 
-      <div data-reveal className="sec-inner max-w-md mx-auto card-paper rounded-3xl p-6 sm:p-8 text-left overflow-hidden">
-        <RoseCorner className="card-corner card-corner-tr" seed={97} />
-        <form onSubmit={handleSubmit} className="relative space-y-4">
-          <div>
-            <label className="block text-[11px] font-bold text-emerald uppercase mb-1.5 tracking-wider font-sans">
-              Nama Lengkap
-            </label>
-            <input
-              type="text"
-              required
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="Tulis nama lengkap Anda..."
-              className="w-full px-3.5 py-2.5 rounded-xl bg-white border border-gold/30 text-emerald-deep font-medium outline-none focus:border-aqua transition-colors text-xs font-sans shadow-sm"
-            />
-          </div>
+      {/* Formulir langsung di atas kertas: garis tulis, bukan kotak di dalam kartu */}
+      <form onSubmit={handleSubmit} className="sec-inner rsvp-form" data-reveal>
+        <label className="rsvp-field">
+          <span className="rsvp-label">Nama</span>
+          <input
+            type="text"
+            required
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="Tulis nama lengkap Anda"
+          />
+        </label>
 
-          <div>
-            <label className="block text-[11px] font-bold text-emerald uppercase mb-1.5 tracking-wider font-sans">
-              Konfirmasi Kehadiran
-            </label>
-            <div className="grid grid-cols-2 gap-3">
+        <fieldset className="rsvp-field">
+          <legend className="rsvp-label">Kehadiran</legend>
+          <div className="rsvp-choice" role="radiogroup">
+            {[['Hadir', 'Insya Allah hadir', Check], ['Tidak Hadir', 'Berhalangan', X]].map(([val, text, Icon]) => (
               <button
+                key={val}
                 type="button"
-                onClick={() => setAttendance('Hadir')}
-                className={`py-2.5 px-3 rounded-xl text-xs font-semibold flex items-center justify-center gap-2 border transition-all font-sans cursor-pointer ${
-                  attendance === 'Hadir'
-                    ? 'bg-aqua-tint border-aqua text-aqua-deep shadow-sm'
-                    : 'bg-white/60 border-gold/30 text-charcoal-muted hover:border-gold'
-                }`}
+                role="radio"
+                aria-checked={attendance === val}
+                onClick={() => setAttendance(val)}
+                className={attendance === val ? 'is-on' : ''}
               >
-                <Check className="w-3.5 h-3.5" />
-                <span>Hadir</span>
+                <Icon aria-hidden="true" />
+                {text}
               </button>
+            ))}
+          </div>
+        </fieldset>
 
-              <button
-                type="button"
-                onClick={() => setAttendance('Tidak Hadir')}
-                className={`py-2.5 px-3 rounded-xl text-xs font-semibold flex items-center justify-center gap-2 border transition-all font-sans cursor-pointer ${
-                  attendance === 'Tidak Hadir'
-                    ? 'bg-paper-lo border-muted/50 text-ink-soft shadow-sm'
-                    : 'bg-white/60 border-gold/30 text-charcoal-muted hover:border-gold'
-                }`}
-              >
-                <X className="w-3.5 h-3.5" />
-                <span>Berhalangan</span>
-              </button>
+        {attendance === 'Hadir' && (
+          <fieldset className="rsvp-field animate-fadeIn">
+            <legend className="rsvp-label">Jumlah tamu</legend>
+            <div className="rsvp-count" role="radiogroup">
+              {['1', '2'].map((n) => (
+                <button
+                  key={n}
+                  type="button"
+                  role="radio"
+                  aria-checked={guestCount === n}
+                  onClick={() => setGuestCount(n)}
+                  className={guestCount === n ? 'is-on' : ''}
+                >
+                  {n} orang
+                </button>
+              ))}
             </div>
-          </div>
+          </fieldset>
+        )}
 
-          {attendance === 'Hadir' && (
-            <div className="animate-fadeIn">
-              <label className="block text-[11px] font-bold text-emerald uppercase mb-1.5 tracking-wider font-sans">
-                Jumlah Tamu
-              </label>
-              <select
-                value={guestCount}
-                onChange={(e) => setGuestCount(e.target.value)}
-                className="w-full px-3.5 py-2.5 rounded-xl bg-white border border-gold/30 text-emerald-deep outline-none focus:border-aqua text-xs font-sans shadow-sm"
-              >
-                <option value="1">1 Orang</option>
-                <option value="2">2 Orang</option>
-              </select>
-            </div>
-          )}
+        <label className="rsvp-field">
+          <span className="rsvp-label">Doa &amp; ucapan</span>
+          <textarea
+            rows={3}
+            required
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            placeholder="Tuliskan doa restu untuk kami"
+          />
+        </label>
 
-          <div>
-            <label className="block text-[11px] font-bold text-emerald uppercase mb-1.5 tracking-wider font-sans">
-              Doa &amp; Ucapan
-            </label>
-            <textarea
-              rows={3}
-              required
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
-              placeholder="Tuliskan doa restu untuk Fahrul & Sabrina..."
-              className="w-full px-3.5 py-2.5 rounded-xl bg-white border border-gold/30 text-emerald-deep outline-none focus:border-aqua transition-colors resize-none text-xs font-sans shadow-sm"
-            />
-          </div>
+        <button type="submit" disabled={isSubmitting} className="btn-gold rsvp-submit">
+          {isSubmitting
+            ? <Loader2 className="w-4 h-4 animate-spin" aria-hidden="true" />
+            : <Send className="w-4 h-4" aria-hidden="true" />}
+          {isSubmitting ? 'Mengirimkan…' : 'Kirim Doa & Konfirmasi'}
+        </button>
 
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className="gold-shimmer-btn relative w-full py-3.5 px-6 rounded-full text-emerald-deep font-bold text-xs tracking-wider uppercase flex items-center justify-center gap-2 shadow-glow-gold hover:brightness-105 active:scale-95 transition-all font-sans disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
-          >
-            {isSubmitting ? (
-              <>
-                <Loader2 className="w-3.5 h-3.5 text-emerald-deep animate-spin" />
-                <span>Mengirimkan Doa...</span>
-              </>
-            ) : (
-              <>
-                <Send className="w-3.5 h-3.5 text-emerald-deep" />
-                <span>Kirim Konfirmasi &amp; Doa</span>
-              </>
-            )}
-          </button>
+        {showToast && (
+          <p className="rsvp-toast animate-fadeIn" role="status">
+            Terima kasih atas konfirmasi kehadiran dan doa restu Anda.
+          </p>
+        )}
+      </form>
 
-          {showToast && (
-            <div className="p-3 bg-emerald-tint border border-emerald text-emerald-rich text-xs font-semibold rounded-xl text-center animate-pulse font-sans">
-              Terima kasih atas konfirmasi kehadiran dan doa restu Anda.
-            </div>
-          )}
-        </form>
-
-        {/* Wishes Stream */}
-        <div className="mt-8 pt-6 border-t border-gold/25">
-          <div className="text-[10px] sm:text-[11px] font-bold tracking-[0.25em] uppercase text-aqua-teal mb-4 text-center font-sans">
-            Doa &amp; Ucapan Tamu
-          </div>
-          <div className="space-y-3 max-h-80 overflow-y-auto pr-1">
-            {wishes.length === 0 ? (
-              <div className="py-6 text-center text-xs text-charcoal-muted/70 italic font-sans">
-                Belum ada ucapan doa. Jadilah yang pertama memberikan doa restu!
-              </div>
-            ) : (
-              wishes.map((w, index) => {
-                const initial = (w.name || 'T').trim().charAt(0).toUpperCase();
-                const isPresent = w.attendance === 'Hadir';
-
-                return (
-                  <div
-                    key={index}
-                    className="bg-white/90 border border-gold/30 rounded-2xl p-4 text-xs text-charcoal shadow-sm flex items-start gap-3"
-                  >
-                    {/* User Initial Avatar in Emerald-Aqua Jewel Gradient */}
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-base-900 via-base-700 to-accent text-gold-pale flex items-center justify-center font-headline font-bold text-xs shrink-0 shadow-sm border border-gold/40">
-                      {initial}
-                    </div>
-
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center justify-between gap-2 mb-1">
-                        <span className="font-bold text-emerald-deep text-xs font-sans truncate">{w.name}</span>
-                        <span
-                          className={`text-[9px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full border font-sans shrink-0 ${
-                            isPresent
-                              ? 'bg-aqua-tint text-aqua-deep border-aqua/30'
-                              : 'bg-paper-lo text-muted border-paper-deep'
-                          }`}
-                        >
-                          {isPresent ? 'Hadir' : 'Berhalangan'}
-                        </span>
-                      </div>
-                      <p className="text-charcoal-muted leading-relaxed font-sans text-xs">{w.message}</p>
-                      <div className="text-[10px] text-charcoal-muted/60 mt-1.5 font-sans">{formatWishTime(w.time)}</div>
-                    </div>
-                  </div>
-                );
-              })
-            )}
-          </div>
+      {/* Buku tamu: daftar ucapan dengan garis pemisah, tanpa kartu */}
+      <div className="sec-inner rsvp-wishes" data-reveal>
+        <div className="rsvp-wishes-head">
+          <i /><span>Doa &amp; Ucapan Tamu</span><i />
         </div>
+        <ol className="rsvp-list">
+          {wishes.length === 0 ? (
+            <li className="rsvp-empty">Belum ada ucapan. Jadilah yang pertama memberikan doa restu.</li>
+          ) : (
+            wishes.map((w, index) => (
+              <li key={index}>
+                <div className="rsvp-who">
+                  <b>{w.name}</b>
+                  <span className={w.attendance === 'Hadir' ? 'is-yes' : ''}>
+                    {w.attendance === 'Hadir' ? 'Hadir' : 'Berhalangan'}
+                  </span>
+                </div>
+                <p>{w.message}</p>
+                <time>{formatWishTime(w.time)}</time>
+              </li>
+            ))
+          )}
+        </ol>
       </div>
     </section>
   );

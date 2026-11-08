@@ -1,13 +1,40 @@
 import { useEffect, useRef, useState } from 'react';
 import { ScrollTrigger } from '../lib/gsap';
-import { Gift, Copy, Check, MapPin, CreditCard } from 'lucide-react';
+import { Copy, Check } from 'lucide-react';
 import SectionSeam from './ornaments/SectionSeam';
-import GoldDust from './ornaments/GoldDust';
-import { RoseCorner, RoseVine } from './ornaments/Roses';
-import { GIFT } from '../data/wedding';
+import { RoseVine } from './ornaments/Roses';
+import { GIFT, WEDDING } from '../data/wedding';
+import './gift/gift.css';
 
+const TABS = [['transfer', 'Transfer'], ['physical', 'Kirim Kado']];
+
+function copyText(text) {
+  if (navigator.clipboard?.writeText) return navigator.clipboard.writeText(text);
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  document.body.appendChild(ta);
+  ta.select();
+  document.execCommand('copy');
+  document.body.removeChild(ta);
+  return Promise.resolve();
+}
+
+function CopyButton({ text, id, copiedId, onCopy, children }) {
+  const done = copiedId === id;
+  return (
+    <button type="button" className={`gift-copy${done ? ' is-done' : ''}`} onClick={() => onCopy(text, id)}>
+      {done ? <Check aria-hidden="true" /> : <Copy aria-hidden="true" />}
+      {done ? 'Tersalin' : children}
+    </button>
+  );
+}
+
+/**
+ * Amplop Digital — section biru powder. Satu lapis: kartu rekening berdiri sendiri seperti
+ * kartu bank asli, alamat kado ditulis seperti label kiriman (tanpa kartu di dalam kartu).
+ */
 export default function WeddingGift() {
-  const [activeTab, setActiveTab] = useState('physical'); // 'physical' | 'transfer'
+  const [activeTab, setActiveTab] = useState('transfer');
   const [copiedId, setCopiedId] = useState(null);
 
   // Ganti tab mengubah tinggi halaman → posisi trigger section di bawahnya perlu dihitung ulang
@@ -19,196 +46,76 @@ export default function WeddingGift() {
     return () => cancelAnimationFrame(id);
   }, [activeTab]);
 
-  const bankAccounts = GIFT.accounts;
-  const physicalAddress = GIFT.address;
-
   const handleCopy = (text, id) => {
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(text);
+    copyText(text).then(() => {
       setCopiedId(id);
       setTimeout(() => setCopiedId(null), 2500);
-    } else {
-      const textArea = document.createElement('textarea');
-      textArea.value = text;
-      document.body.appendChild(textArea);
-      textArea.select();
-      document.execCommand('copy');
-      document.body.removeChild(textArea);
-      setCopiedId(id);
-      setTimeout(() => setCopiedId(null), 2500);
-    }
+    });
   };
 
+  const { accounts, address } = GIFT;
+
   return (
-    <section className="sec sec-dark pt-20 pb-20 px-5 text-center" id="kado">
-      <SectionSeam into="dark" side="right" seed={79} />
-      <GoldDust count={26} />
+    <section className="sec sec-blue gift-sec" id="kado">
+      <SectionSeam into="blue" side="right" seed={79} />
 
       <header className="sec-head" data-reveal>
         <p className="eyebrow">Tanda Kasih</p>
         <h2>Amplop Digital</h2>
+        <p>
+          Doa restu Anda adalah karunia terindah bagi kami. Namun jika memberi adalah ungkapan tanda
+          kasih Anda, kami menerimanya dengan penuh ketulusan.
+        </p>
         <RoseVine className="sec-rule" w={220} h={40} seed={83} />
       </header>
 
-      <div data-reveal className="sec-inner max-w-md mx-auto card-paper rounded-3xl p-6 sm:p-8 text-center overflow-hidden">
-        <RoseCorner className="card-corner card-corner-tl" seed={86} />
-        <RoseCorner className="card-corner card-corner-tr" seed={88} />
-
-        <p className="relative text-xs sm:text-sm text-charcoal-muted leading-relaxed font-sans mt-6 mb-6 max-w-sm mx-auto">
-          Doa restu Anda merupakan karunia terindah bagi kami. Namun jika memberi adalah ungkapan tanda kasih Anda, kami dengan penuh ketulusan menerimanya.
-        </p>
-
-        {/* Segmented Tab Switcher with Animated Sliding Pill Indicator */}
-        <div className="relative grid grid-cols-2 p-1 bg-ivory-container/90 border border-gold/40 rounded-full max-w-xs mx-auto mb-6 shadow-inner">
-          {/* Sliding Background Pill */}
-          <div
-            className="absolute top-1 bottom-1 left-1 w-[calc(50%-4px)] rounded-full bg-gradient-to-r from-base-900 via-base-700 to-base-800 shadow-md transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] pointer-events-none"
-            style={{
-              transform: activeTab === 'physical' ? 'translateX(0%)' : 'translateX(100%)',
-            }}
-          />
-
-          <button
-            type="button"
-            onClick={() => setActiveTab('physical')}
-            className={`relative z-10 py-2 px-3 rounded-full text-xs font-semibold font-sans flex items-center justify-center gap-1.5 transition-colors duration-300 cursor-pointer ${
-              activeTab === 'physical'
-                ? 'text-ivory'
-                : 'text-charcoal-muted hover:text-emerald-deep'
-            }`}
-          >
-            <Gift className="w-3.5 h-3.5" />
-            <span>Kirim Kado</span>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => setActiveTab('transfer')}
-            className={`relative z-10 py-2 px-3 rounded-full text-xs font-semibold font-sans flex items-center justify-center gap-1.5 transition-colors duration-300 cursor-pointer ${
-              activeTab === 'transfer'
-                ? 'text-ivory'
-                : 'text-charcoal-muted hover:text-emerald-deep'
-            }`}
-          >
-            <CreditCard className="w-3.5 h-3.5" />
-            <span>Transfer Bank</span>
-          </button>
+      <div className="sec-inner gift" data-reveal>
+        <div className="gift-tabs" role="tablist">
+          {TABS.map(([id, label]) => (
+            <button
+              key={id}
+              type="button"
+              role="tab"
+              aria-selected={activeTab === id}
+              className={activeTab === id ? 'is-on' : ''}
+              onClick={() => setActiveTab(id)}
+            >
+              {label}
+            </button>
+          ))}
+          <span className="gift-tabs-bar" style={{ transform: `translateX(${activeTab === 'transfer' ? 0 : 100}%)` }} />
         </div>
 
-        {/* Tab 1: Kirim Kado Fisik */}
-        {activeTab === 'physical' && (
-          <div className="rounded-2xl p-5 sm:p-6 text-left bg-paper-hi paper-grain border border-gold/40 shadow-sm animate-fadeIn">
-            <div className="flex items-center gap-2 text-emerald-deep font-sans font-bold text-sm mb-3">
-              <MapPin className="w-4 h-4 text-aqua-teal" />
-              <span>Alamat Pengiriman Kado Fisik</span>
-            </div>
-
-            <div className="space-y-2.5 text-xs font-sans text-charcoal leading-relaxed mb-4">
-              <div>
-                <span className="text-charcoal-muted text-[11px] block">Penerima:</span>
-                <span className="font-semibold text-emerald-deep">{physicalAddress.recipient}</span>
-              </div>
-              <div>
-                <span className="text-charcoal-muted text-[11px] block">Nomor Telepon:</span>
-                <span className="font-medium tabular-nums">{physicalAddress.phone}</span>
-              </div>
-              <div>
-                <span className="text-charcoal-muted text-[11px] block">Alamat Lengkap:</span>
-                <p className="text-charcoal-forest bg-ivory-subtle p-3 rounded-xl border border-gold/30 mt-1 select-all font-sans leading-relaxed">
-                  {physicalAddress.fullAddress}
-                </p>
-              </div>
-            </div>
-
-            <button
-              type="button"
-              onClick={() => handleCopy(physicalAddress.fullAddress, 'address')}
-              className="w-full py-2.5 px-4 rounded-xl text-xs font-bold font-sans flex items-center justify-center gap-2 border border-gold/60 transition-all active:scale-95 bg-gradient-to-r from-base-900 to-base-700 text-gold-pale hover:brightness-110 shadow-sm cursor-pointer"
-            >
-              {copiedId === 'address' ? (
-                <>
-                  <Check className="w-3.5 h-3.5 text-aqua-soft" />
-                  <span>Alamat Berhasil Disalin!</span>
-                </>
-              ) : (
-                <>
-                  <Copy className="w-3.5 h-3.5 text-gold-pale" />
-                  <span>Salin Alamat Lengkap</span>
-                </>
-              )}
-            </button>
+        {activeTab === 'transfer' && (
+          <div className="gift-cards animate-fadeIn">
+            {accounts.map((a) => (
+              <article key={a.id} className="bank-card">
+                <span className="bank-sheen" aria-hidden="true" />
+                <div className="bank-top">
+                  <span className="bank-name">{a.bankName}</span>
+                  <span className="bank-chip" aria-hidden="true" />
+                </div>
+                <p className="bank-number">{a.accountNumber}</p>
+                <div className="bank-bottom">
+                  <div>
+                    <span className="bank-small">{a.label}</span>
+                    <span className="bank-holder">{a.accountHolder}</span>
+                  </div>
+                  <CopyButton text={a.accountNumber} id={a.id} copiedId={copiedId} onCopy={handleCopy}>Salin</CopyButton>
+                </div>
+              </article>
+            ))}
           </div>
         )}
 
-        {/* Tab 2: Transfer Bank - Priority Jewel Cards with Metallic Sheen */}
-        {activeTab === 'transfer' && (
-          <div className="space-y-4 animate-fadeIn">
-            {bankAccounts.map((account) => (
-              <div
-                key={account.id}
-                className="relative rounded-2xl p-5 sm:p-6 text-left bg-gradient-to-br from-base-800 via-base-700 to-base-950 text-ivory border border-gold/50 shadow-xl overflow-hidden group"
-              >
-                {/* Periodic Metallic Diagonal Sheen Sweep */}
-                <div
-                  className="absolute -top-1/2 -left-3/4 w-1/3 h-[200%] bg-gradient-to-r from-transparent via-white/15 to-transparent rotate-[25deg] pointer-events-none"
-                  style={{ animation: 'sheenSweep 5.5s ease-in-out infinite' }}
-                />
-
-                <div className="flex justify-between items-start mb-4 relative z-10">
-                  <div>
-                    <span className="text-[9px] font-sans uppercase tracking-[0.2em] text-aqua-soft block mb-0.5">
-                      {account.label}
-                    </span>
-                    <span className="font-headline font-bold text-xl sm:text-2xl tracking-wide text-gold-pale">
-                      {account.bankName}
-                    </span>
-                  </div>
-                  {/* Priority Banking EMV Gold Chip */}
-                  <div className="w-9 h-7 rounded-md bg-gradient-to-tr from-gold via-gold-pale to-gold-metallic border border-gold-light/60 shadow-sm flex items-center justify-center opacity-90">
-                    <div className="w-6 h-4 border border-emerald-deep/30 rounded-xs" />
-                  </div>
-                </div>
-
-                {/* Nomor Rekening */}
-                <div className="mb-2.5 relative z-10">
-                  <span className="text-[10px] font-sans text-ivory/65 uppercase tracking-wider block mb-0.5">
-                    Nomor Rekening
-                  </span>
-                  <div className="font-mono text-xl sm:text-2xl font-bold tracking-widest text-gold-pale select-all tabular-nums">
-                    {account.accountNumber}
-                  </div>
-                </div>
-
-                {/* Atas Nama */}
-                <div className="mb-5 relative z-10">
-                  <span className="text-[10px] font-sans text-ivory/65 uppercase tracking-wider block mb-0.5">
-                    Atas Nama
-                  </span>
-                  <span className="text-sm font-sans font-semibold text-ivory block">
-                    {account.accountHolder}
-                  </span>
-                </div>
-
-                {/* Tombol Salin */}
-                <button
-                  type="button"
-                  onClick={() => handleCopy(account.accountNumber, account.id)}
-                  className="relative z-10 w-full py-2.5 px-4 rounded-xl text-xs font-bold font-sans flex items-center justify-center gap-2 border transition-all active:scale-95 bg-white/10 text-gold-pale hover:bg-gold hover:text-emerald-deep border-gold/45 shadow-sm cursor-pointer"
-                >
-                  {copiedId === account.id ? (
-                    <>
-                      <Check className="w-3.5 h-3.5 text-aqua-soft" />
-                      <span>Nomor Rekening Berhasil Disalin!</span>
-                    </>
-                  ) : (
-                    <>
-                      <Copy className="w-3.5 h-3.5" />
-                      <span>Salin Nomor Rekening</span>
-                    </>
-                  )}
-                </button>
-              </div>
-            ))}
+        {activeTab === 'physical' && (
+          <div className="gift-label animate-fadeIn">
+            <span className="gift-stamp" aria-hidden="true">{WEDDING.monogram}</span>
+            <span className="gift-to">Kepada</span>
+            <p className="gift-recipient">{address.recipient}</p>
+            <p className="gift-address">{address.fullAddress}</p>
+            <p className="gift-phone">{address.phone}</p>
+            <CopyButton text={address.fullAddress} id="address" copiedId={copiedId} onCopy={handleCopy}>Salin alamat</CopyButton>
           </div>
         )}
       </div>

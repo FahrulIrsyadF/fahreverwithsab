@@ -153,6 +153,17 @@ love story, jadi ide pita di penutup perlu ditanyakan ulang — mungkin tidak di
 
 ### 4a. Urutan section (keputusan user) & alasannya
 
+> **Diperbarui 2026-11-08 (usulan calon istri, sudah diterapkan):**
+> ```
+> Cover (amplop) → Hero (isi amplop + tanggal) → Save the Date (foil + countdown) → Gulungan ayat
+> → Mempelai → Acara → Galeri → Kisah (benang berakhir di "01") → Kehadiran & Doa → Amplop Digital → Penutup
+> ```
+> Benang merah kini melewati Acara & Galeri: menyusur tepi layar dan menyeberang hanya di celah
+> antar-blok lewat `thread/ThreadStitch.jsx` (dua jangkar: tepi asal → tepi seberang). Latar memakai
+> tiga nada: terang (`sec-light`), gelap (`sec-dark`), biru powder (`sec-blue`, `SectionSeam into="blue"`)
+> — Save the Date & Amplop Digital biru. Acara/Galeri/RSVP/Amplop Digital/countdown didesain ulang
+> tanpa "kartu di dalam kartu". Teks di bawah ini adalah urutan lama, disimpan sebagai riwayat.
+
 Urutan baru (bandingkan dengan `App.jsx` sekarang: Verse → Couple → Countdown → Event → LoveStory → …):
 
 ```

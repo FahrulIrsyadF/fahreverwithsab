@@ -1,0 +1,97 @@
+/* Amplop Digital — di atas biru powder; kartu rekening & label kiriman berdiri sendiri (satu lapis) */
+.gift-sec { padding: 80px 26px 84px; }
+.gift { max-width: 360px; margin: 0 auto; }
+
+/* tab: teks + garis bawah yang bergeser */
+.gift-tabs { position: relative; display: grid; grid-template-columns: 1fr 1fr; margin: 0 auto 26px; max-width: 260px; border-bottom: 1px solid rgb(var(--base-800-rgb) / .2); }
+.gift-tabs button {
+  padding: 10px 0; border: 0; background: none; cursor: pointer;
+  font-size: 11px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase;
+  color: rgb(var(--base-800-rgb) / .5); transition: color .3s;
+}
+.gift-tabs button.is-on { color: var(--base-800); }
+.gift-tabs-bar {
+  position: absolute; left: 0; bottom: -1px; width: 50%; height: 2px;
+  background: var(--base-800); transition: transform .5s cubic-bezier(.22, 1, .36, 1);
+}
+
+/* ---------- kartu rekening ---------- */
+.gift-cards { display: grid; gap: 18px; }
+.bank-card {
+  position: relative; overflow: hidden;
+  aspect-ratio: 1.586; padding: 20px 22px;
+  display: flex; flex-direction: column; justify-content: space-between;
+  border-radius: 16px; text-align: left; color: var(--ivory);
+  background:
+    var(--grain-light),
+    radial-gradient(120% 140% at 0% 0%, var(--base-700) 0%, var(--base-900) 55%, var(--base-950) 100%);
+  box-shadow: 0 26px 40px -24px rgb(var(--base-950-rgb) / .8), inset 0 0 0 1px rgb(var(--metal-pale-rgb) / .25);
+}
+.bank-sheen {
+  position: absolute; top: -50%; left: -75%; width: 33%; height: 200%; pointer-events: none;
+  background: linear-gradient(90deg, transparent, rgb(255 255 255 / .12), transparent);
+  transform: rotate(25deg);
+  animation: sheenSweep 5.5s ease-in-out infinite;
+}
+.bank-top { display: flex; align-items: center; justify-content: space-between; }
+.bank-name { font-family: var(--font-display); font-size: 20px; color: var(--metal-pale); }
+.bank-chip {
+  width: 36px; height: 27px; border-radius: 6px;
+  background: var(--metal-foil); background-size: 220% 100%;
+  box-shadow: inset 0 0 0 1px rgb(var(--metal-dark-rgb) / .35);
+}
+.bank-number {
+  margin: 0; font-family: var(--font-display); font-size: clamp(20px, 6.4vw, 25px); letter-spacing: .12em;
+  font-variant-numeric: tabular-nums; color: var(--ivory); user-select: all;
+}
+.bank-bottom { display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; }
+.bank-small { display: block; font-size: 9px; font-weight: 600; letter-spacing: .18em; text-transform: uppercase; color: var(--accent-soft); }
+.bank-holder { display: block; margin-top: 3px; font-size: 13px; font-weight: 600; }
+
+.gift-copy {
+  display: inline-flex; align-items: center; gap: 6px; flex-shrink: 0;
+  padding: 8px 14px; border-radius: 999px; cursor: pointer;
+  border: 1px solid rgb(var(--metal-pale-rgb) / .55); background: transparent;
+  font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--metal-pale);
+  transition: background-color .3s, color .3s;
+}
+.gift-copy svg { width: 13px; height: 13px; }
+.gift-copy.is-done { background: var(--metal-pale); color: var(--base-900); }
+
+/* ---------- label kiriman kado ---------- */
+.gift-label {
+  position: relative; padding: 26px 24px 24px; text-align: left;
+  background-color: var(--paper-hi); background-image: var(--grain);
+  border-radius: 4px;
+  box-shadow: 0 22px 34px -24px rgb(var(--ink-rgb) / .5);
+}
+/* tepi atas & bawah bergaris seperti amplop pos */
+.gift-label::before,
+.gift-label::after {
+  content: ''; position: absolute; left: 0; right: 0; height: 5px;
+  background: repeating-linear-gradient(-45deg, var(--base-800) 0 9px, transparent 9px 18px, var(--accent) 18px 27px, transparent 27px 36px);
+  opacity: .8;
+}
+.gift-label::before { top: 0; border-radius: 4px 4px 0 0; }
+.gift-label::after { bottom: 0; border-radius: 0 0 4px 4px; }
+.gift-stamp {
+  position: absolute; top: 20px; right: 20px; width: 54px; height: 62px;
+  display: grid; place-items: center;
+  font-family: var(--font-script); font-size: 22px; color: var(--base-800);
+  background: var(--paper-lo);
+  outline: 2px dashed rgb(var(--base-800-rgb) / .35); outline-offset: -5px;
+  transform: rotate(4deg);
+}
+.gift-to { font-size: 10px; font-weight: 700; letter-spacing: .24em; text-transform: uppercase; color: var(--accent); }
+.gift-recipient { margin: 6px 70px 12px 0; font-family: var(--font-display); font-size: 20px; line-height: 1.25; color: var(--base-800); }
+.gift-address {
+  margin: 0; padding-bottom: 10px;
+  font-family: var(--font-serif); font-size: 18px; line-height: 1.5; color: var(--ink);
+  background-image: repeating-linear-gradient(180deg, transparent 0 26px, rgb(var(--metal-rgb) / .5) 26px 27px);
+  user-select: all;
+}
+.gift-phone { margin: 10px 0 18px; font-size: 13px; font-variant-numeric: tabular-nums; color: var(--muted); }
+.gift-label .gift-copy { border-color: rgb(var(--base-800-rgb) / .4); color: var(--base-800); }
+.gift-label .gift-copy.is-done { background: var(--base-800); color: var(--metal-pale); }
+
+@media (prefers-reduced-motion: reduce) { .bank-sheen { animation: none; } }

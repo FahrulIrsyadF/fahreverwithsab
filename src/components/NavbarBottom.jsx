@@ -1,13 +1,13 @@
 import { useState, useEffect, useRef } from 'react';
 import { Heart, Scroll, Calendar, Gift, MailCheck } from 'lucide-react';
 
-// Urutan mengikuti urutan section: Mempelai → Kisah → (Save the Date) → Acara → Kado → RSVP
+// Urutan mengikuti urutan section: Mempelai → Acara → (Galeri) → Kisah → RSVP → Kado
 const NAV_ITEMS = [
   { id: 'mempelai', label: 'MEMPELAI', icon: Heart },
-  { id: 'kisah', label: 'KISAH', icon: Scroll },
   { id: 'acara', label: 'ACARA', icon: Calendar },
-  { id: 'kado', label: 'KADO', icon: Gift },
+  { id: 'kisah', label: 'KISAH', icon: Scroll },
   { id: 'rsvp', label: 'RSVP', icon: MailCheck },
+  { id: 'kado', label: 'KADO', icon: Gift },
 ];
 
 const docTop = (el) => el.getBoundingClientRect().top + window.scrollY;

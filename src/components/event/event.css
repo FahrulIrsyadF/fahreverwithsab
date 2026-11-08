@@ -1,0 +1,56 @@
+/* Rangkaian Acara — kartu undangan cetak di atas beludru (satu lapis, tanpa kartu di dalam kartu) */
+.ev-sec { padding: 80px 30px 40px; }
+.ev-list { max-width: 360px; margin: 0 auto; }
+
+.ev {
+  position: relative;
+  padding: 78px 22px 34px;
+  text-align: center;
+  border-radius: 50% 50% 14px 14px / 120px 120px 14px 14px;
+  border: 1px solid rgb(var(--metal-pale-rgb) / .55);
+  background: radial-gradient(90% 55% at 50% 0%, rgb(var(--base-700-rgb) / .55), transparent 75%);
+}
+/* garis kedua (bingkai ganda) */
+.ev::before {
+  content: ''; position: absolute; inset: 7px; pointer-events: none;
+  border-radius: inherit;
+  border: 1px solid rgb(var(--metal-pale-rgb) / .22);
+}
+.ev-no {
+  margin: 0; font-family: var(--font-display); font-style: italic; font-size: 15px;
+  color: var(--metal-pale); opacity: .8;
+}
+.ev-label { margin: 6px 0 0; color: var(--accent-soft); font-size: 10px; }
+.ev-title {
+  margin: 10px auto 22px; max-width: 260px;
+  font-family: var(--font-display); font-weight: 400; font-size: 27px; line-height: 1.2; color: var(--ivory);
+}
+
+/* Sabtu | 17 | Juli 2027 */
+.ev-date {
+  display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 14px;
+  max-width: 270px; margin: 0 auto;
+}
+.ev-date span {
+  padding: 8px 0;
+  border-top: 1px solid rgb(var(--metal-pale-rgb) / .45);
+  border-bottom: 1px solid rgb(var(--metal-pale-rgb) / .45);
+  font-size: 10px; font-weight: 600; letter-spacing: .22em; text-transform: uppercase;
+  color: rgb(var(--ivory-rgb) / .85);
+}
+.ev-date b {
+  font-family: var(--font-display); font-weight: 400; font-size: 52px; line-height: 1;
+  color: var(--metal-pale);
+}
+.ev-time { margin: 14px 0 0; font-family: var(--font-serif); font-style: italic; font-size: 18px; color: rgb(var(--ivory-rgb) / .8); }
+
+.ev-vine { display: block; width: 160px; height: auto; margin: 18px auto 14px; color: var(--metal-pale); opacity: .8; }
+
+.ev-venue { margin: 0; font-family: var(--font-display); font-size: 18px; color: var(--ivory); }
+.ev-addr {
+  margin: 8px auto 22px; max-width: 270px;
+  font-family: var(--font-serif); font-size: 16px; line-height: 1.45; color: rgb(var(--ivory-rgb) / .68);
+}
+.ev-map { font-size: 11px; }
+
+.ev-tail { height: 40px; }
