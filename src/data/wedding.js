@@ -6,8 +6,8 @@
 const u = (id, w = 700) => `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${w}&q=75`;
 
 export const WEDDING = {
-  names: 'Fahrul & Sabrina',
-  monogram: 'F&S',
+  names: 'Sabrina & Fahrul',
+  monogram: 'S&F',
   hashtag: '#FAHreverWithSAB',
   dateISO: '2027-07-17T08:00:00+07:00',
   dateLong: 'Sabtu, 17 Juli 2027',
@@ -19,7 +19,7 @@ export const WEDDING = {
   city: 'Paiton',
   place: 'Paiton · Probolinggo',
   calendarUrl:
-    'https://calendar.google.com/calendar/render?action=TEMPLATE&text=The+Wedding+of+Fahrul+%26+Sabrina&dates=20270717T010000Z/20270717T080000Z&details=Pernikahan+Fahrul+Irsyad+Fianto+%26+Sabrina+Nabila+Kholiqin.+Sabtu,+17+Juli+2027.&location=Paiton,+Kabupaten+Probolinggo,+Jawa+Timur',
+    'https://calendar.google.com/calendar/render?action=TEMPLATE&text=The+Wedding+of+Sabrina+%26+Fahrul&dates=20270717T010000Z/20270717T080000Z&details=Pernikahan+Fahrul+Irsyad+Fianto+%26+Sabrina+Nabila+Kholiqin.+Sabtu,+17+Juli+2027.&location=Paiton,+Kabupaten+Probolinggo,+Jawa+Timur',
   // TODO(§2 #5): isi dengan lagu bebas royalti pilihan sendiri (Pixabay Music / YouTube Audio Library),
   // simpan di /public/music/ lalu tulis path-nya, mis. '/music/lagu.mp3'. null = tanpa musik (tombol musik disembunyikan).
   music: null,
@@ -28,21 +28,21 @@ export const WEDDING = {
 export const COUPLE = [
   {
     side: 'left',
-    role: 'Mempelai Pria',
-    nick: 'Fahrul',
-    full: 'Fahrul Irsyad Fianto, S.Tr.Kom.',
-    parents: ['Putra dari', 'Bapak Arief Maryanto', '& Ibu Siti Rukayah Susanti'],
-    ig: 'fahrulirsy',
-    photo: u('1506794778202-cad84cf45f1d'),
-  },
-  {
-    side: 'right',
     role: 'Mempelai Wanita',
     nick: 'Sabrina',
     full: 'Sabrina Nabila Kholiqin, S.Pd.',
     parents: ['Putri dari', 'Bapak Akhsanul Kholiqin', '& Ibu Siti Nur Kusumawati'],
     ig: 'sabrinnkh',
     photo: u('1534528741775-53994a69daeb'),
+  },
+  {
+    side: 'right',
+    role: 'Mempelai Pria',
+    nick: 'Fahrul',
+    full: 'Fahrul Irsyad Fianto, S.Tr.Kom.',
+    parents: ['Putra dari', 'Bapak Arief Maryanto', '& Ibu Siti Rukayah Susanti'],
+    ig: 'fahrulirsy',
+    photo: u('1506794778202-cad84cf45f1d'),
   },
 ];
 
@@ -114,8 +114,8 @@ export const GALLERY = [
 
 export const GIFT = {
   accounts: [
-    { id: 'groom', bankName: 'Bank BCA', accountNumber: '1234567890', accountHolder: 'Fahrul Irsyad Fianto', label: 'Rekening Mempelai Pria' },
     { id: 'bride', bankName: 'Bank Mandiri', accountNumber: '0987654321000', accountHolder: 'Sabrina Nabila Kholiqin', label: 'Rekening Mempelai Wanita' },
+    { id: 'groom', bankName: 'Bank BCA', accountNumber: '1234567890', accountHolder: 'Fahrul Irsyad Fianto', label: 'Rekening Mempelai Pria' },
   ],
   address: {
     recipient: 'Sabrina Nabila & Fahrul Irsyad',

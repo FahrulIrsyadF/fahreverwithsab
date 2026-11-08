@@ -11,7 +11,7 @@ const DEFAULT_WISHES = [
   {
     name: "Ahmad Fauzi",
     attendance: "Hadir",
-    message: "Barakallahu lakum wa baraka alaikum wa jama'a bainakuma fii khoir. Selamat menempuh hidup baru Fahrul & Sabrina!",
+    message: "Barakallahu lakum wa baraka alaikum wa jama'a bainakuma fii khoir. Selamat menempuh hidup baru Sabrina & Fahrul!",
     time: "1 hari yang lalu"
   },
   {

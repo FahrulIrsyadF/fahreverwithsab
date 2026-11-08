@@ -2,18 +2,18 @@ import React from 'react';
 
 /**
  * Single Source of Truth untuk Monogram / Logo Mempelai.
- * Saat ini me-render tipografi Playfair Display F & S.
+ * Saat ini me-render tipografi Playfair Display S & F.
  * Ketika file logo resmi sudah selesai dibuat, cukup ubah `logoSrc` di bawah ini
  * (misal: '/assets/logo.svg' atau '/assets/logo.png').
  */
 export const BRAND_CONFIG = {
   logoSrc: null, // Ubah ke path file logo jika sudah ada (contoh: '/assets/logo.svg')
   monogramText: {
-    first: 'F',
+    first: 'S',
     ampersand: '&',
-    second: 'S',
+    second: 'F',
   },
-  title: 'Fahrul & Sabrina'
+  title: 'Sabrina & Fahrul'
 };
 
 export default function BrandMonogram({
@@ -38,7 +38,7 @@ export default function BrandMonogram({
     );
   }
 
-  // Render Typography Monogram F & S
+  // Render Typography Monogram S & F
   const sizeMap = {
     sm: {
       container: 'text-sm tracking-wider',

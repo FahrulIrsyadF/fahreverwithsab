@@ -44,7 +44,7 @@ async function rasterize(svg, size) {
   return URL.createObjectURL(blob);
 }
 
-export default function WaxSeal({ monogram = 'F&S', half, className = '', style }) {
+export default function WaxSeal({ monogram = 'S&F', half, className = '', style }) {
   const id = useId().replace(/:/g, '');
   const wrap = useRef(null);
   const body = useRef(null);

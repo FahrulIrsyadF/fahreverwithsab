@@ -223,7 +223,7 @@ export default function SaveTheDate() {
           <RoseCorner className="foil-corner foil-corner-bl" seed={7} width={1.1} />
 
           <p className="eyebrow foil-text stagger">Save the Date</p>
-          <h2 className="foil-names foil-text stagger">Fahrul<span>&amp;</span>Sabrina</h2>
+          <h2 className="foil-names foil-text stagger">Sabrina<span>&amp;</span>Fahrul</h2>
           <RoseVine className="foil-vine stagger" w={240} h={40} seed={4} />
           <p className="foil-hint stagger">Gosok ketiga koin emas di bawah</p>
 

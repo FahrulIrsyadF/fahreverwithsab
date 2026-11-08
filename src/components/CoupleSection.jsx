@@ -11,7 +11,7 @@ function Person({ p }) {
   const left = p.side === 'left';
   return (
     <article className={`person person-${p.side}`}>
-      {/* jangkar benang: kanan foto pria → (simpul "&") → kiri foto wanita */}
+      {/* jangkar benang: kanan foto atas (wanita) → (simpul "&") → kiri foto bawah (pria) */}
       <div className="arch-wrap" data-anchor={left ? '1.04,0.4' : '-0.04,0.55'}>
         <div className="arch-frame" />
         <RoseCorner className={`arch-corner arch-corner-${p.side}`} seed={left ? 6 : 13} />
