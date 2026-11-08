@@ -73,7 +73,7 @@ export default function LoveStory() {
   return (
     <section className="sec sec-dark story-sec" id="kisah" ref={root}>
       <SectionSeam into="dark" side="right" seed={23} anchor="0.3,0.5" />
-      <GoldDust count={30} />
+      <GoldDust count={16} />
 
       <header className="sec-head" data-anchor="0.97,0.6">
         <p className="eyebrow">Our Journey</p>
@@ -91,13 +91,9 @@ export default function LoveStory() {
           <div key={ch.act} className="story-ch">
             {/* badge 01 = ujung benang merah */}
             <div className="story-badge" {...(i === 0 ? { 'data-anchor': '0.5,0.5' } : {})}>{ch.iconText}</div>
-            {/* teks langsung di atas beludru (tanpa kartu): baris kecil babak · tempat, judul, paragraf serif */}
+            {/* teks langsung di atas beludru (tanpa kartu): tempat/waktu, judul, paragraf serif */}
             <div className="story-card">
-              <p className="story-meta">
-                <span className="story-act">{ch.act}</span>
-                <i aria-hidden="true" />
-                <span className="story-loc">{ch.location}</span>
-              </p>
+              <p className="story-meta">{ch.location}</p>
               <h3>{ch.title}</h3>
               <p className="story-text">{ch.text}</p>
             </div>

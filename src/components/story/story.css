@@ -47,18 +47,15 @@
 
 .story-card { padding: 4px 0 6px; transition: opacity .6s; }
 /* babak yang belum dicapai spine sedikit redup */
-.story-ch:not(.is-active) .story-card { opacity: .62; }
-.story-meta { display: flex; align-items: center; gap: 10px; margin: 0 0 8px; }
-.story-meta i { flex: 0 0 22px; height: 1px; background: rgb(var(--metal-pale-rgb) / .5); }
-.story-act { font-size: 10px; font-weight: 700; letter-spacing: .26em; color: var(--accent-soft); }
-.story-loc { font-family: var(--font-serif); font-style: italic; font-size: 16px; color: var(--metal-pale); }
+.story-ch:not(.is-active) .story-card { opacity: .82; }
+.story-meta { margin: 0 0 6px; font-family: var(--font-serif); font-style: italic; font-weight: 500; font-size: 17px; color: var(--metal-pale); }
 .story-card h3 {
   margin: 0 0 12px; font-family: var(--font-display); font-weight: 400; font-size: 25px; line-height: 1.2;
   color: var(--ivory);
 }
 .story-text {
-  margin: 0; font-family: var(--font-serif); font-size: 18px; line-height: 1.6;
-  color: rgb(var(--ivory-rgb) / .82);
+  margin: 0; font-family: var(--font-serif); font-weight: 500; font-size: 19px; line-height: 1.6;
+  color: var(--ivory);
 }
 /* huruf awal: Playfair miring emas, turun dua baris */
 .story-text::first-letter {
