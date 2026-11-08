@@ -1,10 +1,14 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import { ScrollTrigger } from '../lib/gsap';
 import { Check, X, Send, Loader2 } from 'lucide-react';
 import SectionSeam from './ornaments/SectionSeam';
 import { RoseVine } from './ornaments/Roses';
 import './rsvp/rsvp.css';
 
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyn4MeYgGU1Z4cYzOnsVJKcvHX_HSLzjLiZvow12paTs0ebaPTlR_GFhWqVECn0pa6n/exec';
+// Ucapan ditampilkan bertahap (tanpa area scroll di dalam halaman: di HP area seperti itu
+// "menelan" geseran jari sehingga halaman terasa macet).
+const PAGE = 4;
 const STORAGE_KEY = 'wedding_wishes_fahrul_sabrina';
 
 const DEFAULT_WISHES = [
@@ -53,6 +57,16 @@ export default function RSVPSection({ guestName }) {
   const [wishes, setWishes] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showToast, setShowToast] = useState(false);
+  const [shown, setShown] = useState(PAGE);
+
+  // Tinggi section berubah saat ucapan ditambah → trigger section di bawahnya dihitung ulang
+  // (aksi user, bukan saat scroll; aman — lihat aturan performa §8).
+  const firstShown = useRef(true);
+  useEffect(() => {
+    if (firstShown.current) { firstShown.current = false; return; }
+    const id = requestAnimationFrame(() => ScrollTrigger.refresh());
+    return () => cancelAnimationFrame(id);
+  }, [shown]);
 
   // Sinkronisasi jika nama tamu dari prop URL berubah
   useEffect(() => {
@@ -245,7 +259,7 @@ export default function RSVPSection({ guestName }) {
           {wishes.length === 0 ? (
             <li className="rsvp-empty">Belum ada ucapan. Jadilah yang pertama memberikan doa restu.</li>
           ) : (
-            wishes.map((w, index) => (
+            wishes.slice(0, shown).map((w, index) => (
               <li key={index}>
                 <div className="rsvp-who">
                   <b>{w.name}</b>
@@ -259,6 +273,11 @@ export default function RSVPSection({ guestName }) {
             ))
           )}
         </ol>
+        {wishes.length > shown && (
+          <button type="button" className="btn-ghost rsvp-more" onClick={() => setShown((n) => n + 6)}>
+            Lihat ucapan lainnya ({wishes.length - shown})
+          </button>
+        )}
       </div>
     </section>
   );

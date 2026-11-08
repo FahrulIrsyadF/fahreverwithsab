@@ -50,18 +50,14 @@
 .rsvp-toast { margin: 0; text-align: center; font-family: var(--font-serif); font-style: italic; font-size: 17px; color: var(--base-800); }
 
 /* ---------- buku tamu ---------- */
-.rsvp-wishes { max-width: 380px; margin: 60px auto 0; }
+.rsvp-wishes { max-width: 380px; margin: 60px auto 0; text-align: center; }
 .rsvp-wishes-head { display: flex; align-items: center; gap: 12px; margin-bottom: 4px; }
 .rsvp-wishes-head span { flex-shrink: 0; font-size: 10px; font-weight: 700; letter-spacing: .24em; text-transform: uppercase; color: var(--accent); }
 .rsvp-wishes-head i { flex: 1; height: 1px; background: rgb(var(--metal-rgb) / .7); }
-.rsvp-list {
-  list-style: none; margin: 0; padding: 0 4px 0 0; text-align: left;
-  max-height: 26rem; overflow-y: auto; overscroll-behavior: contain;
-  -webkit-mask-image: linear-gradient(180deg, #000 85%, transparent);
-  mask-image: linear-gradient(180deg, #000 85%, transparent);
-}
+.rsvp-list { list-style: none; margin: 0; padding: 0; text-align: left; }
+.rsvp-more { margin-top: 18px; color: var(--base-800); border-color: rgb(var(--base-800-rgb) / .35); font-size: 11px; }
 .rsvp-list li { padding: 16px 0; border-bottom: 1px solid rgb(var(--metal-rgb) / .4); }
-.rsvp-list li:last-child { border-bottom: 0; padding-bottom: 44px; }
+.rsvp-list li:last-child { border-bottom: 0; }
 .rsvp-who { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
 .rsvp-who b {
   min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
