@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { CalendarPlus } from 'lucide-react';
 import { WEDDING } from '../data/wedding';
+import './date/foil.css';
 
 const pad = (n) => String(n).padStart(2, '0');
 

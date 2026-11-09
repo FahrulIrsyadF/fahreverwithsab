@@ -3,6 +3,7 @@ import { gsap, useGSAP } from '../../lib/gsap';
 import Sprig from '../ornaments/Sprig';
 import InkText from '../ornaments/InkText';
 import { RoseCorner, RoseVine, bloomIn } from '../ornaments/Roses';
+import Countdown from '../Countdown';
 import { WEDDING } from '../../data/wedding';
 import './hero.css';
 
@@ -40,7 +41,8 @@ export default function Hero({ guestName, play }) {
       <p className="hero-date reveal">{WEDDING.dateLong}</p>
       <p className="hero-place reveal">{WEDDING.place}</p>
       <p className="hero-to reveal">Kepada Yth. Bapak/Ibu/Saudara/i <strong>{guestName}</strong></p>
-      <div className="hero-cue reveal" aria-hidden="true"><i />Gulir perlahan</div>
+      {/* hitung mundur digabung ke section pertama (dulu section Save the Date tersendiri) */}
+      <div className="hero-cd reveal"><Countdown /></div>
     </section>
   );
 }

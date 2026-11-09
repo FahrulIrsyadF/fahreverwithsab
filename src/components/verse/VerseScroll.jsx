@@ -35,7 +35,7 @@ export default function VerseScroll() {
     const tl = gsap.timeline({
       defaults: { ease: 'none' },
       scrollTrigger: {
-        trigger: '.scroll-pin', start: 'top top', end: '+=200%',
+        trigger: '.scroll-pin', start: 'top top', end: '+=130%',
         pin: true, scrub: 1, invalidateOnRefresh: true,
       },
     });

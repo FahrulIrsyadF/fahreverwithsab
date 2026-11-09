@@ -1,10 +1,11 @@
 /* Gulungan ayat (lab demo 03). Section di-pin; benang merah baru mulai SETELAH section ini (opsi a). */
-.verse-sec { padding-top: 24px; }
+.verse-sec { padding-top: 0; padding-bottom: 0; }
 
 .scroll-pin {
   position: relative; height: 100vh; height: 100svh;
-  display: flex; align-items: center; justify-content: center;
-  padding: 3.5rem 16px 0; /* ruang untuk NavbarTop yang fixed */
+  /* gulungan di atas (bukan di tengah layar): tanpa ruang kosong sebelum gulungan, kertas memanjang ke bawah */
+  display: flex; align-items: flex-start; justify-content: center;
+  padding: calc(3.5rem + 28px) 16px 0; /* ruang untuk NavbarTop yang fixed */
 }
 .scroll-wrap { position: relative; z-index: 2; width: min(84vw, 360px); }
 

@@ -4,7 +4,7 @@
   min-height: calc(100vh - 3.5rem);
   min-height: calc(100svh - 3.5rem);
   display: flex; flex-direction: column; align-items: center; justify-content: center;
-  padding: 48px 16px 64px;
+  padding: 40px 22px 56px;
   text-align: center;
   background-color: var(--paper);
   background-image: var(--grain), radial-gradient(90% 70% at 50% 45%, var(--paper-hi) 0%, var(--paper) 100%);
@@ -21,7 +21,7 @@
 .hero-names { width: min(100%, 400px); height: auto; overflow: visible; }
 .hero-date { margin: 0; font-family: var(--font-display); font-size: 20px; color: var(--base-800); }
 .hero-place { margin: 6px 0 0; font-family: var(--font-serif); font-style: italic; font-size: 17px; color: var(--muted); }
-.hero-to { margin: 28px 0 0; font-size: 13px; color: var(--muted); }
+.hero-to { margin: 20px 0 0; font-size: 13px; color: var(--muted); }
 .hero-to strong { display: block; margin-top: 4px; font-family: var(--font-display); font-weight: 500; font-size: 19px; color: var(--ink); }
 .hero-sprig { position: absolute !important; width: 90px; color: var(--metal); opacity: .9; }
 .hero-sprig-r { right: 6%; top: 9%; transform: rotate(160deg); }
@@ -46,3 +46,12 @@
 .hero-corner-br { right: 10px; bottom: 26px; transform: rotate(180deg); }
 .hero-vine { width: min(64vw, 240px); height: auto; margin: 0 0 12px; color: var(--metal); }
 
+
+/* hitung mundur di dalam bingkai hero */
+.hero-cd { width: 100%; max-width: 330px; }
+.hero-cd .cd { margin-top: 22px; }
+.hero-cd .cd .eyebrow { margin-bottom: 10px; font-size: 10px; }
+.hero-cd .cd-num { height: 40px; }
+.hero-cd .cd-num span { font-size: 34px; line-height: 40px; }
+.hero-cd .cd-grid { padding: 10px 0; }
+.hero-cd .cd-cta { margin-top: 16px; }

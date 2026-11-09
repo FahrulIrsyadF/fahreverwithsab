@@ -10,7 +10,6 @@ import NavbarBottom from './components/NavbarBottom';
 import VerseScroll from './components/verse/VerseScroll';
 import CoupleSection from './components/CoupleSection';
 import LoveStory from './components/LoveStory';
-import SaveTheDate from './components/SaveTheDate';
 import EventDetails from './components/EventDetails';
 import Gallery from './components/Gallery';
 import WeddingGift from './components/WeddingGift';
@@ -142,10 +141,9 @@ export default function App() {
         >
           <ThreadLayer pageRef={mainRef} active={isOpened} />
           <Hero guestName={validatedGuest} play={isOpened} />
-          {/* Urutan (usulan calon istri): isi amplop → Save the Date + countdown → ayat → mempelai →
+          {/* Urutan (usulan calon istri): isi amplop (+ countdown) → ayat → mempelai →
               acara → galeri → kisah → kehadiran & doa → amplop digital → penutup.
               Benang merah: Mempelai → Acara → Galeri → badge 01 Kisah (ayat ter-pin berada SEBELUM benang). */}
-          <SaveTheDate />
           <VerseScroll />
           <CoupleSection />
           <EventDetails />
