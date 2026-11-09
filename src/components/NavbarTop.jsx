@@ -8,9 +8,9 @@ export default function NavbarTop({ isPlaying, onToggleMusic }) {
       <div className="flex justify-between items-center w-full px-5 max-w-lg mx-auto h-14">
         <span className="text-[9px] font-bold tracking-[0.2em] text-accent">{WEDDING.dateCompact}</span>
 
-        <BrandMonogram size="md" variant="emerald" />
-
-        {onToggleMusic ? (
+        {/* monogram di kanan; tombol musik (bila ada) di sampingnya */}
+        <div className="flex items-center gap-3">
+        {onToggleMusic && (
         <button
           type="button"
           onClick={onToggleMusic}
@@ -24,9 +24,9 @@ export default function NavbarTop({ isPlaying, onToggleMusic }) {
             <VolumeX className="w-4 h-4 text-muted" />
           )}
         </button>
-        ) : (
-          <span className="w-8" aria-hidden="true" />
         )}
+        <BrandMonogram size="md" variant="emerald" />
+        </div>
       </div>
     </header>
   );

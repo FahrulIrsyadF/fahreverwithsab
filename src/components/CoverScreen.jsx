@@ -228,7 +228,6 @@ export default function CoverScreen({ guestName, onOpen, onDone, onStartAudio })
         <div className="env-to">
           <p className="eyebrow">Kepada Yth. Bapak/Ibu/Saudara/i</p>
           <h2>{guestName}</h2>
-          <p className="env-sub">Anda diundang ke pernikahan kami</p>
           <p className="env-note">Mohon maaf apabila ada kesalahan penulisan nama/gelar</p>
         </div>
 

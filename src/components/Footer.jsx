@@ -14,7 +14,6 @@ export default function Footer() {
   useGSAP(() => {
     gsap.timeline({ scrollTrigger: { trigger: '.foot-inner', start: 'top 80%' } })
       .from('.foot-seal', { scale: 0.4, rotation: -30, opacity: 0, duration: 1.1, ease: 'back.out(1.8)' })
-      .from('.foot-inner .eyebrow', { opacity: 0, letterSpacing: '0.6em', duration: 0.9, ease: 'power3.out' }, 0.2)
       .to('.foot-inner .ink-text text', { strokeDashoffset: 0, duration: 2, ease: 'power1.inOut' }, 0.3)
       .to('.foot-inner .ink-text text', { fillOpacity: 1, strokeOpacity: 0.3, duration: 0.8 }, '-=0.5')
       .from('.foot-inner .reveal', { y: 16, opacity: 0, stagger: 0.1, duration: 0.8, ease: 'power3.out' }, '-=0.9');
@@ -28,7 +27,6 @@ export default function Footer() {
       <div className="foot-inner sec-inner max-w-sm mx-auto">
         <WaxSeal monogram={WEDDING.monogram} className="foot-seal w-20 mx-auto mb-4" />
 
-        <p className="eyebrow text-accent-soft">Thank You</p>
         <InkText text={WEDDING.names} fontSize={52} width={360} height={100} gradient="pale" className="w-full h-auto overflow-visible my-1" />
         <RoseVine className="sec-rule reveal" w={220} h={40} seed={113} />
 

@@ -28,11 +28,10 @@
   margin: 0; color: var(--ivory);
   font-family: var(--font-display); font-weight: 400; font-size: clamp(24px, 7vw, 32px);
 }
-.env-note { margin: 6px 0 0; font-size: 11px; font-style: italic; color: rgb(var(--ivory-rgb) / .45); }
-.env-sub { margin: 8px 0 0; color: rgb(var(--ivory-rgb) / .6); font-family: var(--font-serif); font-style: italic; font-size: 17px; }
+.env-note { margin: 4px 0 0; font-size: 11px; font-style: italic; color: rgb(var(--ivory-rgb) / .45); }
 
 .env-hint {
-  min-height: 1.4em; margin: 0;
+  min-height: 1.4em; margin: -14px 0 0; /* lebih dekat ke amplop */
   color: rgb(var(--metal-pale-rgb) / .8);
   font-size: 11px; letter-spacing: .24em; text-transform: uppercase;
 }

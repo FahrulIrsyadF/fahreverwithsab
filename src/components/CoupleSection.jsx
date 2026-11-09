@@ -4,6 +4,7 @@ import { gsap, useGSAP } from '../lib/gsap';
 import InkText from './ornaments/InkText';
 import SectionSeam from './ornaments/SectionSeam';
 import { RoseCorner } from './ornaments/Roses';
+import ArchFrame from './ornaments/ArchFrame';
 import { COUPLE } from '../data/wedding';
 import './couple/couple.css';
 
@@ -13,12 +14,12 @@ function Person({ p }) {
     <article className={`person person-${p.side}`}>
       {/* jangkar benang: kanan foto atas (wanita) → (simpul "&") → kiri foto bawah (pria) */}
       <div className="arch-wrap" data-anchor={left ? '1.04,0.4' : '-0.04,0.55'}>
-        <div className="arch-frame" />
         <RoseCorner className={`arch-corner arch-corner-${p.side}`} seed={left ? 6 : 13} />
         <div className="arch">
           {/* ukuran bingkai tetap (aspect-ratio) → tidak perlu refresh ScrollTrigger saat foto dimuat */}
           <img src={p.photo} alt={p.full} loading="lazy" decoding="async" />
         </div>
+        <ArchFrame seed={left ? 3 : 9} />
       </div>
       <div className="person-text">
         <InkText
@@ -64,11 +65,16 @@ export default function CoupleSection() {
         scale: 1, yPercent: 6, ease: 'none',
         scrollTrigger: { trigger: el, start: 'top bottom', end: 'bottom top', scrub: true },
       });
-      // bingkai emas bergeser keluar dari belakang foto (kedalaman)
-      gsap.fromTo(el.querySelector('.arch-frame'), { x: 0, y: 0, opacity: 0 }, {
-        x: left ? 14 : -14, y: 14, opacity: 1, ease: 'none',
-        scrollTrigger: { trigger: el, start: 'top 75%', end: 'top 25%', scrub: 1 },
-      });
+      // bingkai hias: garis emas tergambar, mutiara & renda menyusul, mawar puncak mekar
+      const orn = el.querySelector('.arch-orn');
+      gsap.timeline({ scrollTrigger: { trigger: el, start: 'top 70%' } })
+        .from(orn.querySelectorAll('.arch-orn-line'), { drawSVG: 0, duration: 1.6, stagger: 0.15, ease: 'power2.inOut' })
+        .from(orn.querySelectorAll('.arch-pearl'), {
+          scale: 0, transformOrigin: '50% 50%', duration: 0.4, ease: 'back.out(3)',
+          stagger: { amount: 0.9, from: 'center' },
+        }, 0.4)
+        .from(orn.querySelector('.arch-orn-lace'), { opacity: 0, duration: 1 }, 0.9)
+        .from(orn.querySelector('.arch-orn-crown'), { scale: 0, rotation: -40, transformOrigin: '50% 50%', duration: 1, ease: 'back.out(2)' }, 0.8);
       // nama ditulis tinta, lalu detail muncul berurutan
       gsap.timeline({ scrollTrigger: { trigger: el.querySelector('.person-text'), start: 'top 78%' } })
         .from(el.querySelector('.eyebrow'), { opacity: 0, x: left ? 20 : -20, duration: 0.6 })
