@@ -136,11 +136,14 @@ function ScratchCoin({ value, label, onReveal }) {
   );
 }
 
+// Kartu gosok tanggal disembunyikan dulu (permintaan); ubah ke true untuk menampilkannya lagi.
+const SHOW_SCRATCH = false;
+
 /**
- * Save the Date (lab demo 04): kartu foil emas yang berkilau mengikuti giroskop/pointer,
- * 3 koin gosok (tanggal · bulan · tahun) + confetti, lalu hitung mundur & tombol kalender.
+ * Kartu foil emas (lab demo 04) yang berkilau mengikuti giroskop/pointer,
+ * 3 koin gosok (tanggal · bulan · tahun) + confetti.
  */
-export default function SaveTheDate() {
+function ScratchCard() {
   const root = useRef(null);
   const card = useRef(null);
   const confetti = useRef(null);
@@ -185,10 +188,6 @@ export default function SaveTheDate() {
     gsap.from('.foil-card .stagger', { y: 20, opacity: 0, stagger: 0.1, duration: 0.9, ease: 'power3.out', delay: 0.5, scrollTrigger: st });
     gsap.from('.coin', { scale: 0, rotation: -180, stagger: 0.12, duration: 1, ease: 'back.out(1.8)', delay: 0.9, scrollTrigger: st });
     gsap.from('.foil-card .sprig-path', { drawSVG: 0, duration: 1.8, stagger: { amount: 0.9 }, ease: 'power1.inOut', delay: 0.6, scrollTrigger: st });
-    gsap.from('.cd .eyebrow, .cd-unit, .cd-cta', {
-      y: 22, opacity: 0, stagger: 0.08, duration: 0.8, ease: 'power3.out',
-      scrollTrigger: { trigger: '.cd', start: 'top 85%' },
-    });
   }, { scope: root });
 
   const onReveal = (coinEl) => {
@@ -205,17 +204,15 @@ export default function SaveTheDate() {
         gsap.fromTo(root.current.querySelectorAll('.foil-after > *'), { y: 24, opacity: 0, scale: 0.8 }, { y: 0, opacity: 1, scale: 1, stagger: 0.12, duration: 1, ease: 'elastic.out(1, 0.55)' });
         gsap.to(root.current.querySelector('.foil-hint'), { opacity: 0, height: 0, margin: 0, duration: 0.4 });
         // tombol kalender memantul mengajak disimpan
-        gsap.fromTo(root.current.querySelector('.cd-cta'), { scale: 1 }, { scale: 1.08, duration: 0.35, yoyo: true, repeat: 3, ease: 'power2.inOut', delay: 0.6 });
+        gsap.fromTo(root.current.closest('.date-sec').querySelector('.cd-cta'), { scale: 1 }, { scale: 1.08, duration: 0.35, yoyo: true, repeat: 3, ease: 'power2.inOut', delay: 0.6 });
       }, 350);
     }
   };
 
   return (
-    <section className="sec sec-blue date-sec" id="tanggal" ref={root}>
-      <SectionSeam into="blue" side="left" seed={41} />
-      <Confetti ref={confetti} />
-
-      <div className="foil-stage">
+    <>
+    <Confetti ref={confetti} />
+    <div className="foil-stage" ref={root}>
         <div className="foil-card" ref={card} data-tilt-paused="1">
           <div className="foil-border" />
           <div className="foil-sheen"><div className="foil-sheen-glow" ref={sheen} /></div>
@@ -245,8 +242,26 @@ export default function SaveTheDate() {
           </button>
         )}
         <p className="foil-tip">Miringkan HP untuk melihat kilau foil</p>
-      </div>
+    </div>
+    </>
+  );
+}
 
+/** Save the Date: (kartu gosok, opsional) lalu hitung mundur & tombol kalender. */
+export default function SaveTheDate() {
+  const root = useRef(null);
+
+  useGSAP(() => {
+    gsap.from('.cd .eyebrow, .cd-unit, .cd-cta', {
+      y: 22, opacity: 0, stagger: 0.08, duration: 0.8, ease: 'power3.out',
+      scrollTrigger: { trigger: '.cd', start: 'top 85%' },
+    });
+  }, { scope: root });
+
+  return (
+    <section className={`sec sec-blue date-sec${SHOW_SCRATCH ? '' : ' date-sec-solo'}`} id="tanggal" ref={root}>
+      <SectionSeam into="blue" side="left" seed={41} />
+      {SHOW_SCRATCH && <ScratchCard />}
       <Countdown />
     </section>
   );

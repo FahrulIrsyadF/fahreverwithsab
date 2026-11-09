@@ -32,12 +32,6 @@ export default function VerseScroll() {
     const split = SplitText.create(root.current.querySelector('.scroll-translation'), { type: 'lines', linesClass: 'scroll-line' });
     const lines = [...content.querySelectorAll('.reveal-block, .scroll-line')];
 
-    gsap.from('.verse-intro > *', {
-      y: 30, opacity: 0, stagger: 0.12, duration: 1, ease: 'power3.out',
-      scrollTrigger: { trigger: '.verse-intro', start: 'top 85%' },
-    });
-    gsap.to('.scroll-cue span', { y: 10, opacity: 0.2, duration: 1, repeat: -1, yoyo: true, ease: 'sine.inOut' });
-
     const tl = gsap.timeline({
       defaults: { ease: 'none' },
       scrollTrigger: {
@@ -74,12 +68,8 @@ export default function VerseScroll() {
       <SectionSeam into="dark" side="right" seed={3} />
       <GoldDust count={45} />
 
-      <div className="verse-intro">
-        <p className="eyebrow">Firman Allah</p>
-        <h2>Firman yang menyatukan kami</h2>
-        <p>Gulir perlahan untuk membuka gulungan</p>
-        <div className="scroll-cue" aria-hidden="true"><span /></div>
-      </div>
+      {/* tanpa judul section: langsung gulungan */}
+      <h2 className="sr-only">Firman Allah, QS. Ar-Rum 21</h2>
 
       <div className="scroll-pin">
         <div className="scroll-wrap">
