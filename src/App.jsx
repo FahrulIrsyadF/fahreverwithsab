@@ -89,6 +89,24 @@ export default function App() {
     };
   }, [isOpened]);
 
+  // Tinggi halaman berubah setelah trigger dihitung (pin gulungan dibuat setelah font siap, foto dimuat,
+  // dst.) → posisi trigger di bawahnya basi (mis. garis Kisah tidak mundur). Hitung ulang saat itu terjadi.
+  useEffect(() => {
+    const el = mainRef.current;
+    if (!el) return;
+    let last = el.offsetHeight;
+    let t = 0;
+    const ro = new ResizeObserver(() => {
+      const h = el.offsetHeight;
+      if (Math.abs(h - last) < 2) return;
+      last = h;
+      clearTimeout(t);
+      t = setTimeout(() => ScrollTrigger.refresh(), 150);
+    });
+    ro.observe(el);
+    return () => { ro.disconnect(); clearTimeout(t); };
+  }, [validatedGuest]);
+
   // Auto-pause audio saat tab ditinggalkan
   useEffect(() => {
     const onVisibility = () => {

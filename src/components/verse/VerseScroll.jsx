@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { gsap, useGSAP, SplitText } from '../../lib/gsap';
+import { gsap, useGSAP, SplitText, ScrollTrigger } from '../../lib/gsap';
 import { useFontsReady } from '../../lib/useFontsReady';
 import Sprig from '../ornaments/Sprig';
 import { RoseCorner, RoseVine } from '../ornaments/Roses';
@@ -54,6 +54,9 @@ export default function VerseScroll() {
       scrollTrigger: {
         trigger: '.scroll-pin', start: 'top top', end: '+=130%',
         pin: true, scrub: 1, invalidateOnRefresh: true,
+        // dibuat paling akhir (menunggu font) tapi letaknya di atas: harus dihitung lebih dulu agar
+        // jarak pin-nya ikut diperhitungkan oleh trigger di bawahnya (Kisah, dst.)
+        refreshPriority: 1,
       },
     });
 
@@ -77,6 +80,10 @@ export default function VerseScroll() {
     // 4) ornamen digambar, lalu jeda kecil sebelum lepas pin
     tl.from('.scroll-content .sprig-path', { drawSVG: 0, duration: 0.2, stagger: { amount: 0.25 } }, 1.0)
       .to({}, { duration: 0.15 });
+
+    // urutkan ulang (refreshPriority) lalu hitung ulang semua trigger dengan jarak pin yang baru
+    ScrollTrigger.sort();
+    ScrollTrigger.refresh();
 
     return () => split.revert();
   }, { scope: root, dependencies: [fontsReady, layoutKey], revertOnUpdate: true });

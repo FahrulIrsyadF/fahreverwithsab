@@ -44,16 +44,24 @@ export default function LoveStory() {
     });
 
     // spine: mulai dari badge 01 (pusatnya 32px dari atas timeline), berakhir di badge 03
-    gsap.to('.story-spine-fill', {
+    // fromTo: titik awal eksplisit 0 (Safari bisa membaca scaleY(0) dari CSS sebagai 1 → garis tidak mundur)
+    gsap.fromTo('.story-spine-fill', { scaleY: 0 }, {
       scaleY: 1, ease: 'none',
       scrollTrigger: { trigger: '.story-timeline', start: `top+=32 ${LINE}`, end: `bottom-=64 ${LINE}`, scrub: 0.6 },
     });
 
     gsap.utils.toArray('.story-ch').forEach((ch, i) => {
-      gsap.from(ch.querySelector('.story-card'), {
-        x: 28, opacity: 0, duration: 0.9, ease: 'power3.out',
-        scrollTrigger: { trigger: ch, start: 'top 88%' },
-      });
+      // kertas "ditempel": melayang turun miring → mendarat, lalu selotip direntangkan & ditekan
+      const card = ch.querySelector('.story-card');
+      const tape = ch.querySelector('.story-tape');
+      const tilt = i % 2 ? -1 : 1;
+      gsap.timeline({ scrollTrigger: { trigger: ch, start: 'top 85%' } })
+        .from(card, { y: -46, x: 18 * tilt, rotation: 7 * tilt, scale: 1.06, opacity: 0, duration: 0.75, ease: 'power3.out', clearProps: 'opacity' })
+        .from(tape, { scaleX: 0, opacity: 0, duration: 0.38, ease: 'power2.out' }, '-=0.12')
+        .fromTo(tape, { scaleY: 1.35 }, { scaleY: 1, duration: 0.22, ease: 'power2.out' }, '>-0.05')
+        // kertas sedikit tertekan saat selotip ditekan
+        .to(card, { y: 2, duration: 0.1, ease: 'power1.out' }, '<')
+        .to(card, { y: 0, duration: 0.5, ease: 'elastic.out(1, 0.5)' });
       // badge 02 & 03 aktif saat spine mencapainya (badge 01 oleh benang merah)
       if (i > 0) {
         ScrollTrigger.create({
@@ -93,6 +101,7 @@ export default function LoveStory() {
             <div className="story-badge" {...(i === 0 ? { 'data-anchor': '0.5,0.5' } : {})}>{ch.iconText}</div>
             {/* teks langsung di atas beludru (tanpa kartu): tempat/waktu, judul, paragraf serif */}
             <div className="story-card">
+              <span className="story-tape" aria-hidden="true" />
               <p className="story-meta">{ch.location}</p>
               <h3>{ch.title}</h3>
               <p className="story-text">{ch.text}</p>

@@ -56,12 +56,12 @@
   transition: opacity .6s;
 }
 .story-ch:nth-child(odd of .story-ch) .story-card { rotate: .6deg; }
-/* selotip */
-.story-card::before {
-  content: ''; position: absolute; top: -9px; left: 50%; width: 74px; height: 20px; margin-left: -37px;
+/* selotip (elemen nyata agar bisa dianimasikan "ditempel") */
+.story-tape {
+  position: absolute; top: -9px; left: 50%; width: 74px; height: 20px; margin-left: -37px;
   background: rgb(var(--paper-lo-rgb) / .8);
   box-shadow: 0 1px 2px rgb(0 0 0 / .18);
-  rotate: -3deg;
+  transform: rotate(-3deg); transform-origin: 0% 50%;
   -webkit-mask: linear-gradient(90deg, transparent 0 2px, #000 2px calc(100% - 2px), transparent 0);
           mask: linear-gradient(90deg, transparent 0 2px, #000 2px calc(100% - 2px), transparent 0);
 }
