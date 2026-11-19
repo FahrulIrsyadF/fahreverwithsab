@@ -5,11 +5,14 @@ import { WEDDING } from '../data/wedding';
 export default function NavbarTop({ isPlaying, onToggleMusic }) {
   return (
     <header className="fixed top-0 inset-x-0 z-40 bg-paper-hi/95 border-b border-metal/30 shadow-sm">
-      <div className="flex justify-between items-center w-full px-5 max-w-lg mx-auto h-14">
+      <div className="relative flex justify-between items-center w-full px-5 max-w-lg mx-auto h-14">
         <span className="text-[9px] font-bold tracking-[0.2em] text-accent">{WEDDING.dateCompact}</span>
 
-        {/* monogram di kanan; tombol musik (bila ada) di sampingnya */}
-        <div className="flex items-center gap-3">
+        {/* monogram di tengah (nanti diganti logo) */}
+        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+          <BrandMonogram size="md" variant="emerald" />
+        </div>
+
         {onToggleMusic && (
         <button
           type="button"
@@ -25,8 +28,7 @@ export default function NavbarTop({ isPlaying, onToggleMusic }) {
           )}
         </button>
         )}
-        <BrandMonogram size="md" variant="emerald" />
-        </div>
+        {!onToggleMusic && <span className="w-8" aria-hidden="true" />}
       </div>
     </header>
   );

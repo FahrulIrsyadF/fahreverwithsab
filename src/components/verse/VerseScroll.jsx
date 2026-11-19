@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { gsap, useGSAP, SplitText } from '../../lib/gsap';
 import { useFontsReady } from '../../lib/useFontsReady';
 import Sprig from '../ornaments/Sprig';
@@ -25,9 +25,26 @@ function Roll({ className = '' }) {
 export default function VerseScroll() {
   const root = useRef(null);
   const fontsReady = useFontsReady();
+  // Ukuran isi gulungan (dibulatkan). Saat halaman masih tersembunyi di balik amplop, Safari bisa
+  // memberi ukuran yang salah; timeline dibangun ulang tiap ukuran berubah agar tidak memakai angka basi.
+  const [layoutKey, setLayoutKey] = useState('');
+
+  useEffect(() => {
+    const content = root.current.querySelector('.scroll-content');
+    let raf = 0;
+    const ro = new ResizeObserver(() => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        if (!content.offsetWidth) return;
+        setLayoutKey(`${content.offsetWidth}x${Math.round(content.offsetHeight / 8)}`);
+      });
+    });
+    ro.observe(content);
+    return () => { ro.disconnect(); cancelAnimationFrame(raf); };
+  }, []);
 
   useGSAP(() => {
-    if (!fontsReady) return;
+    if (!fontsReady || !layoutKey) return;
     const content = root.current.querySelector('.scroll-content');
     const split = SplitText.create(root.current.querySelector('.scroll-translation'), { type: 'lines', linesClass: 'scroll-line' });
     const lines = [...content.querySelectorAll('.reveal-block, .scroll-line')];
@@ -41,13 +58,14 @@ export default function VerseScroll() {
     });
 
     // 1) pita & segel kecil jatuh, gulungan berputar lurus
-    tl.to('.ribbon', { y: 220, rotation: 24, duration: 0.16, ease: 'power2.in' })
-      .to('.ribbon', { opacity: 0, duration: 0.04 }, '>-0.04')
+    tl.fromTo('.ribbon', { y: 0, rotation: 0 }, { y: 220, rotation: 24, duration: 0.16, ease: 'power2.in' })
+      .fromTo('.ribbon', { opacity: 1 }, { opacity: 0, duration: 0.04 }, '>-0.04')
       .fromTo('.scroll-wrap', { rotation: -4 }, { rotation: 0, duration: 0.14, ease: 'power1.out' }, 0)
       // 2) kertas memanjang, gulungan bawah ikut turun & berputar
       .addLabel('unroll', 0.12)
-      .to('.scroll-paper', { height: () => content.offsetHeight, duration: 1 }, 'unroll')
-      .to('.roll-bottom .roll-paper', { backgroundPositionY: '+=900px', duration: 1 }, 'unroll')
+      // fromTo (bukan to): titik awal selalu 0, tidak mewarisi tinggi inline dari pengukuran sebelumnya
+      .fromTo('.scroll-paper', { height: 0 }, { height: () => content.offsetHeight, duration: 1 }, 'unroll')
+      .fromTo('.roll-bottom .roll-paper', { backgroundPositionY: '0px' }, { backgroundPositionY: '900px', duration: 1 }, 'unroll')
       .fromTo('.roll-bottom', { scaleY: 1.35 }, { scaleY: 0.9, duration: 1 }, 'unroll');
 
     // 3) tiap baris muncul sesaat setelah kertas melewatinya
@@ -61,7 +79,7 @@ export default function VerseScroll() {
       .to({}, { duration: 0.15 });
 
     return () => split.revert();
-  }, { scope: root, dependencies: [fontsReady] });
+  }, { scope: root, dependencies: [fontsReady, layoutKey], revertOnUpdate: true });
 
   return (
     <section className="sec sec-dark verse-sec" id="ayat" ref={root}>

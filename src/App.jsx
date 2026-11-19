@@ -46,16 +46,31 @@ export default function App() {
     a.play().then(() => setIsPlaying(true)).catch(() => setIsPlaying(false));
   }, []);
 
+  // true hanya bila tamu sendiri yang mematikan musik lewat tombol (jangan dinyalakan lagi otomatis)
+  const userPaused = useRef(false);
+
   const toggleAudio = () => {
     const a = audioRef.current;
     if (!a) return;
     if (isPlaying) {
+      userPaused.current = true;
       a.pause();
       setIsPlaying(false);
     } else {
+      userPaused.current = false;
       a.play().then(() => setIsPlaying(true)).catch(() => setIsPlaying(false));
     }
   };
+
+  // Musik menyala secara default. Jika browser menolak saat segel dibuka (mis. dibuka dari
+  // browser dalam aplikasi), coba lagi pada sentuhan/klik pertama di halaman.
+  useEffect(() => {
+    if (!isOpened || isPlaying || userPaused.current || !WEDDING.music) return;
+    const retry = () => { if (!userPaused.current) startAudio(); };
+    const evs = ['pointerup', 'touchend', 'click', 'keydown'];
+    evs.forEach((e) => window.addEventListener(e, retry, { passive: true }));
+    return () => evs.forEach((e) => window.removeEventListener(e, retry));
+  }, [isOpened, isPlaying, startAudio]);
 
   // Saat "menyelam" ke surat: halaman undangan tampil di bawah cover (scroll instan, bukan smooth)
   const handleOpen = useCallback(() => {
