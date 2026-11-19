@@ -22,7 +22,7 @@ export const WEDDING = {
     'https://calendar.google.com/calendar/render?action=TEMPLATE&text=The+Wedding+of+Sabrina+%26+Fahrul&dates=20270717T010000Z/20270717T080000Z&details=Pernikahan+Fahrul+Irsyad+Fianto+%26+Sabrina+Nabila+Kholiqin.+Sabtu,+17+Juli+2027.&location=Paiton,+Kabupaten+Probolinggo,+Jawa+Timur',
   // TODO(§2 #5): isi dengan lagu bebas royalti pilihan sendiri (Pixabay Music / YouTube Audio Library),
   // simpan di /public/music/ lalu tulis path-nya, mis. '/music/lagu.mp3'. null = tanpa musik (tombol musik disembunyikan).
-  music: null,
+  music: '/music/nothing.mp3', // Bruno Major - Nothing
 };
 
 export const COUPLE = [
