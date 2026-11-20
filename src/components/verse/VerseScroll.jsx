@@ -49,14 +49,21 @@ export default function VerseScroll() {
     const split = SplitText.create(root.current.querySelector('.scroll-translation'), { type: 'lines', linesClass: 'scroll-line' });
     const lines = [...content.querySelectorAll('.reveal-block, .scroll-line')];
 
+    // Pin terpisah dari animasi: gulungan tetap berhenti di atas layar, tapi animasi (pita jatuh,
+    // kertas terbuka) sudah mulai saat gulungan baru terlihat ±¼ layar dari bawah.
+    ScrollTrigger.create({
+      trigger: '.scroll-pin', start: 'top top', end: '+=100%', pin: true,
+      // dibuat paling akhir (menunggu font) tapi letaknya di atas: harus dihitung lebih dulu agar
+      // jarak pin-nya ikut diperhitungkan oleh trigger di bawahnya (Kisah, dst.)
+      refreshPriority: 2,
+    });
     const tl = gsap.timeline({
       defaults: { ease: 'none' },
       scrollTrigger: {
-        trigger: '.scroll-pin', start: 'top top', end: '+=130%',
-        pin: true, scrub: 1, invalidateOnRefresh: true,
-        // dibuat paling akhir (menunggu font) tapi letaknya di atas: harus dihitung lebih dulu agar
-        // jarak pin-nya ikut diperhitungkan oleh trigger di bawahnya (Kisah, dst.)
-        refreshPriority: 1,
+        trigger: '.scroll-wrap', start: 'top 75%',
+        // selesai bersamaan dengan lepasnya pin (dasar section menyentuh dasar layar)
+        endTrigger: root.current, end: 'bottom bottom',
+        scrub: 1, invalidateOnRefresh: true, refreshPriority: 1,
       },
     });
 
