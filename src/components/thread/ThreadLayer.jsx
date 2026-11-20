@@ -43,10 +43,10 @@ export default function ThreadLayer({ pageRef, active }) {
     const svg = page.querySelector(':scope > .thread');
     const paths = svg.querySelectorAll('path');
     const line = svg.querySelector('.thread-line');
-    const drawn = svg.querySelectorAll('.thread-line, .thread-glow'); // dibuka via dashoffset
+    const drawn = svg.querySelectorAll('.thread-line, .thread-glow, .thread-shadow, .thread-sheen'); // dibuka via dashoffset
     const twist = svg.querySelector('.thread-twist');                 // serat pilinan
     const tip = page.querySelector(':scope > .thread-tip');
-    const TW = [2.5, 3.5]; // pola serat: garis 2.5, celah 3.5
+    const TW = [0.9, 2.3]; // alur pilinan: garis gelap tipis 0.9 tiap 3.2px (seperti tali dipilin)
     let total = 0, keys = [], lastTwist = -1, arrived = false;
     const prog = { l: 0 };
 
@@ -173,9 +173,12 @@ export default function ThreadLayer({ pageRef, active }) {
       {/* benang merah takdir: Mempelai → Acara → Galeri → Love Story */}
       <svg className="thread" aria-hidden="true" preserveAspectRatio="none">
         <path className="thread-glow" />
+        {/* bayangan tipis di bawah benang → terasa seperti benang di atas kertas */}
+        <path className="thread-shadow" />
         <path className="thread-line" />
-        {/* serat pilinan: garis putus-putus terang di atas benang */}
+        {/* alur pilinan gelap rapat + kilau tipis di satu sisi → terlihat seperti benang/tali dipilin */}
         <path className="thread-twist" />
+        <path className="thread-sheen" />
       </svg>
       <span className="thread-tip" aria-hidden="true" />
     </>

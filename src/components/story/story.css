@@ -21,7 +21,7 @@
 }
 
 .story-ch { position: relative; z-index: 2; padding-left: 44px; }
-.story-ch + .story-ch { margin-top: 40px; }
+.story-ch + .story-ch { margin-top: 28px; }
 .story-badge {
   position: absolute; left: 16px; top: 16px; width: 32px; height: 32px; margin-left: -16px;
   display: grid; place-items: center; border-radius: 50%;
@@ -48,7 +48,7 @@
 /* tiap babak = selembar kertas surat di atas beludru: butir kertas, garis tulis tipis,
    selotip kecil di atas, sedikit miring bergantian (nuansa label kado, tapi lebih polos) */
 .story-card {
-  position: relative; padding: 26px 20px 22px;
+  position: relative; padding: 20px 16px 16px;
   background-color: var(--paper-hi); background-image: var(--grain);
   border-radius: 3px;
   box-shadow: 0 1px 0 rgb(var(--ink-rgb) / .06), 0 20px 30px -22px rgb(0 0 0 / .65);
@@ -73,23 +73,23 @@
 /* babak yang belum dicapai spine sedikit redup */
 .story-ch:not(.is-active) .story-card { opacity: .82; }
 .story-meta {
-  margin: 0 0 6px; font-family: var(--font-serif); font-style: italic; font-weight: 500; font-size: 16px;
+  margin: 0 0 4px; font-family: var(--font-serif); font-style: italic; font-weight: 500; font-size: 14px;
   color: var(--accent);
 }
 .story-card h3 {
-  margin: 0 0 12px; font-family: var(--font-display); font-weight: 400; font-size: 24px; line-height: 1.2;
+  margin: 0 0 8px; font-family: var(--font-display); font-weight: 400; font-size: 20px; line-height: 1.2;
   color: var(--base-800);
 }
 .story-text {
-  margin: 0; font-family: var(--font-serif); font-weight: 500; font-size: 18px; line-height: 30px;
+  margin: 0; font-family: var(--font-serif); font-weight: 500; font-size: 15.5px; line-height: 24px;
   color: var(--ink);
   /* garis tulis mengikuti tinggi baris */
-  background-image: repeating-linear-gradient(180deg, transparent 0 29px, rgb(var(--metal-rgb) / .28) 29px 30px);
+  background-image: repeating-linear-gradient(180deg, transparent 0 23px, rgb(var(--metal-rgb) / .28) 23px 24px);
 }
 /* huruf awal: Playfair miring, turun dua baris */
 .story-text::first-letter {
-  float: left; margin: 6px 10px 0 0;
-  font-family: var(--font-display); font-style: italic; font-size: 54px; line-height: .8;
+  float: left; margin: 5px 8px 0 0;
+  font-family: var(--font-display); font-style: italic; font-size: 43px; line-height: .8;
   color: var(--base-700);
 }
 

@@ -66,8 +66,8 @@ export default function EventDetails() {
       </article>
 
       {/* benang menyeberang di bawah kartu, lalu turun di tepi kiri menuju ranting sambungan Galeri */}
-      <ThreadStitch from="right" height={48} />
-      <div className="ev-tail" data-anchor="0.04,0.5" aria-hidden="true" />
+      <ThreadStitch from="right" height={48} single />
+      <div className="ev-tail" data-anchor="0.08,0.95" aria-hidden="true" />
     </section>
   );
 }

@@ -26,9 +26,9 @@ export default function Gallery() {
   const [hero, ...rest] = GALLERY;
   return (
     <section className="sec sec-light gal-sec" id="galeri">
-      <SectionSeam into="light" side="left" seed={67} anchor="0.7,0.55" />
+      <SectionSeam into="light" side="left" seed={67} />
 
-      <header className="sec-head" data-reveal data-anchor="-0.04,0.9">
+      <header className="sec-head" data-reveal data-anchor="0.1,0.45">
         <p className="eyebrow">Momen Bahagia</p>
         <h2>Galeri Foto</h2>
         <RoseVine className="sec-rule" w={220} h={40} seed={71} />
@@ -36,7 +36,8 @@ export default function Gallery() {
 
       <div className="sec-inner gal">
         {[hero, ...rest].map((photo, i) => (
-          <figure key={photo.id} className={`gal-item ${i === 0 ? 'gal-hero' : `gal-small gal-small-${i}`}`} data-reveal={i === 0 ? 'up' : i % 2 ? 'left' : 'right'}>
+          <figure key={photo.id} className={`gal-item ${i === 0 ? 'gal-hero' : `gal-small gal-small-${i}`}`}
+            {...(i === 0 ? { 'data-anchor': '-0.035,0.08' } : {})} data-reveal={i === 0 ? 'up' : i % 2 ? 'left' : 'right'}>
             <button type="button" className="gal-photo" onClick={() => setActiveImage(photo)} aria-label={`Perbesar foto: ${photo.caption}`}>
               <img src={photo.src} alt={photo.caption} loading="lazy" decoding="async" />
             </button>
