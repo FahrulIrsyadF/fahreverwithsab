@@ -4,6 +4,8 @@
 /* semua teks putih; judul section ikut putih, eyebrow biru */
 .ev-sec .sec-head h2 { color: #fff; }
 .ev-sec .sec-head .eyebrow { color: var(--ev-hl); }
+/* separator mawar (di bawah judul & di bawah tanggal) ikut putih */
+.ev-sec .sec-rule, .ev-sec .ev-vine { color: #fff; opacity: .9; }
 
 .ev {
   position: relative; max-width: min(440px, calc(100% - 24px)); margin: 0 auto;
