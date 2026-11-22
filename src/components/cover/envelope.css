@@ -90,6 +90,11 @@
   backface-visibility: hidden; -webkit-backface-visibility: hidden;
 }
 .flap-inner { transform: rotateX(180deg); }
+/* renda di tepi tutup (FlapLace) */
+.lace-fill { fill: rgb(255 253 247 / .34); }
+.lace-fill-sc { fill: rgb(255 253 247 / .5); }
+.lace-thread { stroke: rgb(255 253 247 / .9); }
+.lace-dot { fill: rgb(255 253 247 / .95); }
 
 /* ---------- segel ---------- */
 .seal-wrap {

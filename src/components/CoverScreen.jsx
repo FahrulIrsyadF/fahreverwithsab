@@ -3,6 +3,7 @@ import { gsap, useGSAP, vibrate, reduceMotion } from '../lib/gsap';
 import { useTilt, requestGyro } from '../lib/useTilt';
 import WaxSeal, { CRACK_POINTS } from './ornaments/WaxSeal';
 import Sprig from './ornaments/Sprig';
+import FlapLace from './ornaments/FlapLace';
 import GoldDust from './ornaments/GoldDust';
 import { WEDDING } from '../data/wedding';
 import './cover/envelope.css';
@@ -264,6 +265,7 @@ export default function CoverScreen({ guestName, onOpen, onDone, onStartAudio })
                   <svg className="flap-face flap-outer" viewBox="0 0 340 140" preserveAspectRatio="none" aria-hidden="true">
                     <path d="M0 0 L340 0 L184 126 Q170 138 156 126 Z" fill="url(#env-flap)" filter="url(#env-flapshadow)" />
                     <path d="M0 0 L340 0 L184 126 Q170 138 156 126 Z" fill="url(#env-grain)" />
+                    <FlapLace />
                   </svg>
                   <svg className="flap-face flap-inner" viewBox="0 0 340 140" preserveAspectRatio="none" aria-hidden="true">
                     <path d="M0 140 L340 140 L184 14 Q170 2 156 14 Z" fill="url(#env-liner)" />
