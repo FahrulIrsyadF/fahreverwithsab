@@ -1,5 +1,5 @@
 import { useState, useMemo, useRef, useEffect, useCallback } from 'react';
-import { gsap, useGSAP, ScrollTrigger } from './lib/gsap';
+import { gsap, useGSAP, ScrollTrigger, drawable, DRAW_HIDDEN, DRAW_SHOWN } from './lib/gsap';
 import { validateGuest } from './data/guests';
 import { WEDDING } from './data/wedding';
 import GateScreen from './components/GateScreen';
@@ -17,6 +17,13 @@ import RSVPSection from './components/RSVPSection';
 import Footer from './components/Footer';
 import ThreadLayer from './components/thread/ThreadLayer';
 
+// Section di bawah Hero, dipasang BERTAHAP (lihat `mounted` di App).
+const SECTION_COUNT = 8;
+// tunggu amplop selesai jatuh (±1,35 dtk) sebelum mulai memasang section
+const MOUNT_DELAY = 1600;
+const idle = (fn) => (window.requestIdleCallback ? requestIdleCallback(fn, { timeout: 400 }) : setTimeout(fn, 60));
+const cancelIdle = (id) => (window.cancelIdleCallback ? cancelIdleCallback(id) : clearTimeout(id));
+
 // arah masuk untuk elemen ber-atribut data-reveal ("up" | "left" | "right")
 const REVEAL_FROM = { up: { y: 28 }, left: { x: -32, y: 10 }, right: { x: 32, y: 10 } };
 
@@ -26,6 +33,20 @@ export default function App() {
   const [isPlaying, setIsPlaying] = useState(false);
   const audioRef = useRef(null);
   const mainRef = useRef(null);
+
+  // PERFORMA (Android): seluruh halaman (ratusan path SVG, renda, animasi scroll) dulu dipasang
+  // sekaligus saat halaman dibuka — tepat ketika amplop sedang jatuh → macet ±2–3 dtk di HP menengah.
+  // Kini hanya Hero yang langsung dipasang; section lain menyusul satu per satu saat browser
+  // senggang setelah amplop mendarat. Saat segel dibuka, sisanya langsung dipasang semua.
+  const [mounted, setMounted] = useState(0);
+  const allMounted = mounted >= SECTION_COUNT;
+  useEffect(() => {
+    if (allMounted) return;
+    let id = 0;
+    const t = setTimeout(() => { id = idle(() => setMounted((m) => m + 1)); }, mounted === 0 ? MOUNT_DELAY : 0);
+    return () => { clearTimeout(t); cancelIdle(id); };
+  }, [mounted, allMounted]);
+  useEffect(() => { if (isOpened) setMounted(SECTION_COUNT); }, [isOpened]);
 
   // Ambil dan validasi param ?to=
   const validatedGuest = useMemo(() => {
@@ -120,12 +141,12 @@ export default function App() {
 
   // Animasi bersama lintas section: ranting di sambungan + reveal untuk section tanpa demo lab
   useGSAP(() => {
-    if (!mainRef.current) return;
+    if (!mainRef.current || !allMounted) return;
 
     // Ranting di sambungan: tumbuh mengikuti scroll + parallax (lab demo 02)
     gsap.utils.toArray('.seam-sprig').forEach((s) => {
-      gsap.from(s.querySelectorAll('.sprig-path'), {
-        drawSVG: 0, stagger: { amount: 0.4 }, ease: 'none',
+      gsap.fromTo(drawable(s.querySelectorAll('.sprig-path')), DRAW_HIDDEN, {
+        ...DRAW_SHOWN, stagger: { amount: 0.4 }, ease: 'none',
         scrollTrigger: { trigger: s, start: 'top 95%', end: 'top 40%', scrub: 1 },
       });
       gsap.fromTo(s, { yPercent: 18 }, {
@@ -142,7 +163,7 @@ export default function App() {
       once: true,
       onEnter: (batch) => gsap.to(batch, { opacity: 1, x: 0, y: 0, stagger: 0.12, duration: 0.9, ease: 'power3.out', overwrite: true }),
     });
-  }, { scope: mainRef, dependencies: [validatedGuest] });
+  }, { scope: mainRef, dependencies: [validatedGuest, allMounted] });
 
   // Jika nama tidak ada di whitelist / query param kosong: kunci akses total
   if (!validatedGuest) {
@@ -177,14 +198,16 @@ export default function App() {
           {/* Urutan (usulan calon istri): isi amplop (+ countdown) → pemutar musik → ayat → mempelai →
               acara → kisah → kehadiran & doa → amplop digital → penutup.
               Benang merah: Mempelai → Acara → badge 01 Kisah (musik & ayat ter-pin berada SEBELUM benang). */}
-          <MusicPlayer isPlaying={isPlaying} onToggle={toggleAudio} />
-          <VerseScroll />
-          <CoupleSection />
-          <EventDetails />
-          <LoveStory />
-          <RSVPSection guestName={validatedGuest} />
-          <WeddingGift />
-          <Footer />
+          {[
+            <MusicPlayer key="music" isPlaying={isPlaying} onToggle={toggleAudio} />,
+            <VerseScroll key="verse" />,
+            <CoupleSection key="couple" />,
+            <EventDetails key="event" />,
+            <LoveStory key="story" />,
+            <RSVPSection key="rsvp" guestName={validatedGuest} />,
+            <WeddingGift key="gift" />,
+            <Footer key="footer" />,
+          ].slice(0, mounted)}
         </main>
 
         {isOpened && <NavbarBottom />}

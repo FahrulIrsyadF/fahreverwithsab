@@ -27,8 +27,16 @@ function blobPath() {
 const BLOB = blobPath();
 const sc = (v) => ({ stopColor: `var(--${v})` });
 
-// cache PNG per (belahan, ukuran) — dipakai ulang saat replay / pindah halaman
-const cache = new Map();
+// Badan segel digambar SEKALI (ukuran tetap, cukup tajam untuk segel ±130px di layar 3x) lalu dipakai
+// bersama oleh segel utuh & kedua belahannya. Belahan dipotong lewat CSS clip-path pada <img>.
+// (Dulu tiap belahan dirasterisasi sendiri → 3× kerja berat tepat saat amplop jatuh; ±1 dtk di Android.)
+const SIZE = 384;
+let shared = null; // Promise<url PNG>
+const pct = (pts) => pts.map(([x, y]) => `${x / 2}% ${y / 2}%`).join(', ');
+const HALF_CLIP = {
+  left: `polygon(0% 0%, ${pct(CRACK)}, 0% 100%)`,
+  right: `polygon(100% 0%, ${pct(CRACK)}, 100% 100%)`,
+};
 async function rasterize(svg, size) {
   const clone = svg.cloneNode(true);
   clone.removeAttribute('style'); // sumbernya disembunyikan (visibility) — gambarnya jangan ikut
@@ -52,29 +60,23 @@ export default function WaxSeal({ monogram = 'S&F', half, className = '', style 
   const clip =
     half === 'left' ? `0,0 ${CRACK_POINTS} 0,200` :
     half === 'right' ? `200,0 ${CRACK_POINTS} 200,200` : null;
+  const cut = half ? { clipPath: HALF_CLIP[half], WebkitClipPath: HALF_CLIP[half] } : undefined;
 
   useLayoutEffect(() => {
     let alive = true;
-    const w = wrap.current.offsetWidth || 120;
-    const size = Math.min(1024, Math.ceil((w * Math.min(devicePixelRatio || 1, 3)) / 64) * 64);
-    const key = `${half || 'full'}|${size}`;
-    if (cache.has(key)) { setImg(cache.get(key)); return; }
-    setImg(null);
-    rasterize(body.current, size)
-      .then((url) => { cache.set(key, url); if (alive) setImg(url); })
-      .catch(() => alive && setImg('svg'));
+    if (!shared) shared = rasterize(body.current, SIZE);
+    shared.then((url) => alive && setImg(url)).catch(() => alive && setImg('svg'));
     return () => { alive = false; };
-  }, [half]);
+  }, []);
 
-  const clipAttr = clip ? `url(#clip${id})` : undefined;
   const ready = img && img !== 'svg';
   return (
     <span ref={wrap} className={`wax-seal ${className}`} style={style} aria-hidden="true">
       {ready ? (
-        <img src={img} alt="" draggable="false" />
+        <img src={img} alt="" draggable="false" style={cut} />
       ) : (
         // sumber gambar; disembunyikan sampai PNG siap agar filter beratnya tidak dicat
-        <svg ref={body} viewBox="0 0 200 200" style={{ visibility: img === 'svg' ? 'visible' : 'hidden' }}>
+        <svg ref={body} viewBox="0 0 200 200" style={{ visibility: img === 'svg' ? 'visible' : 'hidden', ...cut }}>
           <defs>
             <radialGradient id={`wax${id}`} cx="38%" cy="32%" r="75%">
               <stop offset="0" style={sc('wax-hi')} />
@@ -97,9 +99,8 @@ export default function WaxSeal({ monogram = 'S&F', half, className = '', style 
             <filter id={`shadow${id}`} x="-20%" y="-20%" width="140%" height="150%">
               <feDropShadow dx="0" dy="5" stdDeviation="5" floodColor="#000" floodOpacity=".4" />
             </filter>
-            {clip && <clipPath id={`clip${id}`}><polygon points={clip} /></clipPath>}
           </defs>
-          <g clipPath={clipAttr} filter={`url(#shadow${id})`}>
+          <g filter={`url(#shadow${id})`}>
             <g filter={`url(#emboss${id})`}>
               <path d={BLOB} fill={`url(#wax${id})`} />
               <circle cx="100" cy="100" r="60" fill="none" style={{ stroke: 'var(--wax-rim)' }} strokeWidth="7" />

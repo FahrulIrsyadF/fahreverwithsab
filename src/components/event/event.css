@@ -1,5 +1,9 @@
 /* Rangkaian Acara — satu kartu undangan cetak: Akad (kiri) | Resepsi (kanan) */
-.ev-sec { padding: 80px 18px 64px; }
+.ev-sec { --ev-hl: var(--paper-deep); /* biru untuk teks sorotan (17, Akad Nikah, Resepsi) */
+  padding: 80px 18px 64px; }
+/* semua teks putih; judul section ikut putih, eyebrow biru */
+.ev-sec .sec-head h2 { color: #fff; }
+.ev-sec .sec-head .eyebrow { color: var(--ev-hl); }
 
 .ev {
   position: relative; max-width: min(440px, calc(100% - 24px)); margin: 0 auto;
@@ -32,11 +36,11 @@
   border-top: 1px solid rgb(var(--metal-pale-rgb) / .45);
   border-bottom: 1px solid rgb(var(--metal-pale-rgb) / .45);
   font-size: 10px; font-weight: 600; letter-spacing: .22em; text-transform: uppercase;
-  color: rgb(var(--ivory-rgb) / .85);
+  color: #fff;
 }
 .ev-date b {
   font-family: var(--font-display); font-weight: 400; font-size: 52px; line-height: 1;
-  color: var(--metal-pale);
+  color: var(--ev-hl);
 }
 .ev-vine { display: block; width: 150px; height: auto; margin: 16px auto 18px; color: var(--metal-pale); opacity: .8; }
 
@@ -50,20 +54,21 @@
 
 .ev-no {
   margin: 0; font-family: var(--font-display); font-style: italic; font-size: 14px;
-  color: var(--metal-pale); opacity: .8;
+  color: #fff; opacity: .85;
 }
-.ev-label { margin: 4px 0 0; color: var(--accent-soft); font-size: 10px; }
-.ev-col-date { margin: 8px 0 0; font-size: 12px; color: rgb(var(--ivory-rgb) / .8); }
+.ev-label { margin: 4px 0 0; color: var(--ev-hl); font-size: 10px; }
+.ev-col-date { margin: 8px 0 0; font-size: 12px; color: #fff; }
 .ev-time {
   margin: 10px 0 12px; font-family: var(--font-display); font-size: 17px; line-height: 1.25;
-  color: var(--ivory); font-variant-numeric: tabular-nums;
+  color: #fff; font-variant-numeric: tabular-nums;
 }
 .ev-time::after { content: ''; display: block; width: 26px; height: 1px; margin: 10px auto 0; background: rgb(var(--metal-pale-rgb) / .5); }
-.ev-venue { margin: 0; font-family: var(--font-display); font-size: 15px; line-height: 1.3; color: var(--ivory); }
+.ev-venue { margin: 0; font-family: var(--font-display); font-size: 15px; line-height: 1.3; color: #fff; }
 .ev-addr {
   margin: 8px 0 18px; flex: 1;
-  font-family: var(--font-serif); font-size: 14.5px; line-height: 1.4; color: rgb(var(--ivory-rgb) / .68);
+  font-family: var(--font-serif); font-size: 14.5px; line-height: 1.4; color: #fff;
 }
 .ev-map { font-size: 10.5px; padding-left: 12px; padding-right: 12px; }
+.ev .ev-map { color: #fff; border-color: rgb(255 255 255 / .5); }
 
 /* jalur benang di luar tepi kartu */

@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { gsap, useGSAP } from '../../lib/gsap';
+import { gsap, useGSAP, drawable, DRAW_HIDDEN, DRAW_SHOWN } from '../../lib/gsap';
 import Sprig from '../ornaments/Sprig';
 import InkText from '../ornaments/InkText';
 import { RoseCorner, RoseVine, bloomIn } from '../ornaments/Roses';
@@ -17,7 +17,7 @@ export default function Hero({ guestName, play }) {
 
   useGSAP(() => {
     tl.current = gsap.timeline({ paused: true })
-      .from('.sprig-path', { drawSVG: 0, duration: 1.6, stagger: { amount: 1 }, ease: 'power1.inOut' })
+      .fromTo(drawable(root.current.querySelectorAll('.sprig-path')), DRAW_HIDDEN, { ...DRAW_SHOWN, duration: 1.6, stagger: { amount: 1 }, ease: 'power1.inOut' })
       .add(() => bloomIn(root.current), 0.5)
       .from('.eyebrow', { opacity: 0, letterSpacing: '0.7em', duration: 1.1, ease: 'power3.out' }, 0.1)
       .to('.ink-text text', { strokeDashoffset: 0, duration: 2.4, ease: 'power1.inOut' }, 0.3)

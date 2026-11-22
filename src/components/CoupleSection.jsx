@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 import { Instagram } from 'lucide-react';
-import { gsap, useGSAP } from '../lib/gsap';
+import { gsap, useGSAP, drawable, DRAW_HIDDEN, DRAW_SHOWN } from '../lib/gsap';
 import InkText from './ornaments/InkText';
 import SectionSeam from './ornaments/SectionSeam';
 import OvalFrame from './ornaments/OvalFrame';
@@ -68,7 +68,7 @@ export default function CoupleSection() {
       // bingkai hias: garis emas tergambar, mutiara & renda menyusul, mawar puncak mekar
       const orn = el.querySelector('.arch-orn');
       gsap.timeline({ scrollTrigger: { trigger: el, start: 'top 70%' } })
-        .from(orn.querySelectorAll('.arch-orn-line'), { drawSVG: 0, duration: 1.6, stagger: 0.15, ease: 'power2.inOut' })
+        .fromTo(drawable(orn.querySelectorAll('.arch-orn-line')), DRAW_HIDDEN, { ...DRAW_SHOWN, duration: 1.6, stagger: 0.15, ease: 'power2.inOut' })
         .from(orn.querySelectorAll('.arch-pearl'), {
           scale: 0, transformOrigin: '50% 50%', duration: 0.4, ease: 'back.out(3)',
           stagger: { amount: 0.9, from: 'center' },

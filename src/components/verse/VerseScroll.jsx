@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { gsap, useGSAP, SplitText, ScrollTrigger } from '../../lib/gsap';
+import { gsap, useGSAP, SplitText, ScrollTrigger, drawable, DRAW_HIDDEN, DRAW_SHOWN } from '../../lib/gsap';
 import { useFontsReady } from '../../lib/useFontsReady';
 import Sprig from '../ornaments/Sprig';
 import { RoseCorner, RoseVine } from '../ornaments/Roses';
@@ -85,7 +85,7 @@ export default function VerseScroll() {
     });
 
     // 4) ornamen digambar, lalu jeda kecil sebelum lepas pin
-    tl.from('.scroll-content .sprig-path', { drawSVG: 0, duration: 0.2, stagger: { amount: 0.25 } }, 1.0)
+    tl.fromTo(drawable(content.querySelectorAll('.sprig-path')), DRAW_HIDDEN, { ...DRAW_SHOWN, duration: 0.2, stagger: { amount: 0.25 } }, 1.0)
       .to({}, { duration: 0.15 });
 
     // urutkan ulang (refreshPriority) lalu hitung ulang semua trigger dengan jarak pin yang baru

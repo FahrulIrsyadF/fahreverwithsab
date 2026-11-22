@@ -3,7 +3,7 @@ import './roses.css';
 
 /**
  * Ornamen mawar line-art, prosedural (tanpa file gambar). Gaya sama dengan Sprig:
- * semua garis ber-class "sprig-path" → bisa "digambar" DrawSVGPlugin oleh demo.
+ * semua garis ber-class "sprig-path" → bisa "digambar" lewat drawable() di lib/gsap.
  *  - RoseSprig  : ranting mawar (bunga mekar + kuncup + daun majemuk + duri). API = Sprig.
  *  - RoseCorner : rangkaian pojok (mekar, setengah mekar, kuncup, daun, baby's breath).
  *                 Didesain untuk pojok KIRI ATAS; pojok lain → CSS rotate(90/180/270deg).

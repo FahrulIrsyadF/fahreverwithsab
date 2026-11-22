@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { gsap, useGSAP, vibrate } from '../lib/gsap';
+import { gsap, useGSAP, vibrate, drawable, DRAW_HIDDEN, DRAW_SHOWN } from '../lib/gsap';
 import { useTilt, requestGyro, gyroNeedsPermission } from '../lib/useTilt';
 import { paletteColor, paletteRgb } from '../lib/palette';
 import Confetti from './ornaments/Confetti';
@@ -187,7 +187,7 @@ function ScratchCard() {
     gsap.from('.foil-card', { y: 80, rotationX: 50, opacity: 0, duration: 1.4, ease: 'power4.out', scrollTrigger: st, onComplete: entered });
     gsap.from('.foil-card .stagger', { y: 20, opacity: 0, stagger: 0.1, duration: 0.9, ease: 'power3.out', delay: 0.5, scrollTrigger: st });
     gsap.from('.coin', { scale: 0, rotation: -180, stagger: 0.12, duration: 1, ease: 'back.out(1.8)', delay: 0.9, scrollTrigger: st });
-    gsap.from('.foil-card .sprig-path', { drawSVG: 0, duration: 1.8, stagger: { amount: 0.9 }, ease: 'power1.inOut', delay: 0.6, scrollTrigger: st });
+    gsap.fromTo(drawable(root.current.querySelectorAll('.foil-card .sprig-path')), DRAW_HIDDEN, { ...DRAW_SHOWN, duration: 1.8, stagger: { amount: 0.9 }, ease: 'power1.inOut', delay: 0.6, scrollTrigger: st });
   }, { scope: root });
 
   const onReveal = (coinEl) => {

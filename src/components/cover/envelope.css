@@ -91,10 +91,11 @@
 }
 .flap-inner { transform: rotateX(180deg); }
 /* renda di tepi tutup (FlapLace) */
-.lace-fill { fill: rgb(255 253 247 / .34); }
-.lace-fill-sc { fill: rgb(255 253 247 / .5); }
-.lace-thread { stroke: rgb(255 253 247 / .9); }
-.lace-dot { fill: rgb(255 253 247 / .95); }
+/* renda sewarna amplop: isi biru kertas, benang biru sedikit lebih tua agar polanya terbaca */
+.lace-fill { fill: rgb(var(--paper-rgb) / .7); }
+.lace-fill-sc { fill: rgb(var(--paper-rgb) / .9); }
+.lace-thread { stroke: rgb(var(--paper-deep-rgb) / .95); }
+.lace-dot { fill: var(--paper-deep); }
 
 /* ---------- segel ---------- */
 .seal-wrap {
