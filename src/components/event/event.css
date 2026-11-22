@@ -1,5 +1,5 @@
 /* Rangkaian Acara — satu kartu undangan cetak: Akad (kiri) | Resepsi (kanan) */
-.ev-sec { padding: 80px 18px 32px; }
+.ev-sec { padding: 80px 18px 64px; }
 
 .ev {
   position: relative; max-width: min(440px, calc(100% - 24px)); margin: 0 auto;
@@ -9,6 +9,12 @@
   border: 1px solid rgb(var(--metal-pale-rgb) / .55);
   background: radial-gradient(90% 45% at 50% 0%, rgb(var(--base-700-rgb) / .55), transparent 75%);
 }
+/* renda di luar tepi kartu (EventLace) */
+.ev-lace { position: absolute; left: 0; top: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+.ev-lace-fill { fill: rgb(255 253 247 / .16); }
+.ev-lace-sc { fill: rgb(255 253 247 / .22); }
+.ev-lace-thread { stroke: rgb(255 253 247 / .8); }
+.ev-lace-dot { fill: rgb(255 253 247 / .9); }
 /* garis kedua (bingkai ganda) */
 .ev::before {
   content: ''; position: absolute; inset: 7px; pointer-events: none;

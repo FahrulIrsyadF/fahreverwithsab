@@ -3,6 +3,7 @@ import SectionSeam from './ornaments/SectionSeam';
 import GoldDust from './ornaments/GoldDust';
 import { RoseVine } from './ornaments/Roses';
 import { EVENTS } from '../data/wedding';
+import EventLace from './event/EventLace';
 import './event/event.css';
 
 /** "Sabtu, 17 Juli 2027" → ['Sabtu', '17', 'Juli 2027'] */
@@ -32,7 +33,8 @@ export default function EventDetails() {
         <RoseVine className="sec-rule" w={220} h={40} seed={57} />
       </header>
 
-      <article className="ev" data-reveal data-anchor="1.035,0.9">
+      <article className="ev" data-reveal data-anchor="1.08,0.9">
+        <EventLace />
         {sameDate && (
           <div className="ev-date" aria-label={EVENTS[0].date}>
             <span>{day}</span>
