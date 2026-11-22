@@ -97,7 +97,7 @@ export default function VerseScroll() {
 
   return (
     <section className="sec sec-dark verse-sec" id="ayat" ref={root}>
-      <SectionSeam into="dark" side="right" seed={3} />
+      <SectionSeam into="dark" side="right" seed={3} plain />
       <GoldDust count={45} />
 
       {/* tanpa judul section: langsung gulungan */}

@@ -22,7 +22,8 @@ export const WEDDING = {
     'https://calendar.google.com/calendar/render?action=TEMPLATE&text=The+Wedding+of+Sabrina+%26+Fahrul&dates=20270717T010000Z/20270717T080000Z&details=Pernikahan+Fahrul+Irsyad+Fianto+%26+Sabrina+Nabila+Kholiqin.+Sabtu,+17+Juli+2027.&location=Paiton,+Kabupaten+Probolinggo,+Jawa+Timur',
   // TODO(§2 #5): isi dengan lagu bebas royalti pilihan sendiri (Pixabay Music / YouTube Audio Library),
   // simpan di /public/music/ lalu tulis path-nya, mis. '/music/lagu.mp3'. null = tanpa musik (tombol musik disembunyikan).
-  music: '/music/nothing.mp3', // Bruno Major - Nothing
+  music: '/music/nothing.mp3',
+  musicTitle: 'Bruno Major — Nothing',
 };
 
 export const COUPLE = [
@@ -106,11 +107,8 @@ export const EVENTS = [
   },
 ];
 
-export const GALLERY = [
-  { id: 1, src: u('1519741497674-611481863552', 800), caption: 'Langkah Awal Menuju Abadi', tag: 'FIG. 01 — PREWEDDING', wide: true },
-  { id: 2, src: u('1511285560929-80b456fea0bc', 500), caption: 'Tatap Teduh & Ketulusan', tag: 'FIG. 02 — INTIMATE' },
-  { id: 3, src: u('1583939003579-730e3918a45a', 500), caption: 'Dua Hati Bersatu', tag: 'FIG. 03 — FOREVER' },
-];
+// Foto polaroid di section pemutar musik (landscape ±4:3 paling pas)
+export const MUSIC_PHOTO = { src: u('1519741497674-611481863552', 800), alt: 'Sabrina & Fahrul' };
 
 export const GIFT = {
   accounts: [

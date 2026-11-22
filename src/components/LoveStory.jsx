@@ -13,7 +13,7 @@ import './story/story.css';
 const LINE = '62%';
 
 /**
- * Kisah Cinta — setelah Galeri. Benang merah (dari Mempelai, lewat Acara & Galeri) berakhir di badge "01"
+ * Kisah Cinta — setelah Acara. Benang merah (dari Mempelai, lewat Acara) berakhir di badge "01"
  * (badge menyala + berdenyut saat benang tiba), lalu spine timeline melanjutkan 01 → 02 → 03.
  * Spine digerakkan GSAP (transform scaleY, scrub) — tanpa setState per frame.
  */
@@ -80,7 +80,7 @@ export default function LoveStory() {
 
   return (
     <section className="sec sec-dark story-sec" id="kisah" ref={root}>
-      <SectionSeam into="dark" side="right" seed={23} anchor="0.3,0.5" />
+      <SectionSeam into="dark" side="right" seed={23} anchor="0.3,0.5" plain />
       <GoldDust count={16} />
 
       <header className="sec-head" data-anchor="0.97,0.6">

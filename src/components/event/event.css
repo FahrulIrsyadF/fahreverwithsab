@@ -60,6 +60,4 @@
 }
 .ev-map { font-size: 10.5px; padding-left: 12px; padding-right: 12px; }
 
-.ev-tail { height: 40px; }
 /* jalur benang di luar tepi kartu */
-.ev-sec > .thread-stitch, .ev-tail { margin: 0 -14px; }

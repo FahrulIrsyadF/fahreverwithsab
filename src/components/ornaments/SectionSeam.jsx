@@ -10,19 +10,20 @@ import { RoseVine } from './Roses';
  *  - into="blue" : section biru powder (`.sec-blue`) → kertas sobek berwarna biru
  * Ranting di sisi `side` (bergantian kiri/kanan antar sambungan) tumbuh mengikuti scroll
  * (animasi di App: `.seam-sprig`). `anchor` = jangkar benang merah (opsional).
+ * `plain`: tanpa sobekan/renda (section sebelumnya berwarna sama, mis. gelap → gelap).
  */
-export default function SectionSeam({ into = 'light', side = 'left', seed = 7, anchor, vine = true }) {
+export default function SectionSeam({ into = 'light', side = 'left', seed = 7, anchor, vine = true, plain = false }) {
   const torn = into !== 'dark';
   const dark = torn ? '' : ' seam-on-dark';
   return (
     <>
-      <Seam
+      {!plain && <Seam
         variant={torn ? 'torn' : 'lace'}
         color={into === 'blue' ? 'var(--paper-lo)' : torn ? 'var(--paper)' : 'var(--base-900)'}
         seed={seed}
         height={torn ? 44 : 40}
         className="seam-top"
-      />
+      />}
       {vine && <RoseVine className={`seam-vine${dark}`} w={400} h={46} seed={seed + 4} fillLeaves={torn} />}
       <div className={`seam-sprig seam-sprig-${side === 'left' ? 'l' : 'r'}${dark}`} data-anchor={anchor}>
         <Sprig length={side === 'left' ? 150 : 140} bend={side === 'left' ? 36 : -32} leafSize={side === 'left' ? 20 : 19} seed={seed + 20} fillLeaves />

@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Heart, Scroll, Calendar, Gift, MailCheck } from 'lucide-react';
 
-// Urutan mengikuti urutan section: Mempelai → Acara → (Galeri) → Kisah → RSVP → Kado
+// Urutan mengikuti urutan section: Mempelai → Acara → Kisah → RSVP → Kado
 const NAV_ITEMS = [
   { id: 'mempelai', label: 'MEMPELAI', icon: Heart },
   { id: 'acara', label: 'ACARA', icon: Calendar },

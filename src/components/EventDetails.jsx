@@ -2,7 +2,6 @@ import { MapPin } from 'lucide-react';
 import SectionSeam from './ornaments/SectionSeam';
 import GoldDust from './ornaments/GoldDust';
 import { RoseVine } from './ornaments/Roses';
-import ThreadStitch from './thread/ThreadStitch';
 import { EVENTS } from '../data/wedding';
 import './event/event.css';
 
@@ -16,8 +15,7 @@ function splitDate(s) {
 /**
  * Rangkaian Acara — satu kartu undangan cetak (bingkai lengkung emas bergaris ganda) berisi
  * Akad di kiri dan Resepsi di kanan, dipisah garis emas. Tanggal yang sama ditulis sekali di atas.
- * Benang merah menyusur tepi kanan kartu, menyeberang di bawahnya (ThreadStitch), lalu turun
- * di tepi kiri menuju Galeri.
+ * Benang merah menyusur tepi kanan kartu lalu terus turun ke ranting sambungan Kisah Cinta.
  */
 export default function EventDetails() {
   const sameDate = EVENTS.every((ev) => ev.date === EVENTS[0].date);
@@ -34,7 +32,7 @@ export default function EventDetails() {
         <RoseVine className="sec-rule" w={220} h={40} seed={57} />
       </header>
 
-      <article className="ev" data-reveal>
+      <article className="ev" data-reveal data-anchor="1.035,0.9">
         {sameDate && (
           <div className="ev-date" aria-label={EVENTS[0].date}>
             <span>{day}</span>
@@ -65,9 +63,6 @@ export default function EventDetails() {
         </div>
       </article>
 
-      {/* benang menyeberang di bawah kartu, lalu turun di tepi kiri menuju ranting sambungan Galeri */}
-      <ThreadStitch from="right" height={48} single />
-      <div className="ev-tail" data-anchor="0.08,0.95" aria-hidden="true" />
     </section>
   );
 }

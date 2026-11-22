@@ -11,7 +11,7 @@ import VerseScroll from './components/verse/VerseScroll';
 import CoupleSection from './components/CoupleSection';
 import LoveStory from './components/LoveStory';
 import EventDetails from './components/EventDetails';
-import Gallery from './components/Gallery';
+import MusicPlayer from './components/MusicPlayer';
 import WeddingGift from './components/WeddingGift';
 import RSVPSection from './components/RSVPSection';
 import Footer from './components/Footer';
@@ -174,13 +174,13 @@ export default function App() {
         >
           <ThreadLayer pageRef={mainRef} active={isOpened} />
           <Hero guestName={validatedGuest} play={isOpened} />
-          {/* Urutan (usulan calon istri): isi amplop (+ countdown) → ayat → mempelai →
-              acara → galeri → kisah → kehadiran & doa → amplop digital → penutup.
-              Benang merah: Mempelai → Acara → Galeri → badge 01 Kisah (ayat ter-pin berada SEBELUM benang). */}
+          {/* Urutan (usulan calon istri): isi amplop (+ countdown) → pemutar musik → ayat → mempelai →
+              acara → kisah → kehadiran & doa → amplop digital → penutup.
+              Benang merah: Mempelai → Acara → badge 01 Kisah (musik & ayat ter-pin berada SEBELUM benang). */}
+          <MusicPlayer isPlaying={isPlaying} onToggle={toggleAudio} />
           <VerseScroll />
           <CoupleSection />
           <EventDetails />
-          <Gallery />
           <LoveStory />
           <RSVPSection guestName={validatedGuest} />
           <WeddingGift />
