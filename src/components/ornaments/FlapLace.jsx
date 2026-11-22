@@ -47,7 +47,7 @@ function build() {
   };
   scallop([TIP[0], TIP[1] - 1], [1, 0], [0, 1]);
   edges.forEach(({ L, u, n, pt }) => {
-    for (let s = L - STEP; s >= 22; s -= STEP) scallop(pt(s, -1), u, n);
+    for (let s = L - STEP; s >= -R; s -= STEP) scallop(pt(s, -1), u, n);
   });
 
   return { fill: fills.join(''), strip: strips.join(''), line: lines.join(''), teeth: teeth.join(''), dots: dots.join(''), rings: rings.join('') };
@@ -57,7 +57,9 @@ const LACE = build();
 
 export default function FlapLace() {
   return (
-    <g className="flap-lace" fill="none" strokeLinecap="round" strokeLinejoin="round">
+    <g className="flap-lace" fill="none" strokeLinecap="round" strokeLinejoin="round" clipPath="url(#flap-lace-clip)">
+      {/* renda penuh sampai sudut atas, dipotong rapi di tepi amplop */}
+      <clipPath id="flap-lace-clip"><rect x="0" y="0" width="340" height="230" /></clipPath>
       <path d={LACE.strip} className="lace-fill" />
       <path d={LACE.fill} className="lace-fill lace-fill-sc" />
       <path d={LACE.teeth} className="lace-thread" strokeWidth=".55" />
