@@ -3,8 +3,7 @@ import { Instagram } from 'lucide-react';
 import { gsap, useGSAP } from '../lib/gsap';
 import InkText from './ornaments/InkText';
 import SectionSeam from './ornaments/SectionSeam';
-import { RoseCorner } from './ornaments/Roses';
-import ArchFrame from './ornaments/ArchFrame';
+import OvalFrame from './ornaments/OvalFrame';
 import { COUPLE } from '../data/wedding';
 import './couple/couple.css';
 
@@ -13,13 +12,14 @@ function Person({ p }) {
   return (
     <article className={`person person-${p.side}`}>
       {/* jangkar benang: kanan foto atas (wanita) → (simpul "&") → kiri foto bawah (pria) */}
-      <div className="arch-wrap" data-anchor={left ? '1.04,0.4' : '-0.04,0.55'}>
-        <RoseCorner className={`arch-corner arch-corner-${p.side}`} seed={left ? 6 : 13} />
+      {/* dua titik per foto agar benang memutari bingkai oval (bukan menyilang renda) */}
+      <div className="arch-wrap" data-anchor={left ? '1.16,0.4' : '-0.13,0.2'}>
+        <span className="arch-anchor" data-anchor={left ? '1.12,0.84' : '-0.16,0.58'} aria-hidden="true" />
         <div className="arch">
           {/* ukuran bingkai tetap (aspect-ratio) → tidak perlu refresh ScrollTrigger saat foto dimuat */}
           <img src={p.photo} alt={p.full} loading="lazy" decoding="async" />
         </div>
-        <ArchFrame seed={left ? 3 : 9} />
+        <OvalFrame seed={left ? 3 : 9} side={p.side} />
       </div>
       <div className="person-text">
         <InkText
@@ -56,9 +56,9 @@ export default function CoupleSection() {
     gsap.utils.toArray('.person').forEach((el) => {
       const left = el.classList.contains('person-left');
       const arch = el.querySelector('.arch');
-      // pintu lengkung terbuka dari bawah, foto zoom-out pelan
-      gsap.fromTo(arch, { clipPath: 'inset(100% 0% 0% 0% round 999px 999px 0px 0px)' }, {
-        clipPath: 'inset(0% 0% 0% 0% round 999px 999px 0px 0px)', ease: 'none',
+      // foto oval membuka dari tengah, foto zoom-out pelan
+      gsap.fromTo(arch, { clipPath: 'ellipse(0% 0% at 50% 50%)' }, {
+        clipPath: 'ellipse(50% 50% at 50% 50%)', ease: 'none',
         scrollTrigger: { trigger: el, start: 'top 88%', end: 'top 30%', scrub: 1 },
       });
       gsap.fromTo(arch.querySelector('img'), { scale: 1.4, yPercent: -6 }, {
@@ -74,7 +74,8 @@ export default function CoupleSection() {
           stagger: { amount: 0.9, from: 'center' },
         }, 0.4)
         .from(orn.querySelector('.arch-orn-lace'), { opacity: 0, duration: 1 }, 0.9)
-        .from(orn.querySelector('.arch-orn-crown'), { scale: 0, rotation: -40, transformOrigin: '50% 50%', duration: 1, ease: 'back.out(2)' }, 0.8);
+        .from(orn.querySelectorAll('.arch-orn-crown'), { scale: 0, transformOrigin: '50% 100%', duration: 1, ease: 'back.out(2)', stagger: 0.2 }, 0.8)
+        .from(orn.querySelector('.arch-orn-bouquet'), { scale: 0, rotation: left ? -30 : 30, transformOrigin: '50% 0%', duration: 1.1, ease: 'back.out(1.6)' }, 1.1);
       // nama ditulis tinta, lalu detail muncul berurutan
       gsap.timeline({ scrollTrigger: { trigger: el.querySelector('.person-text'), start: 'top 78%' } })
         .from(el.querySelector('.eyebrow'), { opacity: 0, x: left ? 20 : -20, duration: 0.6 })

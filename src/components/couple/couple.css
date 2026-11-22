@@ -7,24 +7,28 @@
 .cp-head p:last-child { margin: 0; font-family: var(--font-serif); font-size: 18px; line-height: 1.5; color: var(--muted); }
 
 .person { position: relative; z-index: 2; max-width: 420px; margin: 0 auto; }
-.arch-wrap { position: relative; width: 60%; aspect-ratio: 0.72; margin: 34px 0 0 16px; }
-.person-right .arch-wrap { margin-left: auto; margin-right: 16px; }
+.arch-wrap { position: relative; width: 58%; aspect-ratio: 0.72; margin: 46px 0 0 30px; }
+.person-right .arch-wrap { margin-left: auto; margin-right: 30px; }
 .arch {
   position: absolute; inset: 0;
-  border-radius: 999px 999px 0 0;
+  border-radius: 50%;
   overflow: hidden;
   background: var(--paper-lo);
   box-shadow: 0 30px 40px -24px rgb(var(--ink-rgb) / .55);
 }
 .arch img { width: 100%; height: 100%; object-fit: cover; filter: sepia(.08) saturate(.95); transform-origin: 50% 60%; }
-/* bingkai hias (ArchFrame): digambar di luar batas foto */
+/* bingkai hias (OvalFrame): digambar di luar batas foto */
 .arch-orn { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 2; overflow: visible; color: var(--metal); pointer-events: none; }
 .arch-orn-outer { color: var(--metal-bright, var(--metal)); }
 .arch-pearl { fill: var(--paper-hi); stroke: var(--metal); stroke-width: 1; }
-.arch-crown-bg { fill: var(--paper); }
-.arch-orn-crown .rose-fill { fill: rgb(var(--metal-rgb) / .22); }
+.oval-orn { filter: drop-shadow(0 6px 8px rgb(var(--shade-rgb) / .28)); }
+/* rangkaian mawar: kelopak gading bergaris emas, daun hijau zamrud */
+.oval-bq-rose { color: var(--metal-deep); }
+.oval-bq-rose .rose-fill { fill: var(--paper-hi); fill-opacity: 1; stroke: var(--metal); stroke-width: .6; }
+.oval-bq-leaf, .oval-bq-bud { color: var(--base-700); }
+.oval-bq-leaf path[fill="currentColor"] { fill-opacity: .55; }
 
-.person-text { position: relative; margin-top: -58px; }
+.person-text { position: relative; margin-top: -14px; }
 .person-left .person-text { text-align: right; padding-left: 26%; }
 .person-right .person-text { text-align: left; padding-right: 26%; }
 .person-nick { display: block; width: 100%; height: auto; overflow: visible; filter: drop-shadow(0 2px 0 var(--paper)) drop-shadow(0 -2px 0 var(--paper)); }
@@ -49,9 +53,6 @@
 .cp-amp-ring-2 { inset: 12px; border-style: dashed; border-color: rgb(var(--metal-rgb) / .4); }
 .cp-tail { height: 40px; }
 
-
-.arch-corner { position: absolute; z-index: 1; width: 46%; bottom: -22px; color: var(--metal); }
-.arch-corner-left { left: -22px; transform: rotate(270deg); }
-.arch-corner-right { right: -22px; transform: rotate(180deg); }
 .person-ig { display: inline-flex; align-items: center; gap: 6px; }
 .person-ig svg { width: 13px; height: 13px; color: var(--accent); }
+.arch-anchor { position: absolute; inset: 0; pointer-events: none; }
