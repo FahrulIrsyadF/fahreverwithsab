@@ -3,7 +3,7 @@ import { gsap, useGSAP, vibrate, reduceMotion } from '../lib/gsap';
 import { useTilt, requestGyro } from '../lib/useTilt';
 import WaxSeal, { CRACK_POINTS } from './ornaments/WaxSeal';
 import Sprig from './ornaments/Sprig';
-import FlapLace from './ornaments/FlapLace';
+import FlapLace, { FlapClip, FLAP_PATH, FLAP_INNER_PATH, CORNER_R } from './ornaments/FlapLace';
 import GoldDust from './ornaments/GoldDust';
 import { WEDDING } from '../data/wedding';
 import './cover/envelope.css';
@@ -238,7 +238,7 @@ export default function CoverScreen({ guestName, onOpen, onDone, onStartAudio })
               <div className="env">
                 {/* bagian dalam amplop (liner) */}
                 <svg className="env-back env-drop" viewBox="0 0 340 224" preserveAspectRatio="none" aria-hidden="true">
-                  <rect width="340" height="224" rx="8" fill="url(#env-liner)" />
+                  <rect width="340" height="224" rx={CORNER_R} fill="url(#env-liner)" />
                 </svg>
 
                 {/* surat undangan */}
@@ -253,23 +253,33 @@ export default function CoverScreen({ guestName, onOpen, onDone, onStartAudio })
 
                 {/* kantong depan */}
                 <svg className="env-pocket env-drop" viewBox="0 0 340 224" preserveAspectRatio="none" aria-hidden="true">
+                  <clipPath id="env-pocket-clip"><rect width="340" height="224" rx={CORNER_R} /></clipPath>
+                  <g clipPath="url(#env-pocket-clip)">
                   <path d="M0 0 L166 122 L0 224 Z" fill="url(#env-side-l)" />
                   <path d="M340 0 L174 122 L340 224 Z" fill="url(#env-side-r)" />
                   <path d="M0 0 L166 122 L0 224 Z M340 0 L174 122 L340 224 Z" fill="url(#env-grain)" />
                   <path d={POCKET_BOTTOM} fill="url(#env-bottom)" filter="url(#env-lift)" />
                   <path d={POCKET_BOTTOM} fill="url(#env-grain)" />
+                  </g>
                 </svg>
 
                 {/* tutup amplop (flap) — dua sisi */}
                 <div className="env-flap env-drop">
                   <svg className="flap-face flap-outer" viewBox="0 0 340 140" preserveAspectRatio="none" aria-hidden="true">
-                    <path d="M0 0 L340 0 L184 126 Q170 138 156 126 Z" fill="url(#env-flap)" filter="url(#env-flapshadow)" />
-                    <path d="M0 0 L340 0 L184 126 Q170 138 156 126 Z" fill="url(#env-grain)" />
-                    <FlapLace />
+                    {/* sudut atas membulat, ujung tutup melengkung lebar & bertemu segel */}
+                    <FlapClip id="flap-clip" />
+                    <g clipPath="url(#flap-clip)">
+                      <path d={FLAP_PATH} fill="url(#env-flap)" filter="url(#env-flapshadow)" />
+                      <path d={FLAP_PATH} fill="url(#env-grain)" />
+                    </g>
+                    <FlapLace clip="flap-clip" />
                   </svg>
                   <svg className="flap-face flap-inner" viewBox="0 0 340 140" preserveAspectRatio="none" aria-hidden="true">
-                    <path d="M0 140 L340 140 L184 14 Q170 2 156 14 Z" fill="url(#env-liner)" />
-                    <path d="M0 140 L340 140 L184 14 Q170 2 156 14 Z" fill="none" style={{ stroke: 'var(--metal-bright)' }} strokeOpacity=".5" />
+                    <FlapClip id="flap-clip-in" inner />
+                    <g clipPath="url(#flap-clip-in)">
+                      <path d={FLAP_INNER_PATH} fill="url(#env-liner)" />
+                      <path d={FLAP_INNER_PATH} fill="none" style={{ stroke: 'var(--metal-bright)' }} strokeOpacity=".5" />
+                    </g>
                   </svg>
                 </div>
 

@@ -79,8 +79,6 @@
 .seam svg { display: block; width: 100%; height: 100%; }
 .seam-top { bottom: calc(100% - 1px); }
 .seam-torn { filter: drop-shadow(0 -3px 4px rgba(0, 0, 0, .25)); }
-.seam-dots { position: absolute; left: 0; right: 0; display: flex; justify-content: space-around; transform: translateY(-50%); }
-.seam-dots span { width: 5px; height: 5px; border-radius: 50%; background: var(--metal-bright); box-shadow: 0 0 6px rgb(var(--metal-pale-rgb) / .7); }
 
 .seam-sprig { position: absolute; z-index: 2; width: 100px; color: var(--metal); pointer-events: none; }
 .seam-sprig svg { width: 100%; height: auto; }

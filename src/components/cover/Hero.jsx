@@ -1,6 +1,5 @@
 import { useRef } from 'react';
 import { gsap, useGSAP, drawable, DRAW_HIDDEN, DRAW_SHOWN } from '../../lib/gsap';
-import Sprig from '../ornaments/Sprig';
 import InkText from '../ornaments/InkText';
 import { RoseCorner, RoseVine, bloomIn } from '../ornaments/Roses';
 import Countdown from '../Countdown';
@@ -32,15 +31,17 @@ export default function Hero({ guestName, play }) {
 
   return (
     <section className="hero" id="beranda" ref={root} aria-label="Undangan" data-bloom-manual>
-      <RoseCorner className="hero-corner hero-corner-bl" seed={4} />
-      <RoseCorner className="hero-corner hero-corner-br" seed={9} />
-      <Sprig className="hero-sprig hero-sprig-r" length={150} bend={-34} leafSize={20} seed={11} />
       <p className="eyebrow">The Wedding of</p>
       <InkText text={WEDDING.names} fontSize={54} width={380} height={110} gradient="base" className="hero-names" />
       <RoseVine className="hero-vine" w={240} seed={7} />
       <p className="hero-date reveal">{WEDDING.dateLong}</p>
-      <p className="hero-place reveal">{WEDDING.place}</p>
-      <p className="hero-to reveal">Kepada Yth. Bapak/Ibu/Saudara/i <strong>{guestName}</strong></p>
+      {/* mawar mengapit nama tamu, tepat di atas hitung mundur */}
+      <div className="hero-flank">
+        <RoseCorner className="hero-corner hero-corner-bl" seed={4} />
+        <RoseCorner className="hero-corner hero-corner-br" seed={9} />
+        <p className="hero-place reveal">{WEDDING.place}</p>
+        <p className="hero-to reveal">Kepada Yth. Bapak/Ibu/Saudara/i <strong>{guestName}</strong></p>
+      </div>
       {/* hitung mundur digabung ke section pertama (dulu section Save the Date tersendiri) */}
       <div className="hero-cd reveal"><Countdown /></div>
     </section>
