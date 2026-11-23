@@ -21,9 +21,8 @@
 /* ---------- dek: semua posisi dalam satuan 340×294 (sama dengan viewBox lengan jarum) ---------- */
 .mp-deck { position: relative; aspect-ratio: 340 / 294; margin-top: -7%; }
 .mp-disc-wrap {
-  position: absolute; left: 10.88%; top: 0; width: 78.24%; aspect-ratio: 1; z-index: 1;
-  /* bagian bawah piringan "masuk" ke celah kotak */
-  clip-path: inset(-40px -40px 9% -40px);
+  /* piringan paling depan: tidak tertutup foto, kotak, maupun lengan jarum */
+  position: absolute; left: 10.88%; top: 0; width: 78.24%; aspect-ratio: 1; z-index: 5;
 }
 .mp-disc { position: relative; width: 100%; height: 100%; }
 
