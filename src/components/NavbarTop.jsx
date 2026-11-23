@@ -8,9 +8,9 @@ export default function NavbarTop({ isPlaying, onToggleMusic }) {
       <div className="relative flex justify-between items-center w-full px-5 max-w-lg mx-auto h-14">
         <span className="text-[9px] font-bold tracking-[0.2em] text-accent">{WEDDING.dateCompact}</span>
 
-        {/* monogram di tengah (nanti diganti logo) */}
+        {/* logo mempelai di tengah */}
         <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-          <BrandMonogram size="md" variant="emerald" />
+          <BrandMonogram height={40} color="var(--base-800)" style={{ display: 'block' }} />
         </div>
 
         {onToggleMusic && (

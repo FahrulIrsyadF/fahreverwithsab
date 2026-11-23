@@ -2,6 +2,7 @@ import { useRef, useEffect } from 'react';
 import { gsap, useGSAP } from '../lib/gsap';
 import SectionSeam from './ornaments/SectionSeam';
 import GoldDust from './ornaments/GoldDust';
+import BrandMonogram from './BrandMonogram';
 import { WEDDING, MUSIC_PHOTO } from '../data/wedding';
 import './music/music.css';
 
@@ -68,7 +69,7 @@ export default function MusicPlayer({ isPlaying, onToggle }) {
           <div className="mp-base">
             <span className="mp-slot" />
             <span className="mp-knob" /><span className="mp-knob" />
-            <span className="mp-brand">S &amp; F</span>
+            <span className="mp-brand"><BrandMonogram height={34} decorative color="linear-gradient(135deg, var(--metal-light), var(--metal-bright) 45%, var(--metal-deep))" style={{ display: 'block' }} /></span>
           </div>
 
           {/* lengan jarum (koordinat = satuan dek 340×294): berporos di kotak, turun ke piringan saat musik diputar */}

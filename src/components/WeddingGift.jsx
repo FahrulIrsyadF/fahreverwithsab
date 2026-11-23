@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import BrandMonogram from './BrandMonogram';
 import { ScrollTrigger } from '../lib/gsap';
 import { Copy, Check } from 'lucide-react';
 import SectionSeam from './ornaments/SectionSeam';
@@ -110,7 +111,7 @@ export default function WeddingGift() {
 
         {activeTab === 'physical' && (
           <div className="gift-label animate-fadeIn">
-            <span className="gift-stamp" aria-hidden="true">{WEDDING.monogram}</span>
+            <span className="gift-stamp" aria-hidden="true"><BrandMonogram height={34} color="var(--base-800)" decorative /></span>
             <span className="gift-to">Kepada</span>
             <p className="gift-recipient">{address.recipient}</p>
             <p className="gift-address">{address.fullAddress}</p>

@@ -25,7 +25,7 @@ export default function Footer() {
       <GoldDust count={40} />
 
       <div className="foot-inner sec-inner max-w-sm mx-auto">
-        <WaxSeal monogram={WEDDING.monogram} className="foot-seal w-20 mx-auto mb-4" />
+        <WaxSeal className="foot-seal w-20 mx-auto mb-4" />
 
         <InkText text={WEDDING.names} fontSize={52} width={360} height={100} gradient="pale" className="w-full h-auto overflow-visible my-1" />
         <RoseVine className="sec-rule reveal" w={220} h={40} seed={113} />

@@ -302,8 +302,8 @@ export default function CoverScreen({ guestName, onOpen, onDone, onStartAudio })
                     onKeyDown={onKey}
                     onContextMenu={(e) => e.preventDefault()}
                   >
-                    <WaxSeal monogram={WEDDING.monogram} half="left" className="seal-half seal-half-l" />
-                    <WaxSeal monogram={WEDDING.monogram} half="right" className="seal-half seal-half-r" />
+                    <WaxSeal half="left" className="seal-half seal-half-l" />
+                    <WaxSeal half="right" className="seal-half seal-half-r" />
                     <svg className="seal-crack" viewBox="0 0 200 200" aria-hidden="true">
                       <polyline points={CRACK_POINTS} fill="none" style={{ stroke: 'var(--base-950)' }} strokeWidth="3" strokeLinejoin="round" />
                     </svg>

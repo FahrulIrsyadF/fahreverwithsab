@@ -1,48 +1,71 @@
 // Bentuk tutup amplop + renda di tepinya (koordinat = viewBox tutup 340×140).
-// Ujung tutup tidak runcing: lengkung besar (jari-jari TIP_R) yang bagian bawahnya tertutup segel.
+// Ujung tutup tetap runcing (sedikit membulat di bawah segel); yang dibuat lembut adalah
+// SUDUT tutup di tepi kiri/kanan amplop: tepi tutup turun sebentar di sisi amplop lalu
+// melengkung masuk ke garis miring (seperti amplop kertas asli).
 // Semua bagian renda digabung ke beberapa <path> saja (ringan saat tutup diputar 3D).
 const W = 340;
-const TIP_R = 64;       // jari-jari lengkung ujung tutup
-const TIP_BOTTOM = 133; // titik terbawah lengkung (≈ pusat segel)
-export const CORNER_R = 12; // sudut amplop membulat
+const APEX = [W / 2, 139];  // titik ujung semu (dibulatkan sedikit)
+const SIDE_Y = 26;          // titik semu tempat garis miring bertemu sisi amplop
+const SIDE_R = 36;          // jari-jari lengkung di sisi amplop
+const TIP_K = 16;           // panjang pembulatan ujung
+export const CORNER_R = 6;  // sudut amplop sedikit membulat
 const R = 14.5;      // jari-jari lengkung renda
 const STEP = 28;     // jarak antar lengkung
 const f = (n) => Math.round(n * 10) / 10;
 const circle = ([x, y], r) => `M${f(x - r)} ${f(y)}a${r} ${r} 0 1 0 ${2 * r} 0a${r} ${r} 0 1 0 ${-2 * r} 0`;
 
-/** Geometri tepi bawah tutup: garis lurus dari sudut, lengkung bulat di tengah. */
-function geometry() {
-  // cari titik sudut semu V (perpotongan sisi dari (0,0) & (340,0)) agar dasar lengkung tepat di TIP_BOTTOM
-  let vy = TIP_BOTTOM + 20;
-  for (let i = 0; i < 40; i++) {
-    const s = (W / 2) / Math.hypot(W / 2, vy); // sin setengah sudut ujung
-    vy = TIP_BOTTOM - TIP_R + TIP_R / s;
-  }
-  const L = Math.hypot(W / 2, vy), sinT = (W / 2) / L, tanT = (W / 2) / vy;
-  const d = TIP_R / tanT; // jarak titik singgung dari V
-  const ux = (W / 2) / L, uy = vy / L; // arah sisi kiri (dari sudut ke V)
-  const tl = [W / 2 - ux * d, vy - uy * d], tr = [W / 2 + ux * d, vy - uy * d];
-  const cy = vy - TIP_R / sinT;
-  return { ux, uy, tl, tr, cy, a0: Math.atan2(tl[1] - cy, tl[0] - W / 2), lenLine: L - d };
+/** Tepi bawah tutup kiri→kanan sebagai segmen: ['L', p] | ['Q', c, p], mulai dari `start`. */
+function edge() {
+  const dx = APEX[0], dy = APEX[1] - SIDE_Y, L = Math.hypot(dx, dy);
+  const u = [dx / L, dy / L];
+  const t = SIDE_R * Math.tan(Math.acos(u[1]) / 2); // jarak titik singgung dari sudut semu
+  const V = [0, SIDE_Y];
+  const a = [0, SIDE_Y - t], b = [u[0] * t, SIDE_Y + u[1] * t];
+  const c = [APEX[0] - u[0] * TIP_K, APEX[1] - u[1] * TIP_K];
+  const m = (p) => [W - p[0], p[1]];
+  return {
+    start: [0, -30],
+    segs: [['L', a], ['Q', V, b], ['L', c], ['Q', APEX, m(c)], ['L', m(b)], ['Q', m(V), m(a)], ['L', [W, -30]]],
+  };
 }
-const G = geometry();
-
-/** Path tutup amplop (sisi luar). */
-export const FLAP_PATH = `M0 0 L${W} 0 L${f(G.tr[0])} ${f(G.tr[1])} A${TIP_R} ${TIP_R} 0 0 1 ${f(G.tl[0])} ${f(G.tl[1])} Z`;
-/** Path sisi dalam tutup (dicerminkan vertikal, terlihat setelah tutup terbuka 180°). */
-export const FLAP_INNER_PATH = `M0 140 L${W} 140 L${f(G.tr[0])} ${f(140 - G.tr[1])} A${TIP_R} ${TIP_R} 0 0 0 ${f(G.tl[0])} ${f(140 - G.tl[1])} Z`;
-
-/** Titik rapat di sepanjang tepi kiri→kanan (diperpanjang melewati sudut, nanti dipotong clip). */
-function outline() {
-  const pts = [];
-  const ext = 40;
-  for (let s = -ext; s <= G.lenLine; s += 1) pts.push([G.ux * s, G.uy * s]);
-  const a1 = Math.PI - G.a0; // sudut titik singgung kanan
-  for (let i = 1; i < 60; i++) {
-    const a = G.a0 + ((a1 - G.a0) * i) / 60;
-    pts.push([W / 2 + TIP_R * Math.cos(a), G.cy + TIP_R * Math.sin(a)]);
+const E = edge();
+const pathOf = (mapY = (y) => y) => {
+  const P = ([x, y]) => `${f(x)} ${f(mapY(y))}`;
+  // path tutup: mulai dari sudut atas kiri, sisi atas, lalu tepi bawah dari kanan ke kiri
+  const segs = E.segs.slice(0, -1); // tanpa perpanjangan ke atas
+  let d = `M0 ${f(mapY(0))}L${W} ${f(mapY(0))}`;
+  // telusuri terbalik (kanan → kiri)
+  const pts = [E.start, ...segs.map((s) => s[s.length - 1])];
+  d += `L${P(pts[segs.length])}`;
+  for (let i = segs.length - 1; i >= 1; i--) {
+    const s = segs[i], to = pts[i];
+    d += s[0] === 'L' ? `L${P(to)}` : `Q${P(s[1])} ${P(to)}`;
   }
-  for (let s = G.lenLine; s >= -ext; s -= 1) pts.push([W - G.ux * s, G.uy * s]);
+  return `${d}Z`;
+};
+/** Path tutup amplop (sisi luar). */
+export const FLAP_PATH = pathOf();
+/** Path sisi dalam tutup (dicerminkan vertikal, terlihat setelah tutup terbuka 180°). */
+export const FLAP_INNER_PATH = pathOf((y) => 140 - y);
+
+/** Titik rapat di sepanjang tepi kiri→kanan (diperpanjang ke atas, nanti dipotong clip). */
+function outline() {
+  const pts = [E.start];
+  let cur = E.start;
+  for (const s of E.segs) {
+    const to = s[s.length - 1];
+    if (s[0] === 'L') {
+      const n = Math.max(1, Math.ceil(Math.hypot(to[0] - cur[0], to[1] - cur[1])));
+      for (let i = 1; i <= n; i++) pts.push([cur[0] + ((to[0] - cur[0]) * i) / n, cur[1] + ((to[1] - cur[1]) * i) / n]);
+    } else {
+      const c = s[1];
+      for (let i = 1; i <= 40; i++) {
+        const k = i / 40, q = 1 - k;
+        pts.push([q * q * cur[0] + 2 * q * k * c[0] + k * k * to[0], q * q * cur[1] + 2 * q * k * c[1] + k * k * to[1]]);
+      }
+    }
+    cur = to;
+  }
   return pts;
 }
 

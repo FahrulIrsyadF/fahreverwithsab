@@ -1,5 +1,6 @@
 import { useId, useLayoutEffect, useRef, useState } from 'react';
 import { paletteColor } from '../../lib/palette';
+import { LOGO_SRC, LOGO_RATIO } from '../BrandMonogram';
 import './wax-seal.css';
 
 /**
@@ -9,8 +10,8 @@ import './wax-seal.css';
  * PERFORMA: filter pencahayaan SVG sangat berat di WebKit (iPhone) dan dihitung ulang
  * setiap kali segel di-skala / di sekitarnya ada yang berubah. Karena itu badan segel
  * (lilin + emboss + bayangan) DIGAMBAR SEKALI ke PNG lalu ditampilkan sebagai <img>.
- * Monogram tetap SVG hidup (font web tidak bisa dipakai di SVG-sebagai-gambar) dengan
- * emboss murah: tiga lapis teks bergeser, tanpa filter.
+ * Logo tetap SVG hidup (gambar luar tidak dimuat di SVG-sebagai-gambar) dengan
+ * emboss murah: tiga lapis logo (mask) bergeser, tanpa filter.
  */
 const CRACK = [[104, 0], [96, 30], [107, 58], [93, 86], [106, 112], [95, 140], [104, 170], [98, 200]];
 export const CRACK_POINTS = CRACK.map((p) => p.join(',')).join(' ');
@@ -31,6 +32,7 @@ const sc = (v) => ({ stopColor: `var(--${v})` });
 // bersama oleh segel utuh & kedua belahannya. Belahan dipotong lewat CSS clip-path pada <img>.
 // (Dulu tiap belahan dirasterisasi sendiri → 3× kerja berat tepat saat amplop jatuh; ±1 dtk di Android.)
 const SIZE = 384;
+const LW = 86, LH = LW / LOGO_RATIO; // ukuran logo di dalam segel (satuan viewBox 200)
 let shared = null; // Promise<url PNG>
 const pct = (pts) => pts.map(([x, y]) => `${x / 2}% ${y / 2}%`).join(', ');
 const HALF_CLIP = {
@@ -52,7 +54,7 @@ async function rasterize(svg, size) {
   return URL.createObjectURL(blob);
 }
 
-export default function WaxSeal({ monogram = 'S&F', half, className = '', style }) {
+export default function WaxSeal({ half, className = '', style }) {
   const id = useId().replace(/:/g, '');
   const wrap = useRef(null);
   const body = useRef(null);
@@ -110,20 +112,23 @@ export default function WaxSeal({ monogram = 'S&F', half, className = '', style 
           </g>
         </svg>
       )}
-      {/* monogram: emboss murah tanpa filter (bayangan gelap + kilap terang + emas) */}
+      {/* logo: emboss murah tanpa filter (bayangan gelap + kilap terang + emas) */}
       <svg viewBox="0 0 200 200" className="wax-seal-mono">
         <defs>
-          <linearGradient id={`mono${id}`} x1="0" y1="0" x2="1" y2="1">
+          <linearGradient id={`mono${id}`} gradientUnits="userSpaceOnUse" x1="57" y1="62" x2="143" y2="138">
             <stop offset="0" style={sc('metal-light')} />
             <stop offset=".45" style={sc('metal-bright')} />
             <stop offset="1" style={sc('metal-dark')} />
           </linearGradient>
           {clip && <clipPath id={`mclip${id}`}><polygon points={clip} /></clipPath>}
+          <mask id={`logo${id}`} maskUnits="userSpaceOnUse" x="0" y="0" width="200" height="200">
+            <image href={LOGO_SRC} x={100 - LW / 2} y={100 - LH / 2} width={LW} height={LH} />
+          </mask>
         </defs>
-        <g clipPath={clip ? `url(#mclip${id})` : undefined} fontFamily="'Playfair Display', serif" fontSize="40" fontStyle="italic" textAnchor="middle">
-          <text x="100" y="114.6" style={{ fill: 'var(--wax-lo)' }} opacity=".85">{monogram}</text>
-          <text x="100" y="112.2" style={{ fill: 'var(--wax-light)' }} opacity=".35">{monogram}</text>
-          <text x="100" y="113" fill={`url(#mono${id})`}>{monogram}</text>
+        <g clipPath={clip ? `url(#mclip${id})` : undefined}>
+          <g transform="translate(0 1.6)"><rect width="200" height="200" mask={`url(#logo${id})`} style={{ fill: 'var(--wax-lo)' }} opacity=".85" /></g>
+          <g transform="translate(0 -.8)"><rect width="200" height="200" mask={`url(#logo${id})`} style={{ fill: 'var(--wax-light)' }} opacity=".35" /></g>
+          <rect width="200" height="200" mask={`url(#logo${id})`} fill={`url(#mono${id})`} />
         </g>
       </svg>
     </span>

@@ -111,7 +111,7 @@ export default function LoveStory() {
 
         <div className="story-close">
           <i />
-          <BrandMonogram size="sm" variant="gold" />
+          <BrandMonogram height={34} color="var(--metal)" decorative />
           <i />
         </div>
       </div>
